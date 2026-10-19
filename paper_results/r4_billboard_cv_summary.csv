@@ -1,0 +1,4 @@
+config,acc_mean,acc_std,acc_ci95_low,acc_ci95_high,auc_mean,n_folds,delta_vs_ref,corrected_t,corrected_p,wins,losses
+their 13 Spotify,0.5055,0.0397,0.4891,0.5219,0.513,25,,,,,
++ artist (prior charted songs),0.5033,0.0412,0.4863,0.5203,0.503,25,-0.0022,-0.123,0.9032384847819017,11.0,11.0
++ artist (prior top-40 songs),0.5098,0.0395,0.4935,0.5261,0.5174,25,0.0043,0.229,0.820754051204715,9.0,8.0

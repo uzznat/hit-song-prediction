@@ -1,0 +1,16 @@
+feature,mean_abs_shap
+artist_prior_hits_log,1.0777
+"decade (6 one-hot, summed)",0.8615
+instrumentalness,0.7254
+danceability,0.5397
+acousticness,0.4791
+duration_ms,0.3589
+speechiness,0.2857
+energy,0.259
+valence,0.2296
+loudness,0.1862
+tempo,0.1539
+mode,0.1361
+liveness,0.0693
+key,0.0521
+time_signature,0.0405

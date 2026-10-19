@@ -1,0 +1,5 @@
+feature_set,test_acc,delta,mcnemar_p,significant
+baseline,0.773,0.0,,
+A: decade,0.7955,0.0225,0.00031260944323799057,True
+B: artist history,0.8,0.027,0.0005915057006313047,True
+A+B: decade + artist,0.8215,0.0485,2.1202551007522194e-09,True

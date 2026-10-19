@@ -1,0 +1,49 @@
+﻿1) labels
+   95067 rows -> 95067 with a valid year (5832 hits / 89235 non-hits)
+2) Essentia features (cached after first run)
+   5000/95067  (16 s, ~297 s left)
+   10000/95067  (26 s, ~218 s left)
+   15000/95067  (36 s, ~191 s left)
+   20000/95067  (45 s, ~170 s left)
+   25000/95067  (54 s, ~152 s left)
+   30000/95067  (64 s, ~138 s left)
+   35000/95067  (73 s, ~125 s left)
+   40000/95067  (82 s, ~113 s left)
+   45000/95067  (105 s, ~117 s left)
+   50000/95067  (135 s, ~121 s left)
+   55000/95067  (146 s, ~106 s left)
+   60000/95067  (154 s, ~90 s left)
+   65000/95067  (163 s, ~75 s left)
+   70000/95067  (171 s, ~61 s left)
+   75000/95067  (179 s, ~48 s left)
+   80000/95067  (188 s, ~35 s left)
+   85000/95067  (196 s, ~23 s left)
+   90000/95067  (205 s, ~12 s left)
+   95000/95067  (213 s, ~0 s left)
+   extracted 95049 tracks (18 missing a json), 592 columns, 276 s
+   95049 songs with audio (5831 hits), 592 audio features
+   year quartiles (0 = non-hit, 1 = hit):
+           25%     50%     75%
+target                        
+0       1992.0  2001.0  2006.0
+1       1974.0  1987.0  1998.0
+
+=== protocol A balanced-random: 11662 songs (5831 hits), test 2916 ===
+   hit share per decade: 1920s 0%, 1940s 67%, 1950s 71%, 1960s 83%, 1970s 74%, 1980s 72%, 1990s 43%, 2000s 29%, 2010s 18%
+   their audio (Essentia)       acc 0.7061 (+0.0000)  AUC 0.7761
+   + decade                     acc 0.7287 (+0.0226)  AUC 0.8067  McNemar p=0.00024 (+190/-124)
+   + artist                     acc 0.7353 (+0.0291)  AUC 0.8046  McNemar p=3.7e-07 (+179/-94)
+   + decade + artist            acc 0.7572 (+0.0511)  AUC 0.8323  McNemar p=3.3e-15 (+251/-102)
+   our 2 features alone         acc 0.7438 (+0.0377)  AUC 0.8104  McNemar p=0.00043 (+535/-425)
+   decade alone (leak check)    acc 0.6951 (-0.0110)  AUC 0.7262  McNemar p=0.35 (+527/-559)
+
+=== protocol B balanced-year-matched: 11662 songs (5831 hits), test 2916 ===
+   hit share per decade: 1940s 50%, 1950s 50%, 1960s 50%, 1970s 50%, 1980s 50%, 1990s 50%, 2000s 50%, 2010s 50%
+   their audio (Essentia)       acc 0.6794 (+0.0000)  AUC 0.7434
+   + decade                     acc 0.6804 (+0.0010)  AUC 0.7472  McNemar p=0.9 (+128/-125)
+   + artist                     acc 0.7106 (+0.0312)  AUC 0.7783  McNemar p=1.7e-06 (+222/-131)
+   + decade + artist            acc 0.7030 (+0.0237)  AUC 0.7760  McNemar p=0.00019 (+201/-132)
+   our 2 features alone         acc 0.6677 (-0.0117)  AUC 0.6891  McNemar p=0.34 (+569/-603)
+   decade alone (leak check)    acc 0.4959 (-0.1835)  AUC 0.4949  McNemar p=1.4e-44 (+459/-994)
+
+-> C:\Users\uzzna\prectionsong\ismir_results.csv

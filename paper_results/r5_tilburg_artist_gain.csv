@@ -1,0 +1,7 @@
+decade,model,baseline_features,mean_gain_artist,seeds_with_gain,n_seeds,corrected_p
+00s,RF (their config),their inputs,0.0206,50,50,9.493713916139652e-08
+00s,LR (their config),their inputs,0.0266,50,50,2.4580537502453287e-09
+00s,"RF (frozen, ours)",audio (13),0.0231,50,50,9.65176690007347e-08
+10s,RF (their config),their inputs,0.0315,50,50,4.264096937687532e-11
+10s,LR (their config),their inputs,0.0286,50,50,5.743943917204374e-06
+10s,"RF (frozen, ours)",audio (13),0.0326,50,50,9.163027380899091e-10

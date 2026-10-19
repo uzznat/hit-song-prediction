@@ -1,0 +1,17 @@
+data,cv,config,artists,n_songs,hit_share,acc_mean,delta_vs_ref,corrected_p,wins,losses
+kaggle,stratified,audio (13),new,33438,0.3929,0.7729,,,,
+kaggle,stratified,audio (13),known,7122,0.966,0.823,,,,
+kaggle,stratified,+ decade,new,33438,0.3929,0.7955,0.0225,5.301629702828019e-12,25.0,0.0
+kaggle,stratified,+ decade,known,7122,0.966,0.8332,0.0102,0.024090574380062856,23.0,2.0
+kaggle,stratified,+ artist,new,33438,0.3929,0.7759,0.003,0.208000700707658,22.0,3.0
+kaggle,stratified,+ artist,known,7122,0.966,0.9717,0.1487,4.479250698243423e-19,25.0,0.0
+kaggle,stratified,+ decade + artist,new,33438,0.3929,0.8014,0.0285,2.6031092477298353e-12,25.0,0.0
+kaggle,stratified,+ decade + artist,known,7122,0.966,0.9761,0.1531,8.486938255430751e-19,25.0,0.0
+kaggle,artist-grouped,audio (13),new,33438,0.3929,0.7625,,,,
+kaggle,artist-grouped,audio (13),known,7122,0.966,0.8182,,,,
+kaggle,artist-grouped,+ decade,new,33438,0.3929,0.7843,0.0217,1.5900151302687763e-09,25.0,0.0
+kaggle,artist-grouped,+ decade,known,7122,0.966,0.8287,0.0105,0.059833689582012996,23.0,2.0
+kaggle,artist-grouped,+ artist,new,33438,0.3929,0.7664,0.0038,0.16795198174381112,19.0,6.0
+kaggle,artist-grouped,+ artist,known,7122,0.966,0.968,0.1498,2.6277594350401693e-14,25.0,0.0
+kaggle,artist-grouped,+ decade + artist,new,33438,0.3929,0.7904,0.0279,3.00095125189439e-11,25.0,0.0
+kaggle,artist-grouped,+ decade + artist,known,7122,0.966,0.9706,0.1524,4.8316229108878936e-14,25.0,0.0

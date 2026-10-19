@@ -1,0 +1,44 @@
+﻿loading files...
+  tracks: 101939 rows, columns include: ['Unnamed: 0', 'acousticness', 'album_id', 'analysis_url', 'artists_id', 'available_markets', 'country', 'danceability', 'disc_number', 'duration_ms', 'energy', 'href']...
+  got release dates from spotify_albums.csv
+  hit rate at popularity>=55: 19.4%
+loading low_level_audio_features.csv (big file, be patient)...
+py : C:\Users\uzzna\prectionsong\run_spotgentrack_v2.py:102: PerformanceWarning: DataFrame is highly fragmented.  This 
+is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns 
+at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+At line:1 char:361
++ ... FFERED="1"; py run_spotgentrack_v2.py *> paper_results_spotgentrack_v ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\uzzna\...= frame.copy()`:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  low["_id"] = low[lid].astype(str)
+  rich audio features available: 207
+  merged tracks with audio: 101909
+C:\Users\uzzna\prectionsong\run_spotgentrack_v2.py:112: PerformanceWarning: DataFrame is highly fragmented.  This is 
+usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at 
+once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data["_an"] = data["_artist"].astype(str).str.lower().str.strip()
+C:\Users\uzzna\prectionsong\run_spotgentrack_v2.py:122: PerformanceWarning: DataFrame is highly fragmented.  This is 
+usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at 
+once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data["_prior"] = pd.Series(dict(out)).reindex(data.index).fillna(0).values
+C:\Users\uzzna\prectionsong\run_spotgentrack_v2.py:128: PerformanceWarning: DataFrame is highly fragmented.  This is 
+usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at 
+once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data["_prior_log"] = np.log1p(data["_prior"])
+  artist feature: leakage-free (earlier years only)
+
+===================== HEAD-TO-HEAD (SpotGenTrack) =====================
+   101909 songs, same 75/25 split, same Random Forest
+
+  THEIR 13 Spotify features only          : 0.8115
+  their features + OUR artist             : 0.8226   (+0.0110)
+  their features + rich audio (PCA)       : 0.8129   (+0.0013)
+  their features + OUR artist + rich      : 0.8238   (+0.0122)
+
+  OUR system alone (artist + rich, no Spotify 13): 0.8222
+======================================================================
+If 'their + our artist + rich' > 'their features only', our features
+add real value on THEIR dataset, same protocol. (Their published
+DeepHits number uses lyrics + a CNN, so don't compare to that directly.)

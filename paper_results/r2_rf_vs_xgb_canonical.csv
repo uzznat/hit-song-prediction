@@ -1,0 +1,4 @@
+config,accuracy,roc_auc,delta,mcnemar_p,new_right_only,ref_right_only
+RF | + decade + artist,0.8215,0.9063,,,,
+XGBoost | + decade + artist,0.82,0.9154,-0.0015,0.8747546027626794,79.0,82.0
+XGBoost | audio,0.7835,0.8582,-0.038,4.254517307529826e-06,95.0,171.0

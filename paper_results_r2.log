@@ -1,0 +1,88 @@
+﻿  [R2 RF] fold 1/5  (7 s)
+  [R2 RF] fold 2/5  (14 s)
+  [R2 RF] fold 3/5  (21 s)
+  [R2 RF] fold 4/5  (29 s)
+  [R2 RF] fold 5/5  (36 s)
+                config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+            RF | audio    0.7803   0.0050        0.7741         0.7865    0.8595        5           NaN          NaN          NaN   NaN     NaN
+RF | + decade + artist    0.8321   0.0054        0.8253         0.8388    0.9179        5        0.0518       23.238      0.00002   5.0     0.0
+-> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_RF.csv
+  [R2 XGBoost] fold 1/5  (7 s)
+  [R2 XGBoost] fold 2/5  (14 s)
+  [R2 XGBoost] fold 3/5  (58 s)
+  [R2 XGBoost] fold 4/5  (218 s)
+  [R2 XGBoost] fold 5/5  (221 s)
+                     config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+            XGBoost | audio    0.7875   0.0042        0.7824         0.7927    0.8674        5           NaN          NaN          NaN   NaN     NaN
+XGBoost | + decade + artist    0.8447   0.0035        0.8404         0.8490    0.9276        5        0.0572       64.983 3.359393e-07   5.0     0.0
+-> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_XGBoost.csv
+  [R2 LogReg] fold 1/5  (0 s)
+  [R2 LogReg] fold 2/5  (0 s)
+  [R2 LogReg] fold 3/5  (1 s)
+  [R2 LogReg] fold 4/5  (1 s)
+  [R2 LogReg] fold 5/5  (1 s)
+                    config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+            LogReg | audio    0.7268   0.0039        0.7219         0.7316    0.8033        5           NaN          NaN          NaN   NaN     NaN
+LogReg | + decade + artist    0.7820   0.0038        0.7772         0.7868    0.8752        5        0.0553       19.548      0.00004   5.0     0.0
+-> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_LogReg.csv
+  [R2 kNN] fold 1/5  (25 s)
+  [R2 kNN] fold 2/5  (54 s)
+  [R2 kNN] fold 3/5  (99 s)
+  [R2 kNN] fold 4/5  (136 s)
+  [R2 kNN] fold 5/5  (176 s)
+                 config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+            kNN | audio    0.7498   0.0020        0.7473         0.7522    0.8278        5           NaN          NaN          NaN   NaN     NaN
+kNN | + decade + artist    0.7957   0.0042        0.7904         0.8009    0.8884        5        0.0459       29.125     0.000008   5.0     0.0
+-> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_kNN.csv
+  [R2 SVM-RBF] fold 1/5  (550 s)
+  [R2 SVM-RBF] fold 2/5  (21253 s)
+  [R2 SVM-RBF] fold 3/5  (21357 s)
+  [R2 SVM-RBF] fold 4/5  (21466 s)
+  [R2 SVM-RBF] fold 5/5  (21608 s)
+                     config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+            SVM-RBF | audio    0.7730   0.0035        0.7686         0.7773       NaN        5           NaN          NaN          NaN   NaN     NaN
+SVM-RBF | + decade + artist    0.8284   0.0055        0.8216         0.8351       NaN        5        0.0554       20.937     0.000031   5.0     0.0
+-> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_SVM-RBF.csv
+-> C:\Users\uzzna\prectionsong\paper_results\r2_models_cv_summary.csv
+
+=== RF vs XGBoost, canonical split ===
+                     config  accuracy  roc_auc   delta  mcnemar_p  new_right_only  ref_right_only
+     RF | + decade + artist    0.8215   0.9063     NaN        NaN             NaN             NaN
+XGBoost | + decade + artist    0.8200   0.9154 -0.0015   0.874755            79.0            82.0
+            XGBoost | audio    0.7835   0.8582 -0.0380   0.000004            95.0           171.0
+-> C:\Users\uzzna\prectionsong\paper_results\r2_rf_vs_xgb_canonical.csv
+
+=== TreeSHAP (XGBoost, canonical test set) ===
+                   feature  mean_abs_shap
+     artist_prior_hits_log         1.0777
+decade (6 one-hot, summed)         0.8615
+          instrumentalness         0.7254
+              danceability         0.5397
+              acousticness         0.4791
+               duration_ms         0.3589
+               speechiness         0.2857
+                    energy         0.2590
+                   valence         0.2296
+                  loudness         0.1862
+                     tempo         0.1539
+                      mode         0.1361
+                  liveness         0.0693
+                       key         0.0521
+            time_signature         0.0405
+-> C:\Users\uzzna\prectionsong\paper_results\r2_shap.csv
+
+=== temporal hold-out (train on earlier decades only) ===
+test_decade       train_decades  n_train  n_test       features   model  accuracy  roc_auc  mcnemar_p_artist_vs_audio
+        90s         60s+70s+80s    23095    5330          audio      RF    0.7360   0.8135                        NaN
+        90s         60s+70s+80s    23095    5330          audio XGBoost    0.7415   0.8303                        NaN
+        90s         60s+70s+80s    23095    5330 audio + artist      RF    0.7614   0.8458               9.471605e-09
+        90s         60s+70s+80s    23095    5330 audio + artist XGBoost    0.7548   0.8564               1.141228e-03
+        00s     60s+70s+80s+90s    28425    5855          audio      RF    0.8051   0.8700                        NaN
+        00s     60s+70s+80s+90s    28425    5855          audio XGBoost    0.8082   0.8798                        NaN
+        00s     60s+70s+80s+90s    28425    5855 audio + artist      RF    0.8244   0.9073               1.174515e-07
+        00s     60s+70s+80s+90s    28425    5855 audio + artist XGBoost    0.8287   0.9153               3.987885e-10
+        10s 60s+70s+80s+90s+00s    34280    6280          audio      RF    0.7804   0.8603                        NaN
+        10s 60s+70s+80s+90s+00s    34280    6280          audio XGBoost    0.7890   0.8661                        NaN
+        10s 60s+70s+80s+90s+00s    34280    6280 audio + artist      RF    0.8139   0.9127               2.532312e-21
+        10s 60s+70s+80s+90s+00s    34280    6280 audio + artist XGBoost    0.8143   0.9179               3.016791e-18
+-> C:\Users\uzzna\prectionsong\paper_results\r2_temporal.csv

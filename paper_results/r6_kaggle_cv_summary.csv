@@ -1,0 +1,9 @@
+data,cv,config,acc_mean,acc_std,acc_ci95_low,acc_ci95_high,auc_mean,n_folds,delta_vs_ref,corrected_t,corrected_p,wins,losses
+kaggle,stratified,audio (13),0.7817,0.005,0.7796,0.7838,0.8592,25,,,,,
+kaggle,stratified,+ decade,0.8021,0.0043,0.8003,0.8039,0.8798,25,0.0204,10.81,1.0518222103678533e-10,25.0,0.0
+kaggle,stratified,+ artist,0.8103,0.0053,0.8081,0.8125,0.9001,25,0.0286,12.078,1.0922521201638363e-11,25.0,0.0
+kaggle,stratified,+ decade + artist,0.8321,0.0043,0.8303,0.8339,0.9177,25,0.0504,20.805,7.29876714755627e-17,25.0,0.0
+kaggle,artist-grouped,audio (13),0.7723,0.0103,0.768,0.7765,0.8499,25,,,,,
+kaggle,artist-grouped,+ decade,0.7921,0.01,0.7879,0.7962,0.869,25,0.0198,8.511,1.0376121942307617e-08,25.0,0.0
+kaggle,artist-grouped,+ artist,0.8018,0.0095,0.7978,0.8057,0.8929,25,0.0295,9.34,1.8333450947392804e-09,25.0,0.0
+kaggle,artist-grouped,+ decade + artist,0.8221,0.0087,0.8185,0.8257,0.9088,25,0.0498,15.015,1.0628631585258381e-13,25.0,0.0

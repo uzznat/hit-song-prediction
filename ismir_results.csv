@@ -1,0 +1,13 @@
+protocol,features,n_songs,n_test,accuracy,delta_vs_audio,roc_auc,mcnemar_p,new_right_only,base_right_only
+A balanced-random,their audio (Essentia),11662,2916,0.7061,0.0,0.7761,,0,0
+A balanced-random,+ decade,11662,2916,0.7287,0.0226,0.8067,0.00024430017904922144,190,124
+A balanced-random,+ artist,11662,2916,0.7353,0.0291,0.8046,3.6974070723761794e-07,179,94
+A balanced-random,+ decade + artist,11662,2916,0.7572,0.0511,0.8323,3.346778164212688e-15,251,102
+A balanced-random,our 2 features alone,11662,2916,0.7438,0.0377,0.8104,0.0004348781170522134,535,425
+A balanced-random,decade alone (leak check),11662,2916,0.6951,-0.011,0.7262,0.34686346313675875,527,559
+B balanced-year-matched,their audio (Essentia),11662,2916,0.6794,0.0,0.7434,,0,0
+B balanced-year-matched,+ decade,11662,2916,0.6804,0.001,0.7472,0.8999385905096587,128,125
+B balanced-year-matched,+ artist,11662,2916,0.7106,0.0312,0.7783,1.666013254679689e-06,222,131
+B balanced-year-matched,+ decade + artist,11662,2916,0.703,0.0237,0.776,0.0001942517619388091,201,132
+B balanced-year-matched,our 2 features alone,11662,2916,0.6677,-0.0117,0.6891,0.33507586146658375,569,603
+B balanced-year-matched,decade alone (leak check),11662,2916,0.4959,-0.1835,0.4949,1.3724302323230027e-44,459,994

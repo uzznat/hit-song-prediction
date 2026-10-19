@@ -1,0 +1,40 @@
+=====================================================================
+ EXTERNAL VALIDATION - 3 datasets, ready to run
+=====================================================================
+First install the libraries (once):
+   pip install numpy pandas scikit-learn scipy librosa soundfile requests
+
+Each script prints, at the end, a HEAD-TO-HEAD comparison:
+   THEIR features  vs  OUR features (artist + rich)  on THEIR dataset.
+
+---------------------------------------------------------------------
+1) run_spotgentrack.py   (Stanford SpotGenTrack / DeepHits)
+   - download the dataset (spotify_tracks.csv, and spotify_artists.csv
+     if provided) and put them next to this script.
+   - run:  py run_spotgentrack.py
+   - it downloads 30s audio clips (Deezer) and extracts OUR rich audio.
+     This is the SLOW one (hours). It caches + resumes if you stop it.
+
+2) run_zhao.py           (Billboard 2000-2018 w/ Spotify + Lyrics)
+   - download the CSV from data.world, put it next to this script.
+   - OPEN run_zhao.py and set  CSV_PATH = "your_exact_filename.csv"
+     (that ONE line at the top is the only thing to change).
+   - run:  py run_zhao.py
+   - also downloads audio + extracts rich (slow, resumable).
+
+3) run_ismir.py          (Zangerle ISMIR 2019 - peer reviewed)
+   - download from https://zenodo.org/records/3258042 :
+       msd_bb_matches.csv, msd_bb_non_matches.csv,
+       msd_audio_features.tar.gz  (18 GB - extract it here)
+   - run:  py run_ismir.py
+   - uses THEIR audio features (Essentia), no audio download needed.
+     Here we can only ADD our artist feature to their system
+     (we don't have their raw audio to run our librosa on).
+
+---------------------------------------------------------------------
+WHAT YOU CAN CLAIM:
+ * SpotGenTrack & Zhao -> real head-to-head: our features vs theirs,
+   same songs, same split. "Our system beats theirs" IF the diff is +.
+ * ISMIR -> our artist feature helps on top of their audio system.
+ * NOT comparable to their PUBLISHED score (different protocol).
+=====================================================================
