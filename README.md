@@ -9,6 +9,7 @@ Lior Shalon, Nathanael Uzzan — Technion, *Project in Artificial Intelligence*
 * Audit of every claim: [`paper_results/FINDINGS.md`](paper_results/FINDINGS.md)
 * Handoff / where to continue: [`docs/HANDOFF.md`](docs/HANDOFF.md)
 * Getting the data: [`docs/DATA.md`](docs/DATA.md)
+* Licensing: [`LICENSE.md`](LICENSE.md) — MIT for the code; the datasets keep their own terms (the Kaggle benchmark is GPL-3.0 and is not redistributed here)
 
 ---
 
