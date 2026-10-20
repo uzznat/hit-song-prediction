@@ -46,4 +46,4 @@ target
    our 2 features alone         acc 0.6677 (-0.0117)  AUC 0.6891  McNemar p=0.34 (+569/-603)
    decade alone (leak check)    acc 0.4959 (-0.1835)  AUC 0.4949  McNemar p=1.4e-44 (+459/-994)
 
--> C:\Users\uzzna\prectionsong\ismir_results.csv
+-> <repo>\ismir_results.csv

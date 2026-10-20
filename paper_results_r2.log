@@ -6,7 +6,7 @@
                 config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
             RF | audio    0.7803   0.0050        0.7741         0.7865    0.8595        5           NaN          NaN          NaN   NaN     NaN
 RF | + decade + artist    0.8321   0.0054        0.8253         0.8388    0.9179        5        0.0518       23.238      0.00002   5.0     0.0
--> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_RF.csv
+-> <repo>\paper_results\r2_models_folds_RF.csv
   [R2 XGBoost] fold 1/5  (7 s)
   [R2 XGBoost] fold 2/5  (14 s)
   [R2 XGBoost] fold 3/5  (58 s)
@@ -15,7 +15,7 @@ RF | + decade + artist    0.8321   0.0054        0.8253         0.8388    0.9179
                      config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
             XGBoost | audio    0.7875   0.0042        0.7824         0.7927    0.8674        5           NaN          NaN          NaN   NaN     NaN
 XGBoost | + decade + artist    0.8447   0.0035        0.8404         0.8490    0.9276        5        0.0572       64.983 3.359393e-07   5.0     0.0
--> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_XGBoost.csv
+-> <repo>\paper_results\r2_models_folds_XGBoost.csv
   [R2 LogReg] fold 1/5  (0 s)
   [R2 LogReg] fold 2/5  (0 s)
   [R2 LogReg] fold 3/5  (1 s)
@@ -24,7 +24,7 @@ XGBoost | + decade + artist    0.8447   0.0035        0.8404         0.8490    0
                     config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
             LogReg | audio    0.7268   0.0039        0.7219         0.7316    0.8033        5           NaN          NaN          NaN   NaN     NaN
 LogReg | + decade + artist    0.7820   0.0038        0.7772         0.7868    0.8752        5        0.0553       19.548      0.00004   5.0     0.0
--> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_LogReg.csv
+-> <repo>\paper_results\r2_models_folds_LogReg.csv
   [R2 kNN] fold 1/5  (25 s)
   [R2 kNN] fold 2/5  (54 s)
   [R2 kNN] fold 3/5  (99 s)
@@ -33,7 +33,7 @@ LogReg | + decade + artist    0.7820   0.0038        0.7772         0.7868    0.
                  config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
             kNN | audio    0.7498   0.0020        0.7473         0.7522    0.8278        5           NaN          NaN          NaN   NaN     NaN
 kNN | + decade + artist    0.7957   0.0042        0.7904         0.8009    0.8884        5        0.0459       29.125     0.000008   5.0     0.0
--> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_kNN.csv
+-> <repo>\paper_results\r2_models_folds_kNN.csv
   [R2 SVM-RBF] fold 1/5  (550 s)
   [R2 SVM-RBF] fold 2/5  (21253 s)
   [R2 SVM-RBF] fold 3/5  (21357 s)
@@ -42,15 +42,15 @@ kNN | + decade + artist    0.7957   0.0042        0.7904         0.8009    0.888
                      config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
             SVM-RBF | audio    0.7730   0.0035        0.7686         0.7773       NaN        5           NaN          NaN          NaN   NaN     NaN
 SVM-RBF | + decade + artist    0.8284   0.0055        0.8216         0.8351       NaN        5        0.0554       20.937     0.000031   5.0     0.0
--> C:\Users\uzzna\prectionsong\paper_results\r2_models_folds_SVM-RBF.csv
--> C:\Users\uzzna\prectionsong\paper_results\r2_models_cv_summary.csv
+-> <repo>\paper_results\r2_models_folds_SVM-RBF.csv
+-> <repo>\paper_results\r2_models_cv_summary.csv
 
 === RF vs XGBoost, canonical split ===
                      config  accuracy  roc_auc   delta  mcnemar_p  new_right_only  ref_right_only
      RF | + decade + artist    0.8215   0.9063     NaN        NaN             NaN             NaN
 XGBoost | + decade + artist    0.8200   0.9154 -0.0015   0.874755            79.0            82.0
             XGBoost | audio    0.7835   0.8582 -0.0380   0.000004            95.0           171.0
--> C:\Users\uzzna\prectionsong\paper_results\r2_rf_vs_xgb_canonical.csv
+-> <repo>\paper_results\r2_rf_vs_xgb_canonical.csv
 
 === TreeSHAP (XGBoost, canonical test set) ===
                    feature  mean_abs_shap
@@ -69,7 +69,7 @@ decade (6 one-hot, summed)         0.8615
                   liveness         0.0693
                        key         0.0521
             time_signature         0.0405
--> C:\Users\uzzna\prectionsong\paper_results\r2_shap.csv
+-> <repo>\paper_results\r2_shap.csv
 
 === temporal hold-out (train on earlier decades only) ===
 test_decade       train_decades  n_train  n_test       features   model  accuracy  roc_auc  mcnemar_p_artist_vs_audio
@@ -85,4 +85,4 @@ test_decade       train_decades  n_train  n_test       features   model  accurac
         10s 60s+70s+80s+90s+00s    34280    6280          audio XGBoost    0.7890   0.8661                        NaN
         10s 60s+70s+80s+90s+00s    34280    6280 audio + artist      RF    0.8139   0.9127               2.532312e-21
         10s 60s+70s+80s+90s+00s    34280    6280 audio + artist XGBoost    0.8143   0.9179               3.016791e-18
--> C:\Users\uzzna\prectionsong\paper_results\r2_temporal.csv
+-> <repo>\paper_results\r2_temporal.csv
