@@ -35,3 +35,6 @@ paper/*.log
 paper/*.out
 paper/*.blg
 paper/*.synctex.gz
+
+# Release bundles built with `git archive`
+*.zip
