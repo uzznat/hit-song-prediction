@@ -78,10 +78,13 @@ leakage~\cite{kaufman2012leakage} and shortcut learning~\cite{geirhos2020shortcu
 
 This paper studies two cheap, non-audio signals---the artist's prior chart history and
 the song's era---under an evaluation protocol designed to address these three weaknesses.
-Artist history is not a new idea: Middlebrook and Sheik~\cite{middlebrook2019song} already
-list an artist past-performance field among chart-derived fields, but the inputs of their
-final model are not stated and the contribution of that field is neither isolated nor
-tested. What we add is a version restricted to strictly earlier periods, a
+Artist history is not a new idea. Interiano et~al.~\cite{interiano2018musical} add a
+``superstar'' indicator (whether the artist charted in the recent past) to acoustic
+features of 500{,}000 UK releases and find that it raises Random-Forest accuracy, and
+Middlebrook and Sheik~\cite{middlebrook2019song} list an artist past-performance field
+among chart-derived fields, although the inputs of their final model are not stated.
+Neither study tests the gain for significance, compares it with prior models on the same
+data, or asks whether it reflects the way the negative class was sampled. What we add is a version restricted to strictly earlier periods, a
 significance-tested measure of its gain on the same data as prior work, and a check on an
 independent dataset of whether that gain is a genuine signal or a sampling artefact.
 Our contributions are:
@@ -116,6 +119,13 @@ Song Dataset tracks~\cite{bertinmahieux2011million} in a wide-and-deep network a
 75.04\,\% accuracy on a balanced set of 11{,}664 songs, noting that adding the release year
 improved every configuration.
 
+\textbf{Artist reputation.} Interiano et~al.~\cite{interiano2018musical} analyse more
+than 500{,}000 UK songs (1985--2015) and show that a superstar indicator improves the
+prediction of chart success over acoustic features alone. Salganik
+et~al.~\cite{salganik2006experimental} showed experimentally that success in cultural
+markets depends on social influence and cumulative advantage, which is one reason why an
+artist's past success predicts future success.
+
 \textbf{Spotify descriptors and Billboard labels.} Middlebrook and
 Sheik~\cite{middlebrook2019song} matched about 24{,}000 Spotify tracks (1985--2018) to the
 Hot~100 and reported 87.7\,\% test accuracy with a Random Forest; their feature list
@@ -139,7 +149,11 @@ McNemar's test for a single split, and Nadeau and Bengio~\cite{nadeau2003inferen
 that naive $t$-tests over overlapping resamples are anti-conservative and propose a
 corrected variance. Leakage~\cite{kaufman2012leakage} and shortcut
 learning~\cite{geirhos2020shortcut} describe models that exploit cues unrelated to the
-intended task. To our knowledge, no hit-prediction study on Spotify descriptors reports
+intended task. In music information retrieval, Sturm~\cite{sturm2014simple} showed that
+systems can reach high scores through confounds in the ground truth (``horses''), and
+Flexer~\cite{flexer2007closer} showed that letting songs by the same artist appear in
+training and test sets inflates genre-classification accuracy; our artist-grouped
+cross-validation applies this artist filter to hit prediction. To our knowledge, no hit-prediction study on Spotify descriptors reports
 both a significance-tested head-to-head on the same data and an audit of construction
 artefacts.
 
@@ -230,7 +244,8 @@ fitted on the training part of each fold only.
 \subsection{Models}
 The main model is the Random Forest~\cite{breiman2001random} configuration of Middlebrook
 and Sheik~\cite{middlebrook2019song} (80 trees, 8 candidate features per split, Gini),
-kept frozen throughout. Robustness checks use XGBoost~\cite{chen2016xgboost}, logistic
+kept frozen throughout: we do not tune hyperparameters, so that gains come from the
+features and remain comparable with the published configuration. Robustness checks use XGBoost~\cite{chen2016xgboost}, logistic
 regression, $k$-NN and an RBF support vector machine. External datasets use a Random Forest
 with 200 trees and $\sqrt{d}$ candidate features, as in our original external scripts.
 
@@ -288,6 +303,9 @@ Table~\ref{tab:main} shows that each feature helps on its own and that their gai
 nearly additive. The canonical numbers reproduce our earlier single-split experiments
 exactly; cross-validation places all accuracies about one point higher and gives very
 narrow intervals. The combined gain is $+5.04$\pp{} and is positive in all 25 folds.
+It is not bought by trading recall for precision: on the hit class, precision rises from
+0.758 to 0.828 and recall from 0.819 to 0.833, so F1 rises from 0.787 to 0.831 ($+4.3$\pp,
+25/25, $p=7\times10^{-15}$).
 Without audio the two features reach only 0.670, so they complement rather than replace
 the descriptors. The relation between artist history and the label is strongly nonlinear
 (Fig.~\ref{fig:artist}):
@@ -478,7 +496,10 @@ Spotify descriptors (13) & .812 [.811,.813] & .690 & -- \\
 80.6\,\% of tracks are negatives, so accuracy is dominated by the majority class: the 13
 descriptors score 0.812, barely above always predicting ``non-hit''. Ranking quality tells
 the real story (Table~\ref{tab:sgt}): artist history raises ROC-AUC from 0.690 to 0.762
-($+7.2$ points), and with decade to 0.777, while the 207 low-level audio features add
+($+7.2$ points), and with decade to 0.777. On the hit class, the 13 descriptors find
+only 8.3\,\% of the hits (F1 0.147); with decade and artist history, recall rises to
+25.2\,\% at unchanged precision (0.62) and F1 to 0.358 (5/5 folds, $p=7\times10^{-7}$),
+while the 207 low-level audio features add
 nothing on top of artist history. A single 75/25 split gives the same picture (accuracy
 0.810 $\to$ 0.822 and ROC-AUC 0.688 $\to$ 0.760 with artist history, McNemar
 $p=6\times10^{-13}$).
@@ -733,7 +754,9 @@ main model to $0.928$, and the apparent FFT gain disappears once genre is contro
 (Sec.~\ref{sec:further}). Any audio representation evaluated on this benchmark can score
 by recognising the excluded genres rather than by modelling what makes a song a hit, so
 audio gains on it should be reported together with a genre-matched control. Artist history
-passes that control; FFT does not.
+passes that control; FFT does not. Within the audio content itself, therefore, no
+representation we tested adds to artist history and era once the construction shortcuts
+are controlled: on these data, what predicts a hit is mostly who sings it and when.
 
 \textbf{Single splits mislead.} Several conclusions of our own earlier single-split
 analysis did not survive cross-validation. With a few thousand songs, an 891-song test set
@@ -759,7 +782,11 @@ artists in protocol A and new artists in protocol B.
 \textbf{Limitations.} Artist history is matched by normalised name, not by a canonical
 identifier, so homonymous artists can be merged. Artist history does not help new artists on
 the Hit Predictor and helps them only modestly on ISMIR ($+1.4$\pp), and it partly measures
-cumulative advantage rather than the intrinsic appeal of a song. The
+cumulative advantage~\cite{salganik2006experimental} rather than the intrinsic appeal
+of a song. We use classical classifiers on fixed descriptors rather than deep networks on
+raw audio~\cite{yang2017revisiting,nofer2026deephits}: our question is which inputs carry
+signal under a controlled protocol, and the comparison with prior work is made at equal
+model; a learned representation could still capture what the descriptors miss. The
 comparison with Zangerle et~al.\ uses a classifier rather than their regression on chart
 position and a different random draw of negatives; the comparison with Du uses re-drawn
 splits. Our audio previews are 30-second clips from a different service than the one that

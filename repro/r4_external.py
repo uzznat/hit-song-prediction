@@ -83,7 +83,7 @@ def ismir():
 
 
 # --------------------------------------------------------------------------- SpotGenTrack
-def spotgentrack():
+def load_spotgentrack():
     t = pd.read_csv(os.path.join(DATA, "spotify_tracks.csv"))
     alb = pd.read_csv(os.path.join(DATA, "spotify_albums.csv"), usecols=["id", "release_date"])
     art = pd.read_csv(os.path.join(DATA, "spotify_artists.csv"), usecols=["id", "name"])
@@ -104,6 +104,11 @@ def spotgentrack():
     data["decade_n"] = (data["year"] // 10 * 10).astype(float)
     data["artist_prior_log"] = prior_by_year(data, "artist_norm", "year", "target")
     data[rich] = data[rich].apply(pd.to_numeric, errors="coerce").fillna(0)
+    return data, rich
+
+
+def spotgentrack():
+    data, rich = load_spotgentrack()
     y = data["target"].values
     print(f"SpotGenTrack: {len(data)} tracks, hit share {y.mean():.3f}, "
           f"{len(rich)} low-level features")

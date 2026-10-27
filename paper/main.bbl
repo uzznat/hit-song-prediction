@@ -85,6 +85,12 @@ R.~Geirhos, J.-H. Jacobsen, C.~Michaelis, R.~Zemel, W.~Brendel, M.~Bethge, and
   F.~A. Wichmann, ``Shortcut learning in deep neural networks,'' \emph{Nature
   Machine Intelligence}, vol.~2, no.~11, pp. 665--673, 2020.
 
+\bibitem{interiano2018musical}
+M.~Interiano, K.~Kazemi, L.~Wang, J.~Yang, Z.~Yu, and N.~L. Komarova, ``Musical
+  trends and predictability of success in contemporary songs in and out of the
+  top charts,'' \emph{Royal Society Open Science}, vol.~5, no.~5, p. 171274,
+  2018.
+
 \bibitem{herremans2014dance}
 D.~Herremans, D.~Martens, and K.~S{\"o}rensen, ``Dance hit song prediction,''
   \emph{Journal of New Music Research}, vol.~43, no.~3, pp. 291--302, 2014.
@@ -99,6 +105,11 @@ D.~Bogdanov, N.~Wack, E.~G{\'o}mez, S.~Gulati, P.~Herrera, O.~Mayor, G.~Roma,
 T.~Bertin-Mahieux, D.~P.~W. Ellis, B.~Whitman, and P.~Lamere, ``The million
   song dataset,'' in \emph{Proc. 12th International Society for Music
   Information Retrieval Conference (ISMIR)}, 2011, pp. 591--596.
+
+\bibitem{salganik2006experimental}
+M.~J. Salganik, P.~S. Dodds, and D.~J. Watts, ``Experimental study of
+  inequality and unpredictability in an artificial cultural market,''
+  \emph{Science}, vol. 311, no. 5762, pp. 854--856, 2006.
 
 \bibitem{ansari2020dataset}
 {fortyTwo102}, ``The {Spotify} hit predictor dataset (1960--2019),'' GitHub
@@ -122,6 +133,16 @@ T.~G. Dietterich, ``Approximate statistical tests for comparing supervised
 \bibitem{nadeau2003inference}
 C.~Nadeau and Y.~Bengio, ``Inference for the generalization error,''
   \emph{Machine Learning}, vol.~52, no.~3, pp. 239--281, 2003.
+
+\bibitem{sturm2014simple}
+B.~L. Sturm, ``A simple method to determine if a music information retrieval
+  system is a ``horse'','' \emph{IEEE Transactions on Multimedia}, vol.~16,
+  no.~6, pp. 1636--1644, 2014.
+
+\bibitem{flexer2007closer}
+A.~Flexer, ``A closer look on artist filters for musical genre
+  classification,'' in \emph{Proc. 8th International Conference on Music
+  Information Retrieval (ISMIR)}, 2007, pp. 341--344.
 
 \bibitem{mcfee2015librosa}
 B.~McFee, C.~Raffel, D.~Liang, D.~P.~W. Ellis, M.~McVicar, E.~Battenberg, and

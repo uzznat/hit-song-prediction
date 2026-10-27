@@ -119,3 +119,15 @@ Consequences for the paper:
 - Rich audio / PCA 40 / family ablation claims do not survive CV (R3).
 - Billboard external validation invalid (missing features).
 - SpotGenTrack "our 2 alone" label wrong.
+
+## R9 — hit-class metrics and literature gaps (2026-10-27)
+
+`repro/r9_metrics.py`, same folds as R1 / R4.
+- Kaggle, frozen RF, 5x5: audio precision .758 / recall .819 / F1 .787 → + decade + artist .828 / .833 / **.831** (+4.3 F1, 25/25, corrected p = 7e-15). The accuracy gain is not a precision/recall trade.
+- SpotGenTrack, RF-200, 5x1: the 13 descriptors find 8.3 % of hits (F1 .147); + decade + artist recall 25.2 % at the same precision (.62), F1 **.358** (5/5, p = 7e-7).
+
+Paper changes from a comparison with the field: Interiano et al. (2018, R. Soc. Open Sci.) already used a "superstar"
+(recent chart presence) indicator with a Random Forest → now credited in Intro and Related Work, and our novelty stated
+as significance + same-data head-to-head + sampling-artefact controls. Added Sturm (2014, "horse"), Flexer (2007, artist
+filter), Salganik et al. (2006, cumulative advantage); hyperparameters-not-tuned rationale; no-deep-learning limitation;
+explicit answer on audio content in the Discussion.

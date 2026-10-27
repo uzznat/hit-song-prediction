@@ -4,7 +4,7 @@
 Lior Shalon, Nathanael Uzzan — Technion, *Project in Artificial Intelligence*
 
 **Deliverables**
-* Paper (IEEE conference format, 8 pages): [`paper/main.pdf`](paper/main.pdf) ← source `paper/main.tex`
+* Paper (IEEE conference format, 8 pages + references): [`paper/main.pdf`](paper/main.pdf) ← source `paper/main.tex`
 * Slides (23): [`presentation/hit_prediction_deck.pdf`](presentation/hit_prediction_deck.pdf) ← source `hit_prediction_deck.html`
 * Audit of every claim: [`paper_results/FINDINGS.md`](paper_results/FINDINGS.md)
 * Handoff / where to continue: [`docs/HANDOFF.md`](docs/HANDOFF.md)
@@ -43,6 +43,7 @@ python repro/r6_robustness.py       # artist-grouped CV + cold start
 python repro/fetch_audio_full.py download && python repro/fetch_audio_full.py extract
 python repro/r7_fft_full.py         # FFT descriptors on the whole benchmark
 python repro/r8_future_work.py      # artist matching, genre control, decay, lyrics
+python repro/r9_metrics.py           # precision / recall / F1 of the hit class
 python repro/make_figures.py        # the paper figures
 ```
 

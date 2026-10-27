@@ -58,6 +58,7 @@ Every number in the paper is produced here and written to `paper_results/*.csv`.
 | `r6_robustness.py` | `r6_*.csv` | `StratifiedGroupKFold` by normalised artist — no test artist ever appears in training. The gains survive (Kaggle +5.0 unchanged, 25/25, *p* = 1e-13). Plus the cold-start split: on Kaggle, **known artists are 96.6 % hits**, so artist history there largely means "known artist ⇒ hit" (+15.0), and it does nothing for the 33,438 new artists (+0.4, n.s.) where era helps instead (+2.2). On ISMIR B it does help new artists (+1.4, *p* = .002). |
 | `fetch_audio_full.py` + `r7_fft_full.py` | `r7_*.csv` | Deezer clips for 35,370 / 40,560 songs; FFT on top of the main model .825 → .839 (+1.4, 25/25, *p* = 4e-9), all of it on new artists (+1.8). |
 | `r8_future_work.py` | `r8_*.csv` | The Future Work items that can be run: artist matching (99.99 % of hits already found; featured credits +0.1 n.s.), genre control for FFT, rolling-origin decay, lyrics on SpotGenTrack. See FINDINGS.md. |
+| `r9_metrics.py` | `r9_*.csv` | Precision / recall / F1 of the hit class. Kaggle F1 .787 → .831 (+4.3, 25/25, *p* = 7e-15); SpotGenTrack recall .083 → .252, F1 .147 → .358 (5/5, *p* = 7e-7). |
 | `make_figures.py` | `paper/fig_*.pdf` | The paper figures. |
 
 ### Layer B — `legacy/` : exploratory. Historical only.
@@ -157,7 +158,7 @@ The deck is a single self-contained HTML file: open
    of data — but it has never been pushed anywhere.
 2. ~~Prune Layer B~~ — done 2026-10-27: load-bearing modules moved into `repro/`, the rest
    into `legacy/`, raw data into `data/`, logs into `paper_results/logs/`.
-3. **Pick a venue and format.** Currently IEEE conference style, 8 pages — fine for a
+3. **Pick a venue and format.** Currently IEEE conference style, 8 pages + 1 page of references — fine for a
    workshop; a journal version would want the items below.
 4. **Licensing.** `LICENSE.md` exists (MIT code; datasets keep their own terms, Kaggle is GPL-3.0).
 

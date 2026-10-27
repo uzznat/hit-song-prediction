@@ -1,0 +1,42 @@
+  [kaggle] fold 1
+  [kaggle] fold 2
+  [kaggle] fold 3
+  [kaggle] fold 4
+  [kaggle] fold 5
+  [kaggle] fold 6
+  [kaggle] fold 7
+  [kaggle] fold 8
+  [kaggle] fold 9
+  [kaggle] fold 10
+  [kaggle] fold 11
+  [kaggle] fold 12
+  [kaggle] fold 13
+  [kaggle] fold 14
+  [kaggle] fold 15
+  [kaggle] fold 16
+  [kaggle] fold 17
+  [kaggle] fold 18
+  [kaggle] fold 19
+  [kaggle] fold 20
+  [kaggle] fold 21
+  [kaggle] fold 22
+  [kaggle] fold 23
+  [kaggle] fold 24
+  [kaggle] fold 25
+<repo>\repro\r4_external.py:104: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data["decade_n"] = (data["year"] // 10 * 10).astype(float)
+<repo>\repro\r4_external.py:105: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data["artist_prior_log"] = prior_by_year(data, "artist_norm", "year", "target")
+-> <repo>\paper_results\r9_kaggle_folds.csv
+  [spotgentrack] fold 1
+  [spotgentrack] fold 2
+  [spotgentrack] fold 3
+  [spotgentrack] fold 4
+  [spotgentrack] fold 5
+-> <repo>\paper_results\r9_spotgentrack_folds.csv
+     dataset            config  accuracy  precision  recall     f1  f1_delta         f1_p  f1_wins
+      kaggle        audio (13)    0.7817     0.7581  0.8192 0.7874       NaN          NaN      NaN
+      kaggle + decade + artist    0.8321     0.8276  0.8334 0.8305    0.0430 6.501885e-15     25.0
+spotgentrack  their 13 Spotify    0.8119     0.6230  0.0832 0.1468       NaN          NaN      NaN
+spotgentrack + decade + artist    0.8249     0.6238  0.2515 0.3584    0.2116 7.085265e-07      5.0
+-> <repo>\paper_results\r9_metrics_summary.csv
