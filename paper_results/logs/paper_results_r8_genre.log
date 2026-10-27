@@ -1,0 +1,92 @@
+{'n_benchmark': 40560, 'n_fft_and_genre': 20610, 'hit_share': np.float64(0.5728)}
+
+=== dominant genre family: share among flops / hits ===
+target      share_flops  share_hits     n
+genre_dom                                
+rock             0.2101      0.2982  5370
+pop              0.0792      0.2138  3221
+rnb_soul         0.0139      0.1819  2269
+hiphop           0.0178      0.1216  1592
+country          0.0185      0.1178  1554
+latin            0.1665      0.0036  1508
+classical        0.0984      0.0019   889
+jazz             0.0806      0.0077   801
+world            0.0825      0.0009   737
+metal            0.0739      0.0053   713
+electronic       0.0474      0.0208   662
+other            0.0366      0.0079   415
+blues            0.0343      0.0049   360
+folk             0.0191      0.0089   273
+gospel           0.0134      0.0017   138
+reggae           0.0080      0.0032   108
+-> <repo>\paper_results\r8_genre_distribution.csv
+{'genre_acc_13 Spotify': 0.4735, 'genre_acc_31 FFT': 0.4989, 'genre_acc_13 Spotify + FFT': 0.5331, 'genre_acc_majority': np.float64(0.2606)}
+  [R8-genre] fold 1/25  (6 s)
+  [R8-genre] fold 2/25  (11 s)
+  [R8-genre] fold 3/25  (17 s)
+  [R8-genre] fold 4/25  (22 s)
+  [R8-genre] fold 5/25  (28 s)
+  [R8-genre] fold 6/25  (33 s)
+  [R8-genre] fold 7/25  (39 s)
+  [R8-genre] fold 8/25  (44 s)
+  [R8-genre] fold 9/25  (50 s)
+  [R8-genre] fold 10/25  (55 s)
+  [R8-genre] fold 11/25  (61 s)
+  [R8-genre] fold 12/25  (66 s)
+  [R8-genre] fold 13/25  (71 s)
+  [R8-genre] fold 14/25  (77 s)
+  [R8-genre] fold 15/25  (82 s)
+  [R8-genre] fold 16/25  (88 s)
+  [R8-genre] fold 17/25  (93 s)
+  [R8-genre] fold 18/25  (99 s)
+  [R8-genre] fold 19/25  (104 s)
+  [R8-genre] fold 20/25  (109 s)
+  [R8-genre] fold 21/25  (115 s)
+  [R8-genre] fold 22/25  (120 s)
+  [R8-genre] fold 23/25  (126 s)
+  [R8-genre] fold 24/25  (132 s)
+  [R8-genre] fold 25/25  (137 s)
+
+=== R8 genre as a feature: 5x5 CV (songs with FFT and genre) ===
+            config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+              main    0.8275   0.0053        0.8253         0.8297    0.9133       25           NaN          NaN          NaN   NaN     NaN
+        main + FFT    0.8406   0.0064        0.8379         0.8432    0.9215       25        0.0130        4.627 1.072427e-04  24.0     1.0
+      main + genre    0.9283   0.0036        0.9268         0.9298    0.9776       25        0.1008       37.565 7.772232e-23  25.0     0.0
+main + genre + FFT    0.9170   0.0033        0.9157         0.9184    0.9718       25        0.0895       43.783 2.070471e-24  25.0     0.0
+-> <repo>\paper_results\r8_genre_cv_summary.csv
+-> <repo>\paper_results\r8_genre_cv_folds.csv
+  [R8-matched] fold 1/25  (3 s)
+  [R8-matched] fold 2/25  (7 s)
+  [R8-matched] fold 3/25  (10 s)
+  [R8-matched] fold 4/25  (13 s)
+  [R8-matched] fold 5/25  (16 s)
+  [R8-matched] fold 6/25  (19 s)
+  [R8-matched] fold 7/25  (23 s)
+  [R8-matched] fold 8/25  (26 s)
+  [R8-matched] fold 9/25  (29 s)
+  [R8-matched] fold 10/25  (32 s)
+  [R8-matched] fold 11/25  (36 s)
+  [R8-matched] fold 12/25  (39 s)
+  [R8-matched] fold 13/25  (42 s)
+  [R8-matched] fold 14/25  (45 s)
+  [R8-matched] fold 15/25  (49 s)
+  [R8-matched] fold 16/25  (52 s)
+  [R8-matched] fold 17/25  (55 s)
+  [R8-matched] fold 18/25  (59 s)
+  [R8-matched] fold 19/25  (62 s)
+  [R8-matched] fold 20/25  (65 s)
+  [R8-matched] fold 21/25  (69 s)
+  [R8-matched] fold 22/25  (72 s)
+  [R8-matched] fold 23/25  (75 s)
+  [R8-matched] fold 24/25  (78 s)
+  [R8-matched] fold 25/25  (82 s)
+
+=== R8 genre-matched sample: 5x5 CV ===
+     config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+       main    0.7896   0.0088        0.7860         0.7933    0.8791       25           NaN          NaN          NaN   NaN     NaN
+ main + FFT    0.7905   0.0090        0.7868         0.7942    0.8823       25        0.0009        0.210 8.352673e-01  13.0    12.0
+audio + FFT    0.7470   0.0096        0.7431         0.7510    0.8231       25       -0.0426       -8.142 2.308872e-08   0.0    25.0
+      audio    0.7222   0.0078        0.7190         0.7255    0.7961       25       -0.0674      -13.583 9.232991e-13   0.0    25.0
+-> <repo>\paper_results\r8_genre_matched_cv_summary.csv
+-> <repo>\paper_results\r8_genre_matched_cv_folds.csv
+-> <repo>\paper_results\r8_genre_facts.csv

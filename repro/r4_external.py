@@ -18,7 +18,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-from common import ROOT, SEED, canonical_eval, cv_eval, make_pipeline, save, show
+from common import DATA, ROOT, SEED, canonical_eval, cv_eval, make_pipeline, save, show
 
 SPOTIFY_13 = ["danceability", "energy", "key", "loudness", "mode", "speechiness",
               "acousticness", "instrumentalness", "liveness", "valence", "tempo",
@@ -84,16 +84,16 @@ def ismir():
 
 # --------------------------------------------------------------------------- SpotGenTrack
 def spotgentrack():
-    t = pd.read_csv(os.path.join(ROOT, "spotify_tracks.csv"))
-    alb = pd.read_csv(os.path.join(ROOT, "spotify_albums.csv"), usecols=["id", "release_date"])
-    art = pd.read_csv(os.path.join(ROOT, "spotify_artists.csv"), usecols=["id", "name"])
+    t = pd.read_csv(os.path.join(DATA, "spotify_tracks.csv"))
+    alb = pd.read_csv(os.path.join(DATA, "spotify_albums.csv"), usecols=["id", "release_date"])
+    art = pd.read_csv(os.path.join(DATA, "spotify_artists.csv"), usecols=["id", "name"])
     t["year"] = pd.to_datetime(t["album_id"].map(dict(zip(alb.id, alb.release_date))),
                                errors="coerce", format="mixed").dt.year
     amap = dict(zip(art.id.astype(str), art.name.astype(str)))
     first = t["artists_id"].astype(str).str.strip("[]").str.split(",").str[0].str.strip(" '\"")
     t["artist_norm"] = first.map(amap).fillna(first).str.lower().str.strip()
     t["target"] = (pd.to_numeric(t["popularity"], errors="coerce") >= 55).astype(int)
-    low = pd.read_csv(os.path.join(ROOT, "low_level_audio_features.csv"))
+    low = pd.read_csv(os.path.join(DATA, "low_level_audio_features.csv"))
     lid = "Track_id" if "Track_id" in low.columns else next(c for c in low.columns
                                                           if c.lower() in ("track_id", "id"))
     rich = [c for c in low.columns if c != lid and not c.lower().startswith("unnamed")
@@ -121,7 +121,7 @@ def spotgentrack():
 
 # --------------------------------------------------------------------------- Billboard year-end
 def billboard():
-    b = pd.read_csv(os.path.join(ROOT, "billboard_24years_lyrics_spotify.csv"),
+    b = pd.read_csv(os.path.join(DATA, "billboard_24years_lyrics_spotify.csv"),
                     usecols=["ranking", "song", "band_singer", "year"] + SPOTIFY_13)
     b["artist_norm"] = (b["band_singer"].astype(str).str.lower()
                         .str.split(r"\s+(?:featuring|feat\.?|ft\.?|&|x|with|and)\s+").str[0]

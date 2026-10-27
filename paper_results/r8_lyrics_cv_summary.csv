@@ -1,0 +1,5 @@
+config,acc_mean,acc_std,acc_ci95_low,acc_ci95_high,auc_mean,n_folds,delta_vs_ref,corrected_t,corrected_p,wins,losses
+13 Spotify + decade + artist,0.8079,0.0023,0.8051,0.8107,0.7737,5,,,,,
+13 Spotify,0.7922,0.0015,0.7904,0.794,0.6784,5,-0.0157,-8.402,0.0010980146117593272,0.0,5.0
+13 Spotify + lyrics,0.7966,0.0012,0.7951,0.798,0.7293,5,-0.0113,-10.066,0.0005477780051385859,0.0,5.0
++ decade + artist + lyrics,0.8138,0.0019,0.8115,0.8161,0.7966,5,0.006,7.143,0.00203223597001519,5.0,0.0

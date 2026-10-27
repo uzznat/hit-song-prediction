@@ -30,8 +30,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
-os.chdir(ROOT)                                   # the legacy loaders use relative paths
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+os.chdir(ROOT)                                   # the older loaders use paths relative to the root
+DATA = os.path.join(ROOT, "data")                # raw datasets (see docs/DATA.md)
 OUT = os.path.join(ROOT, "paper_results")
 os.makedirs(OUT, exist_ok=True)
 

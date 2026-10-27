@@ -37,10 +37,10 @@ DEC_ORDER = ["60s", "70s", "80s", "90s", "00s", "10s"]
 DEC_START = {"60s": 1960, "70s": 1970, "80s": 1980, "90s": 1990, "00s": 2000, "10s": 2010}
 AUDIO = BASE_FEATURES_A
 
-SPOTIFY_DIR = "The-Spotify-Hit-Predictor-Dataset"
+SPOTIFY_DIR = "data/The-Spotify-Hit-Predictor-Dataset"
 SPOTIFY_URL = ("https://raw.githubusercontent.com/fortyTwo102/"
                "The-Spotify-Hit-Predictor-Dataset/master/dataset-of-{d}.csv")
-BILLBOARD_CSV = "hot100.csv"
+BILLBOARD_CSV = "data/hot100.csv"
 BILLBOARD_URL = ("https://raw.githubusercontent.com/utdata/rwd-billboard-data/"
                  "main/data-out/hot-100-current.csv")
 

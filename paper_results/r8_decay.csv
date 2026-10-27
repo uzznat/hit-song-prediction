@@ -1,0 +1,127 @@
+data,train,test,gap,features,n_train,n_test,accuracy
+all songs,60s,70s,1,audio,8622,7684,0.6853
+all songs,60s,70s,1,audio + artist,8622,7684,0.7392
+all songs,60s,80s,2,audio,8622,6789,0.6848
+all songs,60s,80s,2,audio + artist,8622,6789,0.7409
+all songs,60s,90s,3,audio,8622,5330,0.637
+all songs,60s,90s,3,audio + artist,8622,5330,0.6694
+all songs,60s,00s,4,audio,8622,5855,0.6538
+all songs,60s,00s,4,audio + artist,8622,5855,0.7114
+all songs,60s,10s,5,audio,8622,6280,0.6624
+all songs,60s,10s,5,audio + artist,8622,6280,0.7389
+all songs,70s,80s,1,audio,7684,6789,0.7458
+all songs,70s,80s,1,audio + artist,7684,6789,0.7795
+all songs,70s,90s,2,audio,7684,5330,0.7842
+all songs,70s,90s,2,audio + artist,7684,5330,0.8058
+all songs,70s,00s,3,audio,7684,5855,0.7508
+all songs,70s,00s,3,audio + artist,7684,5855,0.7836
+all songs,70s,10s,4,audio,7684,6280,0.6954
+all songs,70s,10s,4,audio + artist,7684,6280,0.7414
+all songs,80s,90s,1,audio,6789,5330,0.7737
+all songs,80s,90s,1,audio + artist,6789,5330,0.7863
+all songs,80s,00s,2,audio,6789,5855,0.7289
+all songs,80s,00s,2,audio + artist,6789,5855,0.7742
+all songs,80s,10s,3,audio,6789,6280,0.6981
+all songs,80s,10s,3,audio + artist,6789,6280,0.7541
+all songs,90s,00s,1,audio,5330,5855,0.8125
+all songs,90s,00s,1,audio + artist,5330,5855,0.8302
+all songs,90s,10s,2,audio,5330,6280,0.7444
+all songs,90s,10s,2,audio + artist,5330,6280,0.7826
+all songs,00s,10s,1,audio,5855,6280,0.8201
+all songs,00s,10s,1,audio + artist,5855,6280,0.8449
+all songs,60s,60s,0,audio,6897,8622,0.7651
+all songs,60s,60s,0,audio + artist,6897,8622,0.7932
+all songs,70s,70s,0,audio,6147,7684,0.7712
+all songs,70s,70s,0,audio + artist,6147,7684,0.8036
+all songs,80s,80s,0,audio,5431,6789,0.8053
+all songs,80s,80s,0,audio + artist,5431,6789,0.8394
+all songs,90s,90s,0,audio,4264,5330,0.8495
+all songs,90s,90s,0,audio + artist,4264,5330,0.8659
+all songs,00s,00s,0,audio,4684,5855,0.8545
+all songs,00s,00s,0,audio + artist,4684,5855,0.875
+all songs,10s,10s,0,audio,5024,6280,0.8393
+all songs,10s,10s,0,audio + artist,5024,6280,0.8721
+songs with FFT,60s,70s,1,audio,7131,6938,0.6786
+songs with FFT,60s,70s,1,audio + artist,7131,6938,0.7342
+songs with FFT,60s,70s,1,audio + FFT,7131,6938,0.7028
+songs with FFT,60s,70s,1,audio + artist + FFT,7131,6938,0.7563
+songs with FFT,60s,80s,2,audio,7131,6187,0.6767
+songs with FFT,60s,80s,2,audio + artist,7131,6187,0.7414
+songs with FFT,60s,80s,2,audio + FFT,7131,6187,0.6528
+songs with FFT,60s,80s,2,audio + artist + FFT,7131,6187,0.7301
+songs with FFT,60s,90s,3,audio,7131,4678,0.6257
+songs with FFT,60s,90s,3,audio + artist,7131,4678,0.6832
+songs with FFT,60s,90s,3,audio + FFT,7131,4678,0.5663
+songs with FFT,60s,90s,3,audio + artist + FFT,7131,4678,0.6484
+songs with FFT,60s,00s,4,audio,7131,5013,0.6357
+songs with FFT,60s,00s,4,audio + artist,7131,5013,0.7299
+songs with FFT,60s,00s,4,audio + FFT,7131,5013,0.6254
+songs with FFT,60s,00s,4,audio + artist + FFT,7131,5013,0.7147
+songs with FFT,60s,10s,5,audio,7131,5423,0.664
+songs with FFT,60s,10s,5,audio + artist,7131,5423,0.7542
+songs with FFT,60s,10s,5,audio + FFT,7131,5423,0.5993
+songs with FFT,60s,10s,5,audio + artist + FFT,7131,5423,0.7055
+songs with FFT,70s,80s,1,audio,6938,6187,0.7506
+songs with FFT,70s,80s,1,audio + artist,6938,6187,0.7865
+songs with FFT,70s,80s,1,audio + FFT,6938,6187,0.7711
+songs with FFT,70s,80s,1,audio + artist + FFT,6938,6187,0.8094
+songs with FFT,70s,90s,2,audio,6938,4678,0.7826
+songs with FFT,70s,90s,2,audio + artist,6938,4678,0.8068
+songs with FFT,70s,90s,2,audio + FFT,6938,4678,0.7886
+songs with FFT,70s,90s,2,audio + artist + FFT,6938,4678,0.7995
+songs with FFT,70s,00s,3,audio,6938,5013,0.7508
+songs with FFT,70s,00s,3,audio + artist,6938,5013,0.7814
+songs with FFT,70s,00s,3,audio + FFT,6938,5013,0.772
+songs with FFT,70s,00s,3,audio + artist + FFT,6938,5013,0.786
+songs with FFT,70s,10s,4,audio,6938,5423,0.6963
+songs with FFT,70s,10s,4,audio + artist,6938,5423,0.7378
+songs with FFT,70s,10s,4,audio + FFT,6938,5423,0.6967
+songs with FFT,70s,10s,4,audio + artist + FFT,6938,5423,0.7219
+songs with FFT,80s,90s,1,audio,6187,4678,0.7689
+songs with FFT,80s,90s,1,audio + artist,6187,4678,0.782
+songs with FFT,80s,90s,1,audio + FFT,6187,4678,0.7841
+songs with FFT,80s,90s,1,audio + artist + FFT,6187,4678,0.7935
+songs with FFT,80s,00s,2,audio,6187,5013,0.7161
+songs with FFT,80s,00s,2,audio + artist,6187,5013,0.7678
+songs with FFT,80s,00s,2,audio + FFT,6187,5013,0.7506
+songs with FFT,80s,00s,2,audio + artist + FFT,6187,5013,0.775
+songs with FFT,80s,10s,3,audio,6187,5423,0.6911
+songs with FFT,80s,10s,3,audio + artist,6187,5423,0.7549
+songs with FFT,80s,10s,3,audio + FFT,6187,5423,0.6815
+songs with FFT,80s,10s,3,audio + artist + FFT,6187,5423,0.7488
+songs with FFT,90s,00s,1,audio,4678,5013,0.8071
+songs with FFT,90s,00s,1,audio + artist,4678,5013,0.8306
+songs with FFT,90s,00s,1,audio + FFT,4678,5013,0.8203
+songs with FFT,90s,00s,1,audio + artist + FFT,4678,5013,0.8364
+songs with FFT,90s,10s,2,audio,4678,5423,0.737
+songs with FFT,90s,10s,2,audio + artist,4678,5423,0.785
+songs with FFT,90s,10s,2,audio + FFT,4678,5423,0.7516
+songs with FFT,90s,10s,2,audio + artist + FFT,4678,5423,0.7933
+songs with FFT,00s,10s,1,audio,5013,5423,0.8209
+songs with FFT,00s,10s,1,audio + artist,5013,5423,0.844
+songs with FFT,00s,10s,1,audio + FFT,5013,5423,0.8333
+songs with FFT,00s,10s,1,audio + artist + FFT,5013,5423,0.8538
+songs with FFT,60s,60s,0,audio,5704,7131,0.7536
+songs with FFT,60s,60s,0,audio + artist,5704,7131,0.7766
+songs with FFT,60s,60s,0,audio + FFT,5704,7131,0.799
+songs with FFT,60s,60s,0,audio + artist + FFT,5704,7131,0.8265
+songs with FFT,70s,70s,0,audio,5550,6938,0.7655
+songs with FFT,70s,70s,0,audio + artist,5550,6938,0.8025
+songs with FFT,70s,70s,0,audio + FFT,5550,6938,0.8018
+songs with FFT,70s,70s,0,audio + artist + FFT,5550,6938,0.8327
+songs with FFT,80s,80s,0,audio,4949,6187,0.8014
+songs with FFT,80s,80s,0,audio + artist,4949,6187,0.8371
+songs with FFT,80s,80s,0,audio + FFT,4949,6187,0.8209
+songs with FFT,80s,80s,0,audio + artist + FFT,4949,6187,0.8612
+songs with FFT,90s,90s,0,audio,3742,4678,0.8435
+songs with FFT,90s,90s,0,audio + artist,3742,4678,0.8625
+songs with FFT,90s,90s,0,audio + FFT,3742,4678,0.8555
+songs with FFT,90s,90s,0,audio + artist + FFT,3742,4678,0.8749
+songs with FFT,00s,00s,0,audio,4010,5013,0.849
+songs with FFT,00s,00s,0,audio + artist,4010,5013,0.8731
+songs with FFT,00s,00s,0,audio + FFT,4010,5013,0.8612
+songs with FFT,00s,00s,0,audio + artist + FFT,4010,5013,0.8793
+songs with FFT,10s,10s,0,audio,4338,5423,0.8422
+songs with FFT,10s,10s,0,audio + artist,4338,5423,0.8726
+songs with FFT,10s,10s,0,audio + FFT,4338,5423,0.846
+songs with FFT,10s,10s,0,audio + artist + FFT,4338,5423,0.8805

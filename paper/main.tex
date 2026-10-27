@@ -45,7 +45,9 @@ history mainly helps established artists, while era context helps new ones. A sy
 also shows that several gains are artefacts or noise: song titles ($+6.7$\pp) encode
 how the benchmark was assembled, and a 185-dimensional librosa representation that looked
 significant on a single split ($+3.8$\pp) is not significant under repeated
-cross-validation. All numbers are reproduced by released scripts.
+cross-validation. Spectral descriptors of 30-second previews add $+1.4$\pp{} on the whole
+benchmark, but the gain vanishes on a genre-matched sample: the benchmark's negatives are
+chosen by genre, and the artist's genre alone lifts accuracy to $0.928$. All numbers are reproduced by released scripts.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -96,7 +98,9 @@ our feature exceeds the best published accuracy (Sec.~\ref{sec:external}).
 breakdown by whether the artist had an earlier hit (Sec.~\ref{sec:robust}).
 \item An \emph{audit} showing which apparent gains do not survive: title-based features that
 encode dataset construction, and a rich audio representation whose single-split gain
-disappears under repeated cross-validation (Sec.~\ref{sec:audit}).
+disappears under repeated cross-validation (Sec.~\ref{sec:audit}), and a genre control
+showing that a significant spectral-feature gain on the whole benchmark is a genre
+shortcut (Sec.~\ref{sec:further}).
 \end{enumerate}
 
 % =====================================================================
@@ -217,7 +221,8 @@ The strict inequality guarantees that no information from the song's own period 
 the future is used. On the Hit Predictor, $\mathcal{H}$ is the full weekly Hot~100 history
 (distinct titles per artist and decade); on ISMIR and SpotGenTrack it is the set of positive
 songs of the dataset itself. On the Hit Predictor, 52.1\,\% of songs have an artist that
-can be matched to the chart history.
+can be matched to the chart history; this includes 99.99\,\% of the hits, and almost all
+unmatched songs are flops by artists who never charted (Sec.~\ref{sec:further}).
 
 \textbf{Rich audio.} Standardised and reduced by PCA to 40 components; scaling and PCA are
 fitted on the training part of each fold only.
@@ -596,9 +601,10 @@ main model (audio + decade + artist) raises accuracy from $0.825$ to $0.839$ ($+
 new artists, $0.789\to0.807$ ($+1.8$\pp, 25/25, $p=6\times10^{-9}$), while songs by known
 artists stay at $0.977$ ($-0.1$\pp, n.s.). Unlike on the small subset, decade remains
 useful once FFT is present: audio + artist + FFT reaches only $0.829$ ($+0.4$\pp{} over the
-main model, $p=0.04$). FFT thus addresses the cold-start weakness of artist history, but
-the caveat of Sec.~\ref{sec:discussion} applies to it too: the benchmark's flops come from
-non-mainstream genres, which spectral descriptors can recognise.
+main model, $p=0.04$). FFT thus appears to address the cold-start weakness of artist
+history, but the benchmark's flops come from non-mainstream genres by construction, and
+spectral descriptors can recognise genre. Sec.~\ref{sec:further} shows that this gain does
+not survive a genre control.
 
 \begin{figure}[t]
 \centering
@@ -608,6 +614,100 @@ cross-validated accuracy with 95\,\% CI, sorted. Blue: with artist history; gray
 Dashed line: the 13 Spotify descriptors alone.}
 \label{fig:subset}
 \end{figure}
+
+% ---------------------------------------------------------------------
+\subsection{Further experiments}\label{sec:further}
+
+\textbf{Genre control for FFT.} We attach Spotify artist genres from the SpotGenTrack
+release~\cite{martingutierrez2020multimodal} by normalised artist name (20{,}610 songs
+with both a preview and a genre) and map the tags to 16 families. The benchmark's
+construction is plainly visible: Latin, classical, jazz, ``world'' and metal artists
+account for 50\,\% of the flops and 1.9\,\% of the hits, while rock, pop, R\&B,
+hip-hop and country account for 93\,\% of the hits. Genre is also partly audible: a
+Random Forest recovers the family from the 13 Spotify descriptors with 47.4\,\% accuracy,
+from the 31 FFT descriptors with 49.9\,\% and from both with 53.3\,\% (majority class
+26.1\,\%). Three results follow (Table~\ref{tab:genre}). (a) Genre families as features
+raise the main model from $0.828$ to $0.928$ ($+10.1$\pp, 25/25, $p=8\times10^{-23}$):
+on this benchmark, knowing the artist's genre is worth more than any audio
+representation. (b) Once genre is known, FFT \emph{lowers} accuracy ($-1.1$\pp, 0/25,
+$p=5\times10^{-7}$), also for new artists ($-1.4$\pp). (c) On a genre-matched sample
+(as many hits as flops inside every family; 7{,}554 songs), FFT adds nothing to the main
+model ($+0.1$\pp, 13/25, $p=0.84$; new artists $+0.1$\pp, $p=0.80$). FFT still improves
+the 13 Spotify descriptors alone on that sample ($+2.5$\pp, 25/25, $p=5\times10^{-4}$),
+but the main model, without FFT, still beats audio + FFT by $4.3$\pp{}
+($p=2\times10^{-8}$). We conclude that the full-benchmark FFT gain is a genre shortcut,
+whereas the gain of artist history survives the genre control. Spotify assigns artist
+genres retrospectively, so we use them only as a control, never as a predictive feature.
+
+\begin{table}[t]
+\centering
+\caption{Genre control for FFT ($5{\times}5$ CV). Left: songs with a preview and a Spotify
+genre. Right: genre-matched sample. Accuracy overall and on songs by new artists.}
+\label{tab:genre}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{All (20{,}610)} & \multicolumn{2}{c}{Matched (7{,}554)} \\
+Model & Acc. & new art. & Acc. & new art. \\
+\midrule
+main (audio+decade+artist) & .828 & .780 & .790 & .749 \\
+\quad + FFT & .841 & .798 & .791 & .750 \\
+\quad + genre & .928 & .911 & -- & -- \\
+\quad + genre + FFT & .917 & .897 & -- & -- \\
+\midrule
+FFT vs main, $\Delta$ ($p$) & \multicolumn{2}{c}{$+1.3$ ($10^{-4}$)} & \multicolumn{2}{c}{$+0.1$ (.84)} \\
+FFT vs main+genre, $\Delta$ ($p$) & \multicolumn{2}{c}{$-1.1$ ($5\times10^{-7}$)} & \multicolumn{2}{c}{--} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Artist resolution.} The 52.1\,\% match rate is not a matching problem: 99.99\,\%
+of the hits are found in the chart history up to their own decade, and the unmatched songs
+are flops whose artists never charted (2.8\,\% of flops are matched). Two alternatives give
+no gain: matching the full credited name before the primary artist (``Simon \&
+Garfunkel'' rather than ``Simon'') lowers accuracy ($0.827$ vs $0.832$, $-0.5$\pp,
+$p=4\times10^{-4}$), and crediting featured appearances changes nothing ($+0.1$\pp,
+$p=0.39$). Canonical identifiers would avoid homonyms but cannot raise the match rate.
+
+\textbf{How fast does a model age?} We train on a single decade and test on every later
+one (Table~\ref{tab:decay}, songs with a preview). Audio-only accuracy falls from
+$0.809$ within a decade to $0.765$ one decade later and $0.689$ three decades later.
+Artist history slows the decay, and its advantage grows with the gap ($+2.8$\pp{} within
+a decade, $+5.1$\pp{} three decades later). FFT behaves in the opposite way: it helps
+within a decade ($+2.2$\pp) but hurts from three decades on, consistent with descriptors
+that encode era-specific production and genre rather than lasting appeal. The cells
+average 6 to 1 train/test pairs and are not tested for significance.
+
+\begin{table}[t]
+\centering
+\caption{Rolling origin: train on one decade, test $k$ decades later (Random Forest,
+35{,}370 songs with a preview; $k=0$: 5-fold CV inside each decade). Mean accuracy over
+the available decade pairs.}
+\label{tab:decay}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{cccccc}
+\toprule
+$k$ & pairs & audio & + artist & + FFT & + artist + FFT \\
+\midrule
+0 & 6 & .809 & .837 & .831 & \textbf{.859} \\
+1 & 5 & .765 & .796 & .782 & \textbf{.810} \\
+2 & 4 & .728 & \textbf{.775} & .736 & \textbf{.775} \\
+3 & 3 & .689 & \textbf{.740} & .673 & .728 \\
+4 & 2 & .666 & \textbf{.734} & .661 & .718 \\
+5 & 1 & .664 & \textbf{.754} & .599 & .706 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Lyrics.} SpotGenTrack provides six lexical descriptors of the lyrics (syllables
+per word, words per sentence, sentence count, word count, sentence similarity,
+vocabulary richness) for 79{,}420 tracks with lyrics (21.5\,\% hits; $5{\times}1$ CV as in
+Sec.~\ref{sec:external}). They improve the 13 Spotify descriptors (AUC $0.678\to0.729$,
+$p=3\times10^{-4}$) and still add on top of decade and artist history (accuracy
+$0.808\to0.814$, 5/5 folds, $p=0.002$; AUC $0.774\to0.797$, $p=2\times10^{-5}$). The gain
+is modest in accuracy because of the class imbalance, but it is the only content feature
+in this study that adds to artist history on a dataset whose negatives are not selected
+by genre.
 
 % =====================================================================
 \section{Discussion}\label{sec:discussion}
@@ -628,6 +728,13 @@ decade is uninformative alone and helps only through interactions, which is cons
 with era-specific tastes but may also reflect decade-dependent genre rules of the negative
 class. Reported gains from date features should be accompanied by a year-matched control.
 
+\textbf{Genre as a shortcut.} On the Hit Predictor, the artist's genre alone takes the
+main model to $0.928$, and the apparent FFT gain disappears once genre is controlled
+(Sec.~\ref{sec:further}). Any audio representation evaluated on this benchmark can score
+by recognising the excluded genres rather than by modelling what makes a song a hit, so
+audio gains on it should be reported together with a genre-matched control. Artist history
+passes that control; FFT does not.
+
 \textbf{Single splits mislead.} Several conclusions of our own earlier single-split
 analysis did not survive cross-validation. With a few thousand songs, an 891-song test set
 has a standard error of about 1.4\pp, so single-split gains of 3--4\pp{} on subsets are
@@ -639,16 +746,18 @@ correction over all of them ($p < 0.05/60 \approx 8\times10^{-4}$): the main gai
 Tables~\ref{tab:main} and~\ref{tab:models}, the head-to-head of Table~\ref{tab:tilburg},
 the temporal hold-out, the ISMIR gains of artist history in both protocols, and the
 artist-grouped gains. The full-benchmark FFT gain on top of the main model also survives
-($p=4\times10^{-9}$). Results with $8\times10^{-4} < p < 0.05$ should be read as
+($p=4\times10^{-9}$) but is explained by genre (Sec.~\ref{sec:further}); the genre-control
+results themselves ($p\leq5\times10^{-7}$) survive as well. Results with $8\times10^{-4} < p < 0.05$ should be read as
 indicative only: the decade and FFT gains on the 3{,}562-song audio subset (including FFT
 on top of artist history), audio + artist + FFT against the main model on the whole
-benchmark ($p=0.04$), most single-split gains on
+benchmark ($p=0.04$), the lyrics gains on SpotGenTrack ($5{\times}1$ CV, $p=0.002$ for
+accuracy), most single-split gains on
 that subset, the SpotGenTrack accuracy gain of artist history alone ($p=10^{-3}$; with
 decade, $p=3\times10^{-4}$), and the ISMIR cold-start gains of artist history for known
 artists in protocol A and new artists in protocol B.
 
-\textbf{Limitations.} Artist names are matched for 52\,\% of the benchmark songs, so the
-feature is zero for many established artists. Artist history does not help new artists on
+\textbf{Limitations.} Artist history is matched by normalised name, not by a canonical
+identifier, so homonymous artists can be merged. Artist history does not help new artists on
 the Hit Predictor and helps them only modestly on ISMIR ($+1.4$\pp), and it partly measures
 cumulative advantage rather than the intrinsic appeal of a song. The
 comparison with Zangerle et~al.\ uses a classifier rather than their regression on chart
@@ -659,18 +768,18 @@ computed the Spotify descriptors.
 % =====================================================================
 \section{Future Work}
 
-(i) \emph{Better artist resolution}: canonical artist identifiers (e.g.\ MusicBrainz or
-Spotify IDs) instead of name normalisation, to raise the 52\,\% match rate.
-(ii) \emph{Cold start}: since artist history barely helps first-time artists, features
-that do (label, collaborators, prior streams, social media), and a test of whether the
-FFT gain for new artists survives genre-matched negatives.
-(iii) \emph{Rolling-origin evaluation} across all decades to measure how fast a model
-trained on the past decays.
-(iv) \emph{Lyrics and emotion} features and learned audio embeddings, evaluated with the
-same audit protocol.
-(v) \emph{Benchmark design}: a hit-prediction dataset whose negatives are sampled
-independently of artist, genre and date, so that construction shortcuts cannot inflate
-results.
+Sec.~\ref{sec:further} already runs the cheap versions of several follow-ups: artist
+matching (no gain available), a genre control for audio features, rolling-origin decay and
+lexical lyrics descriptors. What remains needs new data.
+(i) \emph{Cold start}: artist history barely helps first-time artists on the benchmark, and
+the FFT gain for them was a genre shortcut; features such as label, collaborators, prior
+streams or social media remain to be tested, with a genre-matched control.
+(ii) \emph{Lyrics and emotion}: semantic and affective lyrics representations, and learned
+audio embeddings, evaluated with the same audit protocol.
+(iii) \emph{Benchmark design}: a hit-prediction dataset whose negatives are sampled
+independently of artist, genre and date. Our genre-matched sample is a small, post-hoc
+approximation of it; a purpose-built one would let content features be compared without
+construction shortcuts.
 
 \section{Conclusion}
 A song's artist history is a simple, leakage-free signal that improves hit prediction
@@ -678,9 +787,10 @@ across classifiers, beats the only prior model on the Spotify Hit Predictor benc
 head-to-head comparison, and transfers to an independent peer-reviewed dataset where it
 exceeds the best published accuracy and survives a year-matched control. These gains hold
 for artists never seen in training, although on the benchmark they come from established
-artists, whereas era context and spectral descriptors of a 30-second preview help
-newcomers. The same audit
-shows that larger gains---song titles, release dates, rich audio on a single split---can
+artists, whereas era context helps newcomers; spectral descriptors of a 30-second
+preview appear to help them too, but that gain disappears under a genre control. The same audit
+shows that larger gains---song titles, release dates, genre-driven audio features, rich
+audio on a single split---can
 come from how the data were built or from chance. Knowing which gains are real matters more
 than the headline number.
 

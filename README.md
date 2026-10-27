@@ -4,7 +4,7 @@
 Lior Shalon, Nathanael Uzzan — Technion, *Project in Artificial Intelligence*
 
 **Deliverables**
-* Paper (IEEE conference format, 7 pages): [`paper/main.pdf`](paper/main.pdf) ← source `paper/main.tex`
+* Paper (IEEE conference format, 8 pages): [`paper/main.pdf`](paper/main.pdf) ← source `paper/main.tex`
 * Slides (23): [`presentation/hit_prediction_deck.pdf`](presentation/hit_prediction_deck.pdf) ← source `hit_prediction_deck.html`
 * Audit of every claim: [`paper_results/FINDINGS.md`](paper_results/FINDINGS.md)
 * Handoff / where to continue: [`docs/HANDOFF.md`](docs/HANDOFF.md)
@@ -40,10 +40,13 @@ python repro/r3_audio_subset.py     # audio subset, FFT / rich librosa / PCA
 python repro/r4_external.py         # ISMIR 2019, SpotGenTrack, Billboard
 python repro/r5_tilburg.py          # head-to-head vs Du (2022), 50 seeds
 python repro/r6_robustness.py       # artist-grouped CV + cold start
-python repro/make_figures.py        # the three paper figures
+python repro/fetch_audio_full.py download && python repro/fetch_audio_full.py extract
+python repro/r7_fft_full.py         # FFT descriptors on the whole benchmark
+python repro/r8_future_work.py      # artist matching, genre control, decay, lyrics
+python repro/make_figures.py        # the paper figures
 ```
 
-Each script writes CSVs into `paper_results/` and a log into `paper_results_r<N>.log`.
+Each script writes CSVs into `paper_results/`; the run logs are in `paper_results/logs/`.
 Seeds are fixed (42 unless stated). `repro/common.py` holds the shared loaders, the
 sklearn pipelines and the two evaluation modes (canonical single split + repeated
 stratified CV with the Nadeau–Bengio corrected resampled *t*-test).
@@ -52,13 +55,16 @@ stratified CV with the Nadeau–Bengio corrected resampled *t*-test).
 
 ```
 repro/            the canonical pipeline — every number in the paper comes from here
-paper_results/    its output (CSVs) + FINDINGS.md, the claim-by-claim audit
-paper/            main.tex, refs.bib, the 3 figures, main.pdf
-presentation/     hit_prediction_deck.html → .pdf (23 slides)
+paper_results/    its output (CSVs) + FINDINGS.md (claim-by-claim audit) + logs/
+paper/            main.tex, refs.bib, the figures, main.pdf
+presentation/     hit_prediction_deck.html → .pdf (23 slides; predates R7/R8)
 docs/             DATA.md, HANDOFF.md, and the upstream datasets' own READMEs
-*.py (root)       the exploratory phase; repro/ still imports 4 of them (see HANDOFF)
+legacy/           the exploratory phase (scripts + figures) — historical only
+data/             raw datasets, not in git (see docs/DATA.md)
+cache/, ext_cache/  derived caches (Deezer clips, FFT/librosa features, ISMIR pickle), not in git
+releases/         zipped snapshots, not in git
 ```
 
-**Warning:** the loose `*.py` scripts in the root are the earlier exploratory phase.
-Several of their conclusions were overturned by `repro/`. Trust `repro/` +
-`paper_results/FINDINGS.md`, never a root script's own printout.
+**Warning:** `legacy/` holds the earlier exploratory scripts. Several of their
+conclusions were overturned by `repro/`, and they are not maintained (their imports and
+paths are those of the old flat layout). Trust `repro/` + `paper_results/FINDINGS.md`.

@@ -42,7 +42,7 @@ from phase0_harness import evaluate_feature, make_baseline_rf, BASE_FEATURES_A
 
 SEED = 42
 MAX_TRACKS = 4000                 # raise once the plumbing works (more audio = stronger test)
-SPOTIFY_DIR = "The-Spotify-Hit-Predictor-Dataset"
+SPOTIFY_DIR = "data/The-Spotify-Hit-Predictor-Dataset"
 SPOTIFY_URL = ("https://raw.githubusercontent.com/fortyTwo102/"
                "The-Spotify-Hit-Predictor-Dataset/master/dataset-of-{d}.csv")
 CACHE = "cache"; AUDIO_DIR = os.path.join(CACHE, "audio")

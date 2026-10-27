@@ -1,0 +1,10 @@
+fact,value
+n_benchmark,40560.0
+n_fft_and_genre,20610.0
+hit_share,0.5728
+genre_acc_13 Spotify,0.4735
+genre_acc_31 FFT,0.4989
+genre_acc_13 Spotify + FFT,0.5331
+genre_acc_majority,0.2606
+n_matched,7554.0
+matched_new_artist,6057.0

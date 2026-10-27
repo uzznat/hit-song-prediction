@@ -56,31 +56,31 @@ Every number in the paper is produced here and written to `paper_results/*.csv`.
 | `r4_external.py` | `r4_*.csv` | ISMIR 2019 protocols A (random negatives) and B (year-matched), SpotGenTrack, and the Billboard file. A: audio .708 → +year .739 → **+year+artist .763** (+2.4, *p* = 7e-8), above the published .7504. **B: release year becomes useless (*p* = .66) while artist history still adds +2.6 (*p* = 3e-5, 10/10 folds).** That contrast is the paper's strongest single piece of evidence. |
 | `r5_tilburg.py` | `r5_*.csv` | Head-to-head with Du (2022, Tilburg MSc) — their exact models, inputs and protocol, 50 seeds of 70/30. Our re-implementation matches their published numbers (RF 00s .846 vs .84; 10s .829 vs .82; LR 00s .821 vs .82; 10s .807 vs .79). Adding our feature: RF 00s **.867**, 10s **.861**. Better on **50/50 seeds in all four cells**, corrected *p* between 6e-6 and 9e-8. |
 | `r6_robustness.py` | `r6_*.csv` | `StratifiedGroupKFold` by normalised artist — no test artist ever appears in training. The gains survive (Kaggle +5.0 unchanged, 25/25, *p* = 1e-13). Plus the cold-start split: on Kaggle, **known artists are 96.6 % hits**, so artist history there largely means "known artist ⇒ hit" (+15.0), and it does nothing for the 33,438 new artists (+0.4, n.s.) where era helps instead (+2.2). On ISMIR B it does help new artists (+1.4, *p* = .002). |
-| `make_figures.py` | `paper/fig_*.pdf` | The three paper figures. |
+| `fetch_audio_full.py` + `r7_fft_full.py` | `r7_*.csv` | Deezer clips for 35,370 / 40,560 songs; FFT on top of the main model .825 → .839 (+1.4, 25/25, *p* = 4e-9), all of it on new artists (+1.8). |
+| `r8_future_work.py` | `r8_*.csv` | The Future Work items that can be run: artist matching (99.99 % of hits already found; featured credits +0.1 n.s.), genre control for FFT, rolling-origin decay, lyrics on SpotGenTrack. See FINDINGS.md. |
+| `make_figures.py` | `paper/fig_*.pdf` | The paper figures. |
 
-### Layer B — root `*.py` : exploratory. Historical, but partly load-bearing.
+### Layer B — `legacy/` : exploratory. Historical only.
 
-`phase0_harness.py`, `feature_experiments.py`, `phase2_fft.py`, `phase5_richaudio.py`,
-`run_ismir.py` / `run_ismir_v2.py`, `run_spotgentrack.py` / `run_spotgentrack_v2.py`,
-`run_zhao.py`, `external_validation_ismir.py`, `phase5_test.py`, `run_phase0.py`.
+`external_validation_ismir.py`, `phase5_test.py`, `run_ismir.py`, `run_phase0.py`,
+`run_spotgentrack.py` / `_v2`, `run_zhao.py`, plus their figures and result files.
+Do **not** quote their printed results — several are exactly the claims CV overturned.
+They are not maintained (written for the old flat layout).
 
-Do **not** quote their printed results — several of them are exactly the claims CV
-overturned. But they cannot simply be deleted, because `repro/` imports four of them:
+The five old modules that the pipeline still needs were moved **into `repro/`** during the
+2026-10-27 cleanup, so `repro/` is now self-contained:
 
 ```
-repro/r1_kaggle_core.py  ->  feature_experiments.build_artist_history
-repro/common.py          ->  phase0_harness.BASE_FEATURES_A, phase0_harness.mcnemar_test
-repro/r4_external.py     ->  run_ismir_v2            (the ISMIR loader)
-repro/r6_robustness.py   ->  run_ismir_v2, r4_external.rf200
+repro/feature_experiments.py  Kaggle loader + artist-history feature (used by common, r1)
+repro/phase0_harness.py       BASE_FEATURES_A, mcnemar_test (used by common)
+repro/run_ismir_v2.py         ISMIR loader (used by r4, r6)
+repro/phase2_fft.py           builds cache/fft_features.csv (3,562-song subset; R3)
+repro/phase5_richaudio.py     builds cache/rich_features.csv (R3)
 ```
 
-Note also that `repro/common.py` calls `os.chdir(ROOT)` on import, because those legacy
-loaders use relative paths. You can launch the scripts from anywhere, but expect that
-side effect.
-
-Superseded pairs — keep only the `_v2`: `run_ismir.py` was **never run** (`run_ismir_v2.py`
-replaced it); `run_spotgentrack.py` downloaded audio needlessly (`_v2` uses the
-pre-extracted features). `run_zhao.py` targets the discarded Billboard file.
+`repro/common.py` still calls `os.chdir(ROOT)` on import (the older loaders use paths
+relative to the root, now `data/...`). You can launch the scripts from anywhere, but
+expect that side effect.
 
 ---
 
@@ -92,7 +92,7 @@ decade files) and 2 (Hot 100 weekly history) download themselves on first run; I
 (18 GB, Zenodo) and SpotGenTrack (740 MB, Mendeley) are manual.
 
 **Before any ISMIR work, build `ext_cache/ismir_essentia.pkl`** by running
-`run_ismir_v2.py` once: it parses 592 Essentia descriptors out of 18 GB of JSON, after
+`repro/run_ismir_v2.py` once: it parses 592 Essentia descriptors out of 18 GB of JSON, after
 which every ISMIR experiment loads in seconds instead of hours.
 
 ---
@@ -106,7 +106,7 @@ which every ISMIR experiment loads in seconds instead of hours.
 | Beats published | ISMIR A **0.763** vs Zangerle et al.'s 0.7504 |
 | Head-to-head | better than Du (2022) on **50/50** seeds, all four cells |
 | Artist-grouped CV | gains unchanged (Kaggle +5.0, 25/25, *p* = 1e-13) |
-| Artist match rate | 52.1 % of benchmark songs |
+| Artist match rate | 52.1 % of benchmark songs — but **99.99 % of hits**; the unmatched songs are flops by artists who never charted (R8) |
 | Hit rate by prior hits | 0 → 39.3 % (n = 33,438) · 1–2 → 91.0 % · 3–5 → 97.2 % · 6–10 → 99.6 % · 11+ → 98.9 % |
 | Prior hits, hits vs flops | 3.21 vs 0.037 |
 | Multiplicity | ~60 *p*-values; every load-bearing result survives Bonferroni (*p* < 8e-4) |
@@ -140,7 +140,7 @@ cd paper && pdflatex main && bibtex main && pdflatex main && pdflatex main
 R1 / R2 / R5 run in minutes. R3 needs `cache/` (hours to build the first time: Deezer
 downloads plus librosa extraction; it resumes if interrupted). R4 / R6 need
 `ext_cache/ismir_essentia.pkl`. Seeds are fixed at 42 unless a script says otherwise.
-Logs land in `paper_results_r<N>.log`.
+Logs land in `paper_results/logs/`.
 
 The deck is a single self-contained HTML file: open
 `presentation/hit_prediction_deck.html` in a browser and print to PDF to regenerate it.
@@ -155,34 +155,22 @@ The deck is a single self-contained HTML file: open
    `repro/`" but gives no URL. A public repo, with that URL added to the section, closes
    the gap. This repository is already prepared for it — `.gitignore` excludes all 53 GB
    of data — but it has never been pushed anywhere.
-2. **Prune Layer B** to the four modules `repro/` actually imports, or absorb those
-   functions into `repro/common.py` and delete the rest. Until that happens, a newcomer
-   will run a root script and believe a number that cross-validation killed.
-3. **Pick a venue and format.** Currently IEEE conference style, 7 pages — fine for a
+2. ~~Prune Layer B~~ — done 2026-10-27: load-bearing modules moved into `repro/`, the rest
+   into `legacy/`, raw data into `data/`, logs into `paper_results/logs/`.
+3. **Pick a venue and format.** Currently IEEE conference style, 8 pages — fine for a
    workshop; a journal version would want the items below.
-4. **Licensing.** There is no licence file, and the Kaggle dataset is GPL-3.0. Settle this
-   before any public release.
+4. **Licensing.** `LICENSE.md` exists (MIT code; datasets keep their own terms, Kaggle is GPL-3.0).
 
-**Research — the paper's own Future Work, in the order I would tackle it.**
+**Research.** R8 (2026-10-27) ran the cheap Future Work items — see FINDINGS.md:
+artist matching cannot be improved (99.99 % of hits already matched); the whole-benchmark
+FFT gain is a **genre shortcut** (vanishes on a genre-matched sample); rolling-origin decay;
+lexical lyrics help a little on SpotGenTrack. What remains needs new data:
 
-5. **Better artist resolution.** The 52.1 % match rate comes from name-string
-   normalisation and is the single biggest cheap win: use canonical identifiers
-   (MusicBrainz, Spotify artist URIs) instead. The feature is currently zero for nearly
-   half the established artists, which means every gain reported here is a floor, not a
-   ceiling.
-6. **Cold start.** §R6 shows artist history does almost nothing for first-time artists —
-   the commercially interesting case. What *does* work for them? Label, collaborators,
-   prior streams, social signals.
+5. **Cold start** with non-audio signals (label, collaborators, prior streams, social),
+   always with a genre-matched control.
+6. **Semantic / emotional lyrics and learned audio embeddings** (no PyTorch/TF on this
+   machine today).
 7. **A benchmark whose negatives are sampled independently of artist, genre and date.**
-   This is the paper's recommendation to the field, and nobody has built it. It would make
-   the whole genre of result interpretable, and it is a contribution in its own right.
-8. **Rolling-origin evaluation** across all decades (how fast does a model trained on the
-   past decay?), plus lyrics / emotion features and learned audio embeddings — each run
-   through the same audit protocol rather than reported on a single split.
-
-**A caveat to carry forward:** the audio previews are 30-second Deezer clips, while the
-13 descriptors were computed by Spotify on full tracks from a different service. Future
-audio work should fix that mismatch rather than inherit it.
 
 ---
 

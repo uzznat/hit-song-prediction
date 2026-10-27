@@ -43,9 +43,10 @@ from sklearn.model_selection import train_test_split
 from phase0_harness import mcnemar_test
 
 SEED = 42
-HERE = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(HERE, "ext_cache", "ismir_essentia.pkl")
-OUT_CSV = os.path.join(HERE, "ismir_results.csv")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HERE = os.path.join(ROOT, "data")            # raw ISMIR files live in data/
+CACHE = os.path.join(ROOT, "ext_cache", "ismir_essentia.pkl")
+OUT_CSV = os.path.join(ROOT, "legacy", "ismir_results.csv")
 
 
 # ---------------------------------------------------------------- labels

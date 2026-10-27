@@ -41,7 +41,27 @@ CV overturns several single-split claims of the deck:
 - artist+FFT without decade .829 (+0.4 vs main, p=0.04 — indicative); decade still useful here,
   unlike on the 3.5k R3 subset. FFT alone on top of audio .804.
 - Caveat: flops are non-mainstream genres by construction; spectral descriptors can detect genre,
-  so the new-artist FFT gain may be partly benchmark-inflated too. Paper Sec. V-E, Discussion.
+  so the new-artist FFT gain may be partly benchmark-inflated too. -> CONFIRMED by R8 genre: it is a genre shortcut.
+
+## R8 — the Future Work items we could run (2026-10-27, `repro/r8_future_work.py`, paper Sec. V-F)
+- **Genre control (the FFT caveat) — FFT gain is a genre shortcut.** Spotify artist genres
+  (SpotGenTrack `spotify_artists.csv`, by normalised name; 20,610 songs with clip + genre, 16 families).
+  Latin/classical/jazz/world/metal = 50 % of flops, 1.9 % of hits. Genre recoverable from audio:
+  13 Spotify 47.4 %, FFT 49.9 %, both 53.3 % (majority 26.1 %).
+  main .828 → +FFT .841 (+1.3, p=1e-4) → +genre .928 (+10.1, p=8e-23); FFT on top of genre −1.1
+  (0/25, p=5e-7; new artists −1.4). Genre-matched sample (7,554): main+FFT vs main +0.1 (p=.84,
+  new artists +0.1 p=.80); audio+FFT vs audio +2.5 (p=5e-4); main beats audio+FFT by 4.3 (p=2e-8).
+  Genre is retrospective (Spotify tags) → used only as a control.
+- **Artist resolution — nothing to gain.** 99.99 % of HITS are found in the chart history; the 52 %
+  "match rate" = flops by never-charting artists (2.8 % of flops matched). Full-name-first matching
+  −0.5 (p=4e-4); featured credits +0.1 n.s. The old Limitations sentence ("zero for many
+  established artists") was WRONG and is corrected.
+- **Rolling origin (train on one decade, test k later, songs with clip):** audio .809/.765/.728/.689/
+  .666/.664 for k=0..5; artist advantage grows with k (+2.8 → +5.1 at k=3); FFT helps at k=0–1 and
+  hurts from k=3 (era/genre-specific). No significance test (1–6 pairs per cell).
+- **Lyrics (SpotGenTrack lexical, 79,420 tracks with lyrics, 5x1 CV):** 13 Spotify AUC .678 → .729
+  (p=3e-4); on top of decade+artist acc .808 → .814 (5/5, p=.002), AUC .774 → .797 (p=2e-5).
+  Indicative under Bonferroni for accuracy.
 
 ## R5 — Tilburg head-to-head (Du 2022), their exact protocol, 50 seeds of 70/30
 - Our re-implementation matches their published numbers (RF 00s 0.846 vs 0.84;

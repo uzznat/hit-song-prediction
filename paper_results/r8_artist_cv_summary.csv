@@ -1,0 +1,5 @@
+config,acc_mean,acc_std,acc_ci95_low,acc_ci95_high,auc_mean,n_folds,delta_vs_ref,corrected_t,corrected_p,wins,losses
+main (orig artist),0.8321,0.0043,0.8303,0.8339,0.9177,25,,,,,
+audio + decade,0.8021,0.0043,0.8003,0.8039,0.8798,25,-0.03,-13.752,7.084954247231368e-13,0.0,25.0
+strict matching,0.8267,0.0043,0.8249,0.8285,0.912,25,-0.0054,-4.11,0.0003990558438070734,0.0,25.0
+wide (featured credits),0.8332,0.0043,0.8315,0.835,0.9189,25,0.0011,0.881,0.3868172172989927,17.0,8.0
