@@ -38,3 +38,6 @@ paper/*.synctex.gz
 
 # Release bundles built with `git archive`
 *.zip
+
+# Operational logs of the Deezer download/extract runs
+fetch_audio_full_*.log

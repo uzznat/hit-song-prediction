@@ -7,10 +7,13 @@ R3 -- the audio subset (Kaggle songs with a 30 s Deezer clip).
   * block knock-out ablation from the full model
   * rich-family knock-out (MFCC, deltas, chroma, tonnetz, spectral shape,
     ZCR+RMS, rhythm)
+  * FFT on top of artist history, and whether decade still adds once FFT is in
   canonical split (75/25, seed 42, as in phase5) + 5x5 repeated CV.
 
-    py repro/r3_audio_subset.py
+    py repro/r3_audio_subset.py          # everything
+    py repro/r3_audio_subset.py fft      # only the FFT block
 """
+import sys
 import numpy as np
 import pandas as pd
 
@@ -91,13 +94,28 @@ def main():
         keep = [c for c in rcols if fams[c] != f]
         fam[f"- {f}"] = P(AUDIO + [ART], keep, n_pca=min(40, len(keep)))
 
+    # FFT block: reference = artist + FFT, so each delta is a direct paired test
+    fft = {
+        "+ artist + FFT":           P(AUDIO + [ART] + fcols),
+        "+ artist":                 P(AUDIO + [ART]),
+        "+ decade + artist":        P(AUDIO + DEC_COLS + [ART]),
+        "+ artist + FFT + decade":  P(AUDIO + [ART] + fcols + DEC_COLS),
+        "+ FFT (31)":               P(AUDIO + fcols),
+        "+ FFT + decade":           P(AUDIO + fcols + DEC_COLS),
+    }
+
     idx = np.arange(len(data))
     tr, te = train_test_split(idx, test_size=0.25, stratify=y, random_state=SEED)
 
-    for tag, cfg, ref in [("combos", combos, "audio (13)"),
-                          ("ablation", ablation, "full model"),
-                          ("pca", pca, "PCA 40"),
-                          ("families", fam, "audio + artist + rich (all families)")]:
+    blocks = [("combos", combos, "audio (13)"),
+              ("ablation", ablation, "full model"),
+              ("pca", pca, "PCA 40"),
+              ("families", fam, "audio + artist + rich (all families)"),
+              ("fft", fft, "+ artist + FFT")]
+    only = sys.argv[1:]
+    for tag, cfg, ref in blocks:
+        if only and tag not in only:
+            continue
         can = canonical_eval(cfg, data, y, tr, te, ref=ref)
         print(f"\n=== R3 {tag}: canonical 75/25 split ({len(tr)} train / {len(te)} test) ===")
         show(can)

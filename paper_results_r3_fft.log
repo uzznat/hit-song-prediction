@@ -1,0 +1,205 @@
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+<repo>\repro\r3_audio_subset.py:52: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  data[f"{a}_x_{d}"] = data[a] * data[c]
+audio subset: 3562 songs (1854 hits), rich=185, fft=31
+rich families: {'other': 80, 'MFCC': 40, 'chroma': 24, 'spectral shape': 22, 'tonnetz': 12, 'ZCR + RMS': 4, 'rhythm': 3}
+-> <repo>\paper_results\r3_subset_facts.csv
+
+=== R3 fft: canonical 75/25 split (2671 train / 891 test) ===
+                 config  accuracy  roc_auc   delta  mcnemar_p  new_right_only  ref_right_only
+         + artist + FFT    0.8114   0.9036     NaN        NaN             NaN             NaN
+               + artist    0.7868   0.8852 -0.0246   0.055234            49.0            71.0
+      + decade + artist    0.7890   0.8904 -0.0224   0.077714            48.0            68.0
++ artist + FFT + decade    0.8373   0.9079  0.0259   0.004181            41.0            18.0
+             + FFT (31)    0.7969   0.8654 -0.0145   0.237049            45.0            58.0
+         + FFT + decade    0.7935   0.8707 -0.0179   0.160057            49.0            65.0
+-> <repo>\paper_results\r3_fft_canonical.csv
+  [R3 fft] fold 1/25  (2 s)
+  [R3 fft] fold 2/25  (3 s)
+  [R3 fft] fold 3/25  (5 s)
+  [R3 fft] fold 4/25  (6 s)
+  [R3 fft] fold 5/25  (8 s)
+  [R3 fft] fold 6/25  (9 s)
+  [R3 fft] fold 7/25  (11 s)
+  [R3 fft] fold 8/25  (12 s)
+  [R3 fft] fold 9/25  (14 s)
+  [R3 fft] fold 10/25  (15 s)
+  [R3 fft] fold 11/25  (17 s)
+  [R3 fft] fold 12/25  (18 s)
+  [R3 fft] fold 13/25  (20 s)
+  [R3 fft] fold 14/25  (21 s)
+  [R3 fft] fold 15/25  (23 s)
+  [R3 fft] fold 16/25  (24 s)
+  [R3 fft] fold 17/25  (26 s)
+  [R3 fft] fold 18/25  (27 s)
+  [R3 fft] fold 19/25  (29 s)
+  [R3 fft] fold 20/25  (30 s)
+  [R3 fft] fold 21/25  (32 s)
+  [R3 fft] fold 22/25  (33 s)
+  [R3 fft] fold 23/25  (35 s)
+  [R3 fft] fold 24/25  (36 s)
+  [R3 fft] fold 25/25  (38 s)
+
+=== R3 fft: 5x5 repeated CV ===
+                 config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+         + artist + FFT    0.8208   0.0100        0.8167         0.8250    0.9054       25           NaN          NaN          NaN   NaN     NaN
+               + artist    0.8012   0.0143        0.7953         0.8071    0.8907       25       -0.0196       -2.899     0.007888   2.0    23.0
+      + decade + artist    0.8139   0.0139        0.8081         0.8196    0.9003       25       -0.0070       -1.157     0.258655   4.0    20.0
++ artist + FFT + decade    0.8236   0.0101        0.8195         0.8278    0.9078       25        0.0028        0.677     0.504977  16.0     9.0
+             + FFT (31)    0.7861   0.0125        0.7810         0.7913    0.8615       25       -0.0347       -5.072     0.000035   0.0    25.0
+         + FFT + decade    0.7853   0.0140        0.7796         0.7911    0.8638       25       -0.0355       -5.055     0.000036   0.0    25.0
+-> <repo>\paper_results\r3_fft_cv_summary.csv
+-> <repo>\paper_results\r3_fft_cv_folds.csv

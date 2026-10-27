@@ -24,11 +24,24 @@ CV overturns several single-split claims of the deck:
 - artist +3.8 (p=2e-6, 25/25) ✅ ; decade+artist +5.1 (p=1e-8) ✅
 - **rich librosa (185→PCA40) +0.9, p=0.15 — NOT significant** (canonical said +3.8, p=0.002)
 - FFT (31) +2.3, p=0.007 — modest but significant; artist+FFT 0.821 best mean
+- FFT block (2026-10-25, `r3_fft_*.csv`): FFT on top of artist +2.0 (p=0.008, 23/25);
+  artist+FFT+decade 0.824 = best, but decade adds +0.3 n.s. (p=0.50); FFT+decade 0.785 = FFT
+  0.786 (FFT already carries the era); artist on top of FFT +3.5 (p=4e-5). Paper Fig. 4.
 - decade +1.0 (p=0.026); decade×audio +2.6 (p=0.001)
 - PCA 5…100 all within noise (185 raw −1.2, p=0.11) → "PCA 40 is the peak" not supported
 - rich family knock-outs all within ±0.1 pt → no family matters
 - block ablation from full model: only **artist** is essential (−3.3, p=1e-5);
   removing rich +0.45 (n.s.), audio −0.9 (n.s.)
+
+## R7 — FFT on the whole Kaggle benchmark (2026-10-26, `repro/r7_fft_full.py`)
+- Deezer clips for 35,370 / 40,560 songs (87.2 %); hits 94.0 % vs flops 80.6 % covered →
+  subset is 53.2 % hits, so all comparisons use the SAME 35,370 songs.
+- 5x5 CV: main model (audio+decade+artist) .825 → +FFT .839 (+1.4, 25/25, p=4e-9; AUC .911→.921).
+- Gain is all on NEW artists: .789 → .807 (+1.8, 25/25, p=6e-9); known artists .977 → .976 (n.s.).
+- artist+FFT without decade .829 (+0.4 vs main, p=0.04 — indicative); decade still useful here,
+  unlike on the 3.5k R3 subset. FFT alone on top of audio .804.
+- Caveat: flops are non-mainstream genres by construction; spectral descriptors can detect genre,
+  so the new-artist FFT gain may be partly benchmark-inflated too. Paper Sec. V-E, Discussion.
 
 ## R5 — Tilburg head-to-head (Du 2022), their exact protocol, 50 seeds of 70/30
 - Our re-implementation matches their published numbers (RF 00s 0.846 vs 0.84;

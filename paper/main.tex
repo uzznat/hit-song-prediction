@@ -175,8 +175,8 @@ Each decade file is therefore balanced (48.3--49.9\,\% hits), and the negative c
 selected partly \emph{by artist} and \emph{by genre}. We return to this in
 Sec.~\ref{sec:discussion}.
 
-\textbf{Audio subset.} For 3{,}562 of these songs a 30-second preview was retrieved from
-Deezer, from which we extracted 31 spectral/rhythmic descriptors (``FFT'') and 185 richer
+\textbf{Audio subset.} For 3{,}562 of these songs a 30-second preview was first retrieved from
+Deezer (extended to 35{,}370 songs in Sec.~\ref{sec:audit}), from which we extracted 31 spectral/rhythmic descriptors (``FFT'') and 185 richer
 librosa~\cite{mcfee2015librosa} descriptors (20 MFCCs and their first and second
 derivatives, chroma, tonnetz, spectral contrast, centroid, bandwidth, roll-off, flatness,
 zero-crossing rate, RMS and onset/tempogram statistics, each summarised by mean and
@@ -577,6 +577,38 @@ descriptor family (all within $\pm0.1$\pp). In a block ablation of the full subs
 only removing artist history causes a significant drop ($-3.3$\pp, $p=10^{-5}$). The
 \texttt{chorus\_hit} and \texttt{sections} fields, often suspected of leakage, add nothing.
 
+\textbf{FFT and the best audio-subset model.} The 31 FFT descriptors are the only extra
+audio representation whose gain survives cross-validation, and it persists on top of
+artist history: audio + artist + FFT reaches $0.821$ against $0.801$ for audio + artist
+($+2.0$\pp, 23/25 folds, $p=0.008$). Adding decade to that model gives the best subset
+accuracy, $0.824$, but the increment is not significant ($+0.3$\pp, $p=0.50$), and
+decade adds nothing to FFT alone ($0.786$ vs $0.785$): the spectral descriptors already
+carry the era. Conversely, artist history still adds $+3.5$\pp{} on top of FFT
+($p=4\times10^{-5}$). Fig.~\ref{fig:subset} shows every configuration we evaluated on
+this subset.
+
+\textbf{FFT on the whole benchmark.} We then retrieved Deezer previews for every song we
+could match: 35{,}370 of the 40{,}560 songs (87.2\,\%). Deezer finds hits more often than
+flops (94.0\,\% vs 80.6\,\%), so the covered set is 53.2\,\% hits and every comparison
+below uses the same 35{,}370 songs. With $5{\times}5$ cross-validation, adding FFT to the
+main model (audio + decade + artist) raises accuracy from $0.825$ to $0.839$ ($+1.4$\pp,
+25/25 folds, $p=4\times10^{-9}$; AUC $0.911\to0.921$). The whole gain comes from songs by
+new artists, $0.789\to0.807$ ($+1.8$\pp, 25/25, $p=6\times10^{-9}$), while songs by known
+artists stay at $0.977$ ($-0.1$\pp, n.s.). Unlike on the small subset, decade remains
+useful once FFT is present: audio + artist + FFT reaches only $0.829$ ($+0.4$\pp{} over the
+main model, $p=0.04$). FFT thus addresses the cold-start weakness of artist history, but
+the caveat of Sec.~\ref{sec:discussion} applies to it too: the benchmark's flops come from
+non-mainstream genres, which spectral descriptors can recognise.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_subset.pdf}
+\caption{Every configuration evaluated on the 3{,}562-song audio subset, $5{\times}5$
+cross-validated accuracy with 95\,\% CI, sorted. Blue: with artist history; gray: without.
+Dashed line: the 13 Spotify descriptors alone.}
+\label{fig:subset}
+\end{figure}
+
 % =====================================================================
 \section{Discussion}\label{sec:discussion}
 
@@ -606,8 +638,11 @@ multiplicity. Every result our conclusions rest on remains significant after a B
 correction over all of them ($p < 0.05/60 \approx 8\times10^{-4}$): the main gains of
 Tables~\ref{tab:main} and~\ref{tab:models}, the head-to-head of Table~\ref{tab:tilburg},
 the temporal hold-out, the ISMIR gains of artist history in both protocols, and the
-artist-grouped gains. Results with $8\times10^{-4} < p < 0.05$ should be read as
-indicative only: the decade and FFT gains on the audio subset, most single-split gains on
+artist-grouped gains. The full-benchmark FFT gain on top of the main model also survives
+($p=4\times10^{-9}$). Results with $8\times10^{-4} < p < 0.05$ should be read as
+indicative only: the decade and FFT gains on the 3{,}562-song audio subset (including FFT
+on top of artist history), audio + artist + FFT against the main model on the whole
+benchmark ($p=0.04$), most single-split gains on
 that subset, the SpotGenTrack accuracy gain of artist history alone ($p=10^{-3}$; with
 decade, $p=3\times10^{-4}$), and the ISMIR cold-start gains of artist history for known
 artists in protocol A and new artists in protocol B.
@@ -627,7 +662,8 @@ computed the Spotify descriptors.
 (i) \emph{Better artist resolution}: canonical artist identifiers (e.g.\ MusicBrainz or
 Spotify IDs) instead of name normalisation, to raise the 52\,\% match rate.
 (ii) \emph{Cold start}: since artist history barely helps first-time artists, features
-that do (label, collaborators, prior streams, social media).
+that do (label, collaborators, prior streams, social media), and a test of whether the
+FFT gain for new artists survives genre-matched negatives.
 (iii) \emph{Rolling-origin evaluation} across all decades to measure how fast a model
 trained on the past decays.
 (iv) \emph{Lyrics and emotion} features and learned audio embeddings, evaluated with the
@@ -642,7 +678,8 @@ across classifiers, beats the only prior model on the Spotify Hit Predictor benc
 head-to-head comparison, and transfers to an independent peer-reviewed dataset where it
 exceeds the best published accuracy and survives a year-matched control. These gains hold
 for artists never seen in training, although on the benchmark they come from established
-artists, whereas era context also helps newcomers. The same audit
+artists, whereas era context and spectral descriptors of a 30-second preview help
+newcomers. The same audit
 shows that larger gains---song titles, release dates, rich audio on a single split---can
 come from how the data were built or from chance. Knowing which gains are real matters more
 than the headline number.

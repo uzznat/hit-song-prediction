@@ -1,0 +1,14 @@
+fact,value
+n_benchmark,40560.0
+n_with_fft,35370.0
+coverage,0.872
+coverage_hits,0.9397
+coverage_flops,0.8061
+hit_share_subset,0.5319
+n_new_artist,28641.0
+coverage_00s,0.8562
+coverage_10s,0.8635
+coverage_60s,0.8271
+coverage_70s,0.9029
+coverage_80s,0.9113
+coverage_90s,0.8777

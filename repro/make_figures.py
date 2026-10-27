@@ -113,8 +113,41 @@ def fig_ismir():
     plt.close(fig)
 
 
+def fig_subset():
+    combos = rd("r3_combos_cv_summary.csv")
+    fft = rd("r3_fft_cv_summary.csv")
+    s = pd.concat([combos, fft[~fft.config.isin(combos.config)]]).set_index("config")
+    names = {"audio (13)": "audio (13)", "+ decade": "+ decade", "+ rich": "+ rich librosa",
+             "+ FFT (31)": "+ FFT", "+ FFT + decade": "+ FFT + decade",
+             "+ decade x audio": "+ decade x audio", "+ rich + decade": "+ rich + decade",
+             "+ artist": "+ artist", "+ decade + artist": "+ decade + artist",
+             "+ artist + rich": "+ artist + rich", "+ artist + rich + FFT": "+ artist + rich + FFT",
+             "+ artist + rich + decade": "+ artist + rich + decade",
+             "all 5 blocks": "all 5 blocks", "+ artist + FFT": "+ artist + FFT",
+             "+ artist + FFT + decade": "+ artist + FFT + decade"}
+    s = s.loc[list(names)].sort_values("acc_mean")
+    base = 100 * s.loc["audio (13)", "acc_mean"]
+    fig, ax = plt.subplots(figsize=(COL_W, 2.9))
+    y = np.arange(len(s))
+    for yi, (cfg, r) in zip(y, s.iterrows()):
+        m, lo, hi = 100 * r.acc_mean, 100 * r.acc_ci95_low, 100 * r.acc_ci95_high
+        col = BLUE if ("artist" in cfg or cfg == "all 5 blocks") else GRAY
+        ax.plot([lo, hi], [yi, yi], color=col, lw=1.6, solid_capstyle="round", zorder=2)
+        ax.scatter(m, yi, s=18, color=col, edgecolor="white", linewidth=0.6, zorder=3)
+        ax.text(hi + 0.25, yi, f"{m:.1f}", va="center", color=INK, fontsize=6.3)
+    ax.axvline(base, color=MUTED, lw=0.8, ls="--", zorder=1)       # explained in the caption
+    ax.set_yticks(y, [names[c] for c in s.index], fontsize=6.5)
+    ax.set_xlabel("CV accuracy (%), audio subset")
+    ax.set_xlim(75, 84.5)
+    ax.grid(axis="y", visible=False)
+    fig.tight_layout(pad=0.3)
+    fig.savefig(os.path.join(OUT, "fig_subset.pdf"), bbox_inches="tight", pad_inches=0.02)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     fig_artist_curve()
     fig_tilburg()
     fig_ismir()
+    fig_subset()
     print("figures written to", OUT)
