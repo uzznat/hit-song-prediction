@@ -69,3 +69,9 @@ releases/         zipped snapshots, not in git
 **Warning:** `legacy/` holds the earlier exploratory scripts. Several of their
 conclusions were overturned by `repro/`, and they are not maintained (their imports and
 paths are those of the old flat layout). Trust `repro/` + `paper_results/FINDINGS.md`.
+
+## Time series study (`timeseries/`)
+
+Reading plan from our supervisor (time-series components, Fourier seasonality, forecasting, ARIMA, ML), applied
+to the weekly Hot 100: `timeseries/time_series_hot100.ipynb` (HTML export alongside), rebuilt and executed by
+`py timeseries/build_notebook.py` (needs `statsmodels nbformat nbclient ipykernel`).
