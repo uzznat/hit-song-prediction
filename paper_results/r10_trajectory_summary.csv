@@ -1,0 +1,53 @@
+target,k,model,config,accuracy,auc,f1
+big_20wk,1,logistic,"context only (year, month, artist history)",0.8123,0.7394,0.0675
+big_20wk,1,logistic,debut position,0.8211,0.6082,0.0
+big_20wk,1,logistic,first 1 week(s),0.8211,0.6082,0.0
+big_20wk,1,logistic,first 1 week(s) + context,0.8139,0.7527,0.0951
+big_20wk,1,random forest,"context only (year, month, artist history)",0.7957,0.7491,0.3069
+big_20wk,1,random forest,debut position,0.8236,0.6041,0.0694
+big_20wk,1,random forest,first 1 week(s),0.8236,0.6041,0.0694
+big_20wk,1,random forest,first 1 week(s) + context,0.8165,0.7861,0.3453
+big_20wk,2,logistic,"context only (year, month, artist history)",0.8123,0.7394,0.0675
+big_20wk,2,logistic,first 2 week(s),0.8299,0.6768,0.1644
+big_20wk,2,logistic,first 2 week(s) + context,0.838,0.8369,0.389
+big_20wk,2,random forest,"context only (year, month, artist history)",0.7957,0.7491,0.3069
+big_20wk,2,random forest,first 2 week(s),0.811,0.6287,0.2262
+big_20wk,2,random forest,first 2 week(s) + context,0.8468,0.8473,0.4933
+big_20wk,3,logistic,"context only (year, month, artist history)",0.8123,0.7394,0.0675
+big_20wk,3,logistic,first 3 week(s),0.8318,0.6915,0.1794
+big_20wk,3,logistic,first 3 week(s) + context,0.8526,0.8568,0.475
+big_20wk,3,random forest,"context only (year, month, artist history)",0.7957,0.7491,0.3069
+big_20wk,3,random forest,first 3 week(s),0.8002,0.6594,0.2665
+big_20wk,3,random forest,first 3 week(s) + context,0.8601,0.8704,0.54
+big_20wk,4,logistic,"context only (year, month, artist history)",0.8123,0.7394,0.0675
+big_20wk,4,logistic,first 4 week(s),0.8317,0.717,0.1935
+big_20wk,4,logistic,first 4 week(s) + context,0.8638,0.8743,0.535
+big_20wk,4,random forest,"context only (year, month, artist history)",0.7957,0.7491,0.3069
+big_20wk,4,random forest,first 4 week(s),0.8175,0.713,0.2718
+big_20wk,4,random forest,first 4 week(s) + context,0.8725,0.8886,0.5862
+big_top10,1,logistic,"context only (year, month, artist history)",0.8359,0.6391,0.0
+big_top10,1,logistic,debut position,0.8442,0.6988,0.2023
+big_top10,1,logistic,first 1 week(s),0.8442,0.6988,0.2023
+big_top10,1,logistic,first 1 week(s) + context,0.8532,0.7474,0.2931
+big_top10,1,random forest,"context only (year, month, artist history)",0.8068,0.5925,0.1511
+big_top10,1,random forest,debut position,0.8523,0.6998,0.1815
+big_top10,1,random forest,first 1 week(s),0.8523,0.6998,0.1815
+big_top10,1,random forest,first 1 week(s) + context,0.8504,0.75,0.4006
+big_top10,2,logistic,"context only (year, month, artist history)",0.8359,0.6391,0.0
+big_top10,2,logistic,first 2 week(s),0.8642,0.8375,0.4471
+big_top10,2,logistic,first 2 week(s) + context,0.8673,0.8436,0.4687
+big_top10,2,random forest,"context only (year, month, artist history)",0.8068,0.5925,0.1511
+big_top10,2,random forest,first 2 week(s),0.8597,0.7956,0.4651
+big_top10,2,random forest,first 2 week(s) + context,0.8756,0.8499,0.5307
+big_top10,3,logistic,"context only (year, month, artist history)",0.8359,0.6391,0.0
+big_top10,3,logistic,first 3 week(s),0.8806,0.8736,0.5602
+big_top10,3,logistic,first 3 week(s) + context,0.8817,0.8791,0.5651
+big_top10,3,random forest,"context only (year, month, artist history)",0.8068,0.5925,0.1511
+big_top10,3,random forest,first 3 week(s),0.8686,0.8451,0.5492
+big_top10,3,random forest,first 3 week(s) + context,0.8924,0.8917,0.6101
+big_top10,4,logistic,"context only (year, month, artist history)",0.8359,0.6391,0.0
+big_top10,4,logistic,first 4 week(s),0.8928,0.898,0.6241
+big_top10,4,logistic,first 4 week(s) + context,0.8931,0.9034,0.6267
+big_top10,4,random forest,"context only (year, month, artist history)",0.8068,0.5925,0.1511
+big_top10,4,random forest,first 4 week(s),0.8936,0.8906,0.6312
+big_top10,4,random forest,first 4 week(s) + context,0.9067,0.9174,0.674

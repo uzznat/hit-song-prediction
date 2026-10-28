@@ -1,0 +1,6 @@
+config,acc_mean,acc_std,acc_ci95_low,acc_ci95_high,auc_mean,n_folds,delta_vs_ref,corrected_t,corrected_p,wins,losses
+main (audio + decade + artist),0.8321,0.0043,0.8303,0.8339,0.9177,25,,,,,
++ trend distance & direction (2),0.8328,0.0045,0.8309,0.8346,0.9192,25,0.0007,0.445,0.6600708900194927,16.0,8.0
++ per-feature deviation from last decade's hits (13),0.8367,0.0041,0.835,0.8384,0.922,25,0.0046,3.046,0.0055558398429694945,23.0,2.0
+audio only,0.7817,0.005,0.7796,0.7838,0.8592,25,-0.0504,-20.805,7.29876714755627e-17,0.0,25.0
+audio + trend (2),0.7995,0.0041,0.7978,0.8012,0.8758,25,-0.0326,-17.28,4.799504539036865e-15,0.0,25.0

@@ -1,0 +1,3 @@
+config,acc_mean,acc_std,acc_ci95_low,acc_ci95_high,auc_mean,n_folds,delta_vs_ref,corrected_t,corrected_p,wins,losses
+audio only,0.7817,0.005,0.7796,0.7838,0.8592,25,,,,,
+audio + trend (2),0.7995,0.0041,0.7978,0.8012,0.8758,25,0.0178,9.798,7.312596710307611e-10,25.0,0.0

@@ -1,0 +1,171 @@
+songs with complete history: 31,925 (1958 to 2025); top-10 share 0.164, >=20 weeks share 0.179
+  [big_top10] k=1 done
+  [big_top10] k=2 done
+  [big_top10] k=3 done
+  [big_top10] k=4 done
+  [big_20wk] k=1 done
+  [big_20wk] k=2 done
+  [big_20wk] k=3 done
+  [big_20wk] k=4 done
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_folds.csv
+
+=== trajectory: summary ===
+   target  k         model                                     config  accuracy    auc     f1
+ big_20wk  1      logistic context only (year, month, artist history)    0.8123 0.7394 0.0675
+ big_20wk  1      logistic                             debut position    0.8211 0.6082 0.0000
+ big_20wk  1      logistic                            first 1 week(s)    0.8211 0.6082 0.0000
+ big_20wk  1      logistic                  first 1 week(s) + context    0.8139 0.7527 0.0951
+ big_20wk  1 random forest context only (year, month, artist history)    0.7957 0.7491 0.3069
+ big_20wk  1 random forest                             debut position    0.8236 0.6041 0.0694
+ big_20wk  1 random forest                            first 1 week(s)    0.8236 0.6041 0.0694
+ big_20wk  1 random forest                  first 1 week(s) + context    0.8165 0.7861 0.3453
+ big_20wk  2      logistic context only (year, month, artist history)    0.8123 0.7394 0.0675
+ big_20wk  2      logistic                            first 2 week(s)    0.8299 0.6768 0.1644
+ big_20wk  2      logistic                  first 2 week(s) + context    0.8380 0.8369 0.3890
+ big_20wk  2 random forest context only (year, month, artist history)    0.7957 0.7491 0.3069
+ big_20wk  2 random forest                            first 2 week(s)    0.8110 0.6287 0.2262
+ big_20wk  2 random forest                  first 2 week(s) + context    0.8468 0.8473 0.4933
+ big_20wk  3      logistic context only (year, month, artist history)    0.8123 0.7394 0.0675
+ big_20wk  3      logistic                            first 3 week(s)    0.8318 0.6915 0.1794
+ big_20wk  3      logistic                  first 3 week(s) + context    0.8526 0.8568 0.4750
+ big_20wk  3 random forest context only (year, month, artist history)    0.7957 0.7491 0.3069
+ big_20wk  3 random forest                            first 3 week(s)    0.8002 0.6594 0.2665
+ big_20wk  3 random forest                  first 3 week(s) + context    0.8601 0.8704 0.5400
+ big_20wk  4      logistic context only (year, month, artist history)    0.8123 0.7394 0.0675
+ big_20wk  4      logistic                            first 4 week(s)    0.8317 0.7170 0.1935
+ big_20wk  4      logistic                  first 4 week(s) + context    0.8638 0.8743 0.5350
+ big_20wk  4 random forest context only (year, month, artist history)    0.7957 0.7491 0.3069
+ big_20wk  4 random forest                            first 4 week(s)    0.8175 0.7130 0.2718
+ big_20wk  4 random forest                  first 4 week(s) + context    0.8725 0.8886 0.5862
+big_top10  1      logistic context only (year, month, artist history)    0.8359 0.6391 0.0000
+big_top10  1      logistic                             debut position    0.8442 0.6988 0.2023
+big_top10  1      logistic                            first 1 week(s)    0.8442 0.6988 0.2023
+big_top10  1      logistic                  first 1 week(s) + context    0.8532 0.7474 0.2931
+big_top10  1 random forest context only (year, month, artist history)    0.8068 0.5925 0.1511
+big_top10  1 random forest                             debut position    0.8523 0.6998 0.1815
+big_top10  1 random forest                            first 1 week(s)    0.8523 0.6998 0.1815
+big_top10  1 random forest                  first 1 week(s) + context    0.8504 0.7500 0.4006
+big_top10  2      logistic context only (year, month, artist history)    0.8359 0.6391 0.0000
+big_top10  2      logistic                            first 2 week(s)    0.8642 0.8375 0.4471
+big_top10  2      logistic                  first 2 week(s) + context    0.8673 0.8436 0.4687
+big_top10  2 random forest context only (year, month, artist history)    0.8068 0.5925 0.1511
+big_top10  2 random forest                            first 2 week(s)    0.8597 0.7956 0.4651
+big_top10  2 random forest                  first 2 week(s) + context    0.8756 0.8499 0.5307
+big_top10  3      logistic context only (year, month, artist history)    0.8359 0.6391 0.0000
+big_top10  3      logistic                            first 3 week(s)    0.8806 0.8736 0.5602
+big_top10  3      logistic                  first 3 week(s) + context    0.8817 0.8791 0.5651
+big_top10  3 random forest context only (year, month, artist history)    0.8068 0.5925 0.1511
+big_top10  3 random forest                            first 3 week(s)    0.8686 0.8451 0.5492
+big_top10  3 random forest                  first 3 week(s) + context    0.8924 0.8917 0.6101
+big_top10  4      logistic context only (year, month, artist history)    0.8359 0.6391 0.0000
+big_top10  4      logistic                            first 4 week(s)    0.8928 0.8980 0.6241
+big_top10  4      logistic                  first 4 week(s) + context    0.8931 0.9034 0.6267
+big_top10  4 random forest context only (year, month, artist history)    0.8068 0.5925 0.1511
+big_top10  4 random forest                            first 4 week(s)    0.8936 0.8906 0.6312
+big_top10  4 random forest                  first 4 week(s) + context    0.9067 0.9174 0.6740
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_summary.csv
+
+=== trajectory: tests ===
+   target  k                 comparison  delta_auc  wins  n            p
+big_top10  1    + context vs weeks only     0.0502    15 15 3.076794e-07
+big_top10  1 weeks only vs context only     0.1072    15 15 2.502788e-10
+big_top10  2    + context vs weeks only     0.0543    15 15 1.628645e-09
+big_top10  2 weeks only vs context only     0.2031    15 15 2.111466e-15
+big_top10  3    + context vs weeks only     0.0467    15 15 1.364925e-12
+big_top10  3 weeks only vs context only     0.2525    15 15 1.272399e-15
+big_top10  4    + context vs weeks only     0.0268    15 15 1.617138e-13
+big_top10  4 weeks only vs context only     0.2981    15 15 1.337462e-17
+ big_20wk  1    + context vs weeks only     0.1820    15 15 2.561321e-16
+ big_20wk  1 weeks only vs context only    -0.1450     0 15 6.864993e-13
+ big_20wk  2    + context vs weeks only     0.2186    15 15 9.315219e-18
+ big_20wk  2 weeks only vs context only    -0.1205     0 15 4.805247e-13
+ big_20wk  3    + context vs weeks only     0.2111    15 15 2.663467e-17
+ big_20wk  3 weeks only vs context only    -0.0898     0 15 4.089485e-10
+ big_20wk  4    + context vs weeks only     0.1756    15 15 1.190356e-16
+ big_20wk  4 weeks only vs context only    -0.0361     0 15 3.330714e-06
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_tests.csv
+
+=== trajectory: open ===
+ k  n_songs_not_yet_top10  later_top10_share  auc_rf_weeks_plus_context
+ 1                  31402             0.1501                     0.7203
+ 2                  31264             0.1464                     0.8280
+ 3                  31072             0.1411                     0.8699
+ 4                  30749             0.1321                     0.8942
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_open.csv
+
+=== trajectory: temporal ===
+   target                  config    auc  accuracy
+big_top10           first 3 weeks 0.8353    0.9083
+big_top10 first 3 weeks + context 0.8520    0.9106
+big_top10            context only 0.5724    0.8416
+ big_20wk           first 3 weeks 0.6788    0.7286
+ big_20wk first 3 weeks + context 0.7906    0.7669
+ big_20wk            context only 0.5511    0.6267
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_temporal.csv
+Previous-decade hit centroids are computed from the benchmark's own hits (strictly earlier decade).
+  [trend] fold 1/25  (29 s)
+  [trend] fold 2/25  (58 s)
+  [trend] fold 3/25  (86 s)
+  [trend] fold 4/25  (116 s)
+  [trend] fold 5/25  (144 s)
+  [trend] fold 6/25  (173 s)
+  [trend] fold 7/25  (202 s)
+  [trend] fold 8/25  (230 s)
+  [trend] fold 9/25  (260 s)
+  [trend] fold 10/25  (289 s)
+  [trend] fold 11/25  (318 s)
+  [trend] fold 12/25  (347 s)
+  [trend] fold 13/25  (376 s)
+  [trend] fold 14/25  (405 s)
+  [trend] fold 15/25  (434 s)
+  [trend] fold 16/25  (463 s)
+  [trend] fold 17/25  (492 s)
+  [trend] fold 18/25  (521 s)
+  [trend] fold 19/25  (548 s)
+  [trend] fold 20/25  (578 s)
+  [trend] fold 21/25  (607 s)
+  [trend] fold 22/25  (636 s)
+  [trend] fold 23/25  (666 s)
+  [trend] fold 24/25  (695 s)
+  [trend] fold 25/25  (725 s)
+
+=== trend: 5x5 CV (ref = main model) ===
+                                              config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+                      main (audio + decade + artist)    0.8321   0.0043        0.8303         0.8339    0.9177       25           NaN          NaN          NaN   NaN     NaN
+                    + trend distance & direction (2)    0.8328   0.0045        0.8309         0.8346    0.9192       25        0.0007        0.445 6.600709e-01  16.0     8.0
++ per-feature deviation from last decade's hits (13)    0.8367   0.0041        0.8350         0.8384    0.9220       25        0.0046        3.046 5.555840e-03  23.0     2.0
+                                          audio only    0.7817   0.0050        0.7796         0.7838    0.8592       25       -0.0504      -20.805 7.298767e-17   0.0    25.0
+                                   audio + trend (2)    0.7995   0.0041        0.7978         0.8012    0.8758       25       -0.0326      -17.280 4.799505e-15   0.0    25.0
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trend_cv_summary.csv
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trend_cv_folds.csv
+  [trend-audio] fold 1/25  (14 s)
+  [trend-audio] fold 2/25  (28 s)
+  [trend-audio] fold 3/25  (37 s)
+  [trend-audio] fold 4/25  (50 s)
+  [trend-audio] fold 5/25  (64 s)
+  [trend-audio] fold 6/25  (77 s)
+  [trend-audio] fold 7/25  (91 s)
+  [trend-audio] fold 8/25  (103 s)
+  [trend-audio] fold 9/25  (114 s)
+  [trend-audio] fold 10/25  (128 s)
+  [trend-audio] fold 11/25  (141 s)
+  [trend-audio] fold 12/25  (155 s)
+  [trend-audio] fold 13/25  (169 s)
+  [trend-audio] fold 14/25  (179 s)
+  [trend-audio] fold 15/25  (194 s)
+  [trend-audio] fold 16/25  (207 s)
+  [trend-audio] fold 17/25  (221 s)
+  [trend-audio] fold 18/25  (235 s)
+  [trend-audio] fold 19/25  (250 s)
+  [trend-audio] fold 20/25  (263 s)
+  [trend-audio] fold 21/25  (277 s)
+  [trend-audio] fold 22/25  (292 s)
+  [trend-audio] fold 23/25  (306 s)
+  [trend-audio] fold 24/25  (320 s)
+  [trend-audio] fold 25/25  (333 s)
+
+=== trend on audio only ===
+           config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+       audio only    0.7817   0.0050        0.7796         0.7838    0.8592       25           NaN          NaN          NaN   NaN     NaN
+audio + trend (2)    0.7995   0.0041        0.7978         0.8012    0.8758       25        0.0178        9.798 7.312597e-10  25.0     0.0
+-> C:\Users\uzzna\prectionsong\paper_results\r10_trend_audio_cv_summary.csv

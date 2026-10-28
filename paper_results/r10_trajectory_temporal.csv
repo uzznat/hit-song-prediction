@@ -1,0 +1,7 @@
+target,config,auc,accuracy
+big_top10,first 3 weeks,0.8353,0.9083
+big_top10,first 3 weeks + context,0.852,0.9106
+big_top10,context only,0.5724,0.8416
+big_20wk,first 3 weeks,0.6788,0.7286
+big_20wk,first 3 weeks + context,0.7906,0.7669
+big_20wk,context only,0.5511,0.6267

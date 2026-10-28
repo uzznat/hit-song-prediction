@@ -1,0 +1,17 @@
+target,k,comparison,delta_auc,wins,n,p
+big_top10,1,+ context vs weeks only,0.0502,15,15,3.076794113739606e-07
+big_top10,1,weeks only vs context only,0.1072,15,15,2.502787810409609e-10
+big_top10,2,+ context vs weeks only,0.0543,15,15,1.6286447648754069e-09
+big_top10,2,weeks only vs context only,0.2031,15,15,2.1114655787781913e-15
+big_top10,3,+ context vs weeks only,0.0467,15,15,1.3649248178947057e-12
+big_top10,3,weeks only vs context only,0.2525,15,15,1.2723990113081612e-15
+big_top10,4,+ context vs weeks only,0.0268,15,15,1.6171375232430342e-13
+big_top10,4,weeks only vs context only,0.2981,15,15,1.337462386686442e-17
+big_20wk,1,+ context vs weeks only,0.182,15,15,2.561321321717713e-16
+big_20wk,1,weeks only vs context only,-0.145,0,15,6.864993241291773e-13
+big_20wk,2,+ context vs weeks only,0.2186,15,15,9.315219401638285e-18
+big_20wk,2,weeks only vs context only,-0.1205,0,15,4.805246534267958e-13
+big_20wk,3,+ context vs weeks only,0.2111,15,15,2.6634672549430848e-17
+big_20wk,3,weeks only vs context only,-0.0898,0,15,4.0894845937593667e-10
+big_20wk,4,+ context vs weeks only,0.1756,15,15,1.1903563062639535e-16
+big_20wk,4,weeks only vs context only,-0.0361,0,15,3.3307142888040696e-06

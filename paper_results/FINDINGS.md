@@ -131,3 +131,20 @@ Paper changes from a comparison with the field: Interiano et al. (2018, R. Soc. 
 as significance + same-data head-to-head + sampling-artefact controls. Added Sturm (2014, "horse"), Flexer (2007, artist
 filter), Salganik et al. (2006, cumulative advantage); hyperparameters-not-tuned rationale; no-deep-learning limitation;
 explicit answer on audio content in the Discussion.
+
+## R10 — time series for hit prediction (2026-10-28, `repro/r10_timeseries.py`)
+
+**Trajectory (after release).** 31,925 Hot 100 songs with complete history (not on the first chart, >= 52 weeks of
+follow-up); 16.4 % reach the top 10. Features: positions in the first k weeks (101 = off chart), best rank, slope,
+acceleration; context = year, month, log earlier songs, log earlier top-10s already reached before the debut.
+5x3 CV, RF-200 / logistic.
+- Top 10, RF weeks + context: AUC .750 (k=1), .850 (2), **.892 (3)**, .917 (4); F1 .40 / .53 / .61 / .67;
+  context only .59. Weeks beat context-only by +.11 to +.30 AUC; context adds +.03 to +.05 on top (15/15, p < 1e-6).
+- Songs not yet in the top 10 after k weeks: AUC .72 / .83 / .87 / .89 (later top-10 share 15 → 13 %).
+- Temporal hold-out (train < 2000, test >= 2000, k=3): AUC .835 weeks, .852 weeks + context.
+- >= 20 weeks on chart: weeks alone weak (AUC .60–.71), context needed (.79–.89). Chart-rule driven (recurrent
+  rules remove older songs), so not used as a headline.
+
+**Trend (before release), Kaggle 5x5 CV.** Distance of z-scored audio to the previous decade's hit centroid and
+projection on the trend direction: on the main model +0.07 (p=.66) → removed; 13 per-feature deviations +0.46
+(23/25, p=.006, indicative); on audio alone +1.8 (p=7e-10) < decade alone +2.0 → carries only the era.

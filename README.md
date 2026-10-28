@@ -44,6 +44,7 @@ python repro/fetch_audio_full.py download && python repro/fetch_audio_full.py ex
 python repro/r7_fft_full.py         # FFT descriptors on the whole benchmark
 python repro/r8_future_work.py      # artist matching, genre control, decay, lyrics
 python repro/r9_metrics.py           # precision / recall / F1 of the hit class
+python repro/r10_timeseries.py       # first-weeks trajectory -> top 10; market-trend features
 python repro/make_figures.py        # the paper figures
 ```
 
