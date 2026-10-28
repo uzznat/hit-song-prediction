@@ -1,0 +1,46 @@
+   95067 rows -> 95067 with a valid year (5832 hits / 89235 non-hits)
+ISMIR songs with audio: 95,049 (hits 5,831); with lyrics: 35,560
+lyrics coverage: hits 0.560, non-hits 0.362
+English share (>= 25 % common English words): hits 0.975, non-hits 0.805
+  word      coef    side
+  love  4.319177     hit
+    la  2.583497     hit
+    oh  2.547744     hit
+  yeah  2.143879     hit
+   ooh  2.100508     hit
+ night  2.042074     hit
+  caus  1.971562     hit
+  need  1.962098     hit
+   put  1.797954     hit
+  girl  1.746107     hit
+    up  1.609045     hit
+   can  1.600019     hit
+   arm  1.599620     hit
+   hey  1.419269     hit
+  when  1.400228     hit
+  kill -1.913199 non-hit
+   the -1.583084 non-hit
+   him -1.467006 non-hit
+ their -1.391036 non-hit
+  mind -1.372547 non-hit
+  game -1.354064 non-hit
+  fuck -1.335473 non-hit
+  kick -1.331692 non-hit
+  babe -1.250434 non-hit
+ crime -1.215422 non-hit
+  hate -1.207925 non-hit
+ futur -1.190246 non-hit
+mother -1.178727 non-hit
+  call -1.169151 non-hit
+affect -1.166417 non-hit
+-> C:\Users\uzzna\prectionsong\paper_results\r11_lyrics_words.csv
+ non_hits   hits
+   5.2979 5.5711
+   4.3753 4.4665
+   0.4150 0.3433
+   0.0903 0.0905
+   0.0739 0.0839
+   0.0459 0.0551
+   0.0065 0.0127
+   0.3852 0.3988
+-> C:\Users\uzzna\prectionsong\paper_results\r11_lyrics_lexical_means.csv

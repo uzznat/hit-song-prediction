@@ -1,0 +1,83 @@
+component  explained  cumulative    auc
+      PC1     0.2361      0.2361 0.7024
+      PC2     0.1109      0.3470 0.6159
+      PC3     0.0930      0.4400 0.5194
+      PC4     0.0854      0.5254 0.5177
+      PC5     0.0792      0.6046 0.5032
+      PC6     0.0708      0.6754 0.5084
+      PC7     0.0687      0.7441 0.5985
+      PC8     0.0659      0.8100 0.5576
+      PC9     0.0616      0.8716 0.5117
+     PC10     0.0565      0.9281 0.5654
+     PC11     0.0328      0.9609 0.5741
+     PC12     0.0283      0.9892 0.5205
+     PC13     0.0108      1.0000 0.5306
+   PC1    PC2    PC3    PC4    PC5    PC6    PC7    PC8    PC9   PC10   PC11   PC12   PC13
+ 0.313  0.483 -0.270  0.019 -0.132  0.177 -0.019  0.031  0.158  0.190 -0.408  0.529  0.193
+ 0.483 -0.293  0.056 -0.068  0.011 -0.050 -0.055 -0.120 -0.075  0.190  0.242 -0.091  0.738
+ 0.020 -0.070 -0.471  0.126  0.560 -0.360 -0.052  0.508 -0.149  0.174 -0.001  0.019 -0.005
+ 0.469 -0.168  0.098 -0.057  0.034 -0.073 -0.211 -0.092 -0.149 -0.065  0.395  0.510 -0.487
+-0.007  0.170  0.620 -0.035 -0.221 -0.097 -0.075  0.585 -0.236  0.348 -0.033  0.025  0.008
+ 0.106 -0.071 -0.211  0.640 -0.229  0.494  0.179  0.125 -0.368  0.073  0.158 -0.118 -0.074
+-0.428  0.275  0.039  0.189  0.037 -0.047  0.108  0.064  0.167 -0.131  0.618  0.399  0.315
+-0.286 -0.261 -0.112 -0.219 -0.034  0.046  0.354 -0.239 -0.040  0.736  0.060  0.202 -0.126
+ 0.062 -0.286  0.167  0.610 -0.170 -0.464  0.081 -0.077  0.443  0.091 -0.202  0.103 -0.045
+ 0.331  0.442 -0.009  0.006  0.103  0.008  0.137 -0.013  0.438  0.296  0.359 -0.449 -0.238
+ 0.148 -0.246  0.306 -0.057  0.439  0.406  0.501  0.250  0.276 -0.183 -0.120  0.160  0.010
+-0.046 -0.357 -0.309 -0.242 -0.434  0.193 -0.229  0.461  0.452 -0.026  0.145 -0.007 -0.028
+ 0.188  0.071 -0.183 -0.218 -0.378 -0.395  0.668  0.133 -0.190 -0.279  0.045 -0.010 -0.014
+         feature    auc      direction
+instrumentalness 0.7399  lower in hits
+    danceability 0.6959 higher in hits
+        loudness 0.6424 higher in hits
+         valence 0.6396 higher in hits
+    acousticness 0.5964  lower in hits
+          energy 0.5851 higher in hits
+     speechiness 0.5750  lower in hits
+            mode 0.5368 higher in hits
+  time_signature 0.5334 higher in hits
+        liveness 0.5316  lower in hits
+           tempo 0.5221 higher in hits
+     duration_ms 0.5105 higher in hits
+             key 0.5056 higher in hits
+-> C:\Users\uzzna\prectionsong\paper_results\r12_pca_variance.csv
+-> C:\Users\uzzna\prectionsong\paper_results\r12_pca_loadings.csv
+-> C:\Users\uzzna\prectionsong\paper_results\r12_univariate_auc.csv
+  [pca] fold 1/25  (29 s)
+  [pca] fold 2/25  (75 s)
+  [pca] fold 3/25  (108 s)
+  [pca] fold 4/25  (136 s)
+  [pca] fold 5/25  (164 s)
+  [pca] fold 6/25  (313 s)
+  [pca] fold 7/25  (345 s)
+  [pca] fold 8/25  (374 s)
+  [pca] fold 9/25  (404 s)
+  [pca] fold 10/25  (433 s)
+  [pca] fold 11/25  (462 s)
+  [pca] fold 12/25  (491 s)
+  [pca] fold 13/25  (520 s)
+  [pca] fold 14/25  (551 s)
+  [pca] fold 15/25  (582 s)
+  [pca] fold 16/25  (614 s)
+  [pca] fold 17/25  (645 s)
+  [pca] fold 18/25  (676 s)
+  [pca] fold 19/25  (706 s)
+  [pca] fold 20/25  (733 s)
+  [pca] fold 21/25  (762 s)
+  [pca] fold 22/25  (791 s)
+  [pca] fold 23/25  (820 s)
+  [pca] fold 24/25  (848 s)
+  [pca] fold 25/25  (877 s)
+                       config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+             Spotify (13 raw)    0.7817   0.0050        0.7796         0.7838    0.8592       25           NaN          NaN          NaN   NaN     NaN
+                  first 1 PCs    0.5748   0.0066        0.5721         0.5775    0.6237       25       -0.2069      -50.704 6.342268e-26   0.0    25.0
+                  first 2 PCs    0.6532   0.0054        0.6510         0.6555    0.7154       25       -0.1285      -43.029 3.126147e-24   0.0    25.0
+                  first 4 PCs    0.6930   0.0042        0.6913         0.6947    0.7609       25       -0.0887      -29.408 2.451708e-20   0.0    25.0
+                  first 6 PCs    0.7100   0.0049        0.7080         0.7121    0.7792       25       -0.0717      -22.894 8.166542e-18   0.0    25.0
+                  first 8 PCs    0.7334   0.0043        0.7316         0.7351    0.8051       25       -0.0484      -20.896 6.608911e-17   0.0    25.0
+                 first 10 PCs    0.7492   0.0045        0.7473         0.7510    0.8219       25       -0.0325      -12.767 3.430379e-12   0.0    25.0
+                 first 13 PCs    0.7647   0.0033        0.7633         0.7661    0.8396       25       -0.0170       -8.160 2.217869e-08   0.0    25.0
+first 6 PCs + decade + artist    0.7758   0.0052        0.7736         0.7779    0.8703       25       -0.0059       -1.921 6.662903e-02   2.0    23.0
+                   final (20)    0.8321   0.0043        0.8303         0.8339    0.9177       25        0.0504       20.805 7.298767e-17  25.0     0.0
+-> C:\Users\uzzna\prectionsong\paper_results\r12_pca_cv_summary.csv
+-> C:\Users\uzzna\prectionsong\paper_results\r12_pca_cv_folds.csv

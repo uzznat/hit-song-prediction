@@ -1,0 +1,25 @@
+% Fig.: how a candidate input is kept or rejected.
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\scriptsize, >=Stealth, node distance=3.2mm,
+  q/.style={draw=black!70, fill=white, rounded corners=2pt, align=center, text width=3.5cm, minimum height=7mm},
+  no/.style={draw=red!55!black, fill=red!5, rounded corners=2pt, align=left, text width=3.2cm, minimum height=7mm},
+  yes/.style={draw=blue!60!black, fill=blue!12, rounded corners=2pt, align=center, text width=3.5cm, minimum height=7mm}]
+\node[q, fill=black!4] (c) {\textbf{Candidate input}};
+\node[q, below=of c] (q1) {1. Known on release day?\\(no future, no own period)};
+\node[q, below=of q1] (q2) {2. Gain under $5{\times}5$ CV,\\corrected $p<0.05$?};
+\node[q, below=of q2] (q3) {3. Survives the controls?\\year-, genre-matched; unseen artists};
+\node[q, below=of q3] (q4) {4. Survives Bonferroni\\over $\approx$\,60 tests?};
+\node[yes, below=of q4] (k) {\textbf{kept}: decade, artist history\\(lyrics, where available)};
+\node[no, right=4mm of q1] (n1) {\textbf{out} -- leak: genre tags\\(assigned afterwards)};
+\node[no, right=4mm of q2] (n2) {\textbf{out} -- noise: title length,\\chorus\_hit, sections, rich librosa,\\market trend};
+\node[no, right=4mm of q3] (n3) {\textbf{out} -- shortcut: song title,\\FFT (genre), release year (ISMIR)};
+\node[no, right=4mm of q4] (n4) {\textbf{indicative only}: e.g.\\SpotGenTrack lexical lyrics};
+\draw[->] (c) -- (q1);
+\foreach \a/\b in {q1/q2, q2/q3, q3/q4, q4/k} \draw[->] (\a) -- node[left, font=\tiny] {yes} (\b);
+\foreach \a/\b in {q1/n1, q2/n2, q3/n3, q4/n4} \draw[->] (\a) -- node[above, font=\tiny] {no} (\b);
+\end{tikzpicture}
+\caption{How every candidate input was kept or rejected. Each input is tested in this order; the boxes on the right
+list the inputs that stopped at each question.}
+\label{fig:selection}
+\end{figure}

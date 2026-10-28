@@ -1,0 +1,14 @@
+feature,auc,direction
+instrumentalness,0.7399,lower in hits
+danceability,0.6959,higher in hits
+loudness,0.6424,higher in hits
+valence,0.6396,higher in hits
+acousticness,0.5964,lower in hits
+energy,0.5851,higher in hits
+speechiness,0.575,lower in hits
+mode,0.5368,higher in hits
+time_signature,0.5334,higher in hits
+liveness,0.5316,lower in hits
+tempo,0.5221,higher in hits
+duration_ms,0.5105,higher in hits
+key,0.5056,higher in hits

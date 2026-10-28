@@ -1,0 +1,52 @@
+% Fig.: what goes in, what comes out (main model), how it is tested, and the separate after-release model.
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, node distance=4mm,
+  src/.style={draw=black!45, fill=black!4, rounded corners=2pt, align=center, text width=2.6cm, minimum height=9mm},
+  feat/.style={draw=blue!60!black, fill=blue!6, rounded corners=2pt, align=center, text width=3.7cm, minimum height=9mm},
+  stp/.style={draw=black!70, fill=white, rounded corners=2pt, align=center, minimum height=9mm},
+  outb/.style={draw=blue!60!black, fill=blue!15, rounded corners=2pt, align=center, minimum height=9mm},
+  lab/.style={font=\scriptsize\itshape, text=black!60}]
+% ---- inputs
+\node[src] (a) {Song audio\\(Spotify Web API)};
+\node[src, below=of a] (d) {Release date};
+\node[src, below=of d] (h) {Artist name +\\Billboard Hot~100, 1958--};
+\node[lab, above=1mm of a] {1. raw inputs};
+% ---- features
+\node[feat, right=7mm of a] (fa) {13 audio descriptors\\{\scriptsize danceability, energy, loudness, \dots}};
+\node[feat, right=7mm of d] (fd) {decade $\rightarrow$ 6 indicators\\{\scriptsize 1960s \dots\ 2010s, one-hot}};
+\node[feat, right=7mm of h] (fh) {artist history \mbox{$h(s)=\log(1+n)$}\\{\scriptsize $n$ = its Hot~100 songs in earlier decades}};
+\node[lab, above=1mm of fa] {2. features (20 numbers)};
+\foreach \x/\y in {a/fa, d/fd, h/fh} \draw[->] (\x) -- (\y);
+% ---- model
+\node[stp, right=9mm of fd, text width=2.5cm] (rf) {\textbf{Random Forest}\\80 trees, 8 features\\per split, never tuned};
+\foreach \x in {fa, fd, fh} \draw[->] (\x.east) -- (rf.west);
+\node[lab, above=1mm of rf] {3. model};
+\node[outb, right=7mm of rf, text width=1.6cm] (p) {$P(\text{hit})$\\$\in[0,1]$};
+\node[outb, right=7mm of p, text width=2.1cm] (dec) {hit if\\$P(\text{hit})\geq 0.5$};
+\draw[->] (rf) -- (p);
+\draw[->] (p) -- (dec);
+\node[lab, above=1mm of p, xshift=6mm] {4. output};
+% ---- evaluation band
+\node[stp, below=8mm of h.south west, anchor=north west, text width=16.2cm, fill=black!3, draw=black!40] (ev)
+ {\textbf{How every number is tested.} 5 folds $\times$ 5 repeats: the model is trained on 80\,\% of the songs and
+ scored on the 20\,\% it never saw, 25 times $\rightarrow$ mean accuracy and 95\,\% CI $\rightarrow$ corrected
+ $t$-test (Nadeau--Bengio) against the same model without the feature $\rightarrow$ Bonferroni over all
+ $\approx$\,60 tests ($p<8\times10^{-4}$) $\rightarrow$ controls: year-matched negatives, genre-matched negatives,
+ no artist in both training and test folds.};
+% ---- after release
+\node[src, below=10mm of ev.south west, anchor=north west, text width=2.6cm] (w) {Chart positions in\\weeks 1, 2, 3 after debut};
+\node[feat, right=7mm of w, text width=4.6cm] (wf) {positions, best rank, climb per week,\\acceleration + year, month,\\artist's earlier hits};
+\node[stp, right=9mm of wf, text width=2.5cm] (rf2) {Random Forest\\200 trees};
+\node[outb, right=7mm of rf2, text width=3.9cm] (p2) {$P(\text{peak in the top 10})$\\\scriptsize separate question: only after release};
+\draw[->] (w) -- (wf);
+\draw[->] (wf) -- (rf2);
+\draw[->] (rf2) -- (p2);
+\node[lab, above=1mm of w.north west, anchor=south west] {After release (Sec.~\ref{sec:timeseries}): a second, separate model};
+\end{tikzpicture}
+\caption{The prediction pipeline. Top: the final model predicts, on release day, whether a song will enter the
+Hot~100, from 20 numbers per song. Middle: the protocol under which every gain in this paper is measured. Bottom:
+a separate model, used only once a song has charted, predicts whether it will reach the top~10 from its first three
+weeks.}
+\label{fig:pipeline}
+\end{figure*}

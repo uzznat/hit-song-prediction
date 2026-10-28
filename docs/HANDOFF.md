@@ -158,7 +158,7 @@ The deck is a single self-contained HTML file: open
    of data — but it has never been pushed anywhere.
 2. ~~Prune Layer B~~ — done 2026-10-27: load-bearing modules moved into `repro/`, the rest
    into `legacy/`, raw data into `data/`, logs into `paper_results/logs/`.
-3. **Pick a venue and format.** Currently IEEE conference style, 10 pages (no page limit) — fine for a
+3. **Pick a venue and format.** Currently IEEE conference style, 19 pages (no page limit) — fine for a
    workshop; a journal version would want the items below.
 4. **Licensing.** `LICENSE.md` exists (MIT code; datasets keep their own terms, Kaggle is GPL-3.0).
 

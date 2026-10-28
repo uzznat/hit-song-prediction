@@ -91,6 +91,10 @@ M.~Interiano, K.~Kazemi, L.~Wang, J.~Yang, Z.~Yu, and N.~L. Komarova, ``Musical
   top charts,'' \emph{Royal Society Open Science}, vol.~5, no.~5, p. 171274,
   2018.
 
+\bibitem{szabo2010predicting}
+G.~Szabo and B.~A. Huberman, ``Predicting the popularity of online content,''
+  \emph{Communications of the ACM}, vol.~53, no.~8, pp. 80--88, 2010.
+
 \bibitem{herremans2014dance}
 D.~Herremans, D.~Martens, and K.~S{\"o}rensen, ``Dance hit song prediction,''
   \emph{Journal of New Music Research}, vol.~43, no.~3, pp. 291--302, 2014.
@@ -172,9 +176,5 @@ R.~J. Hyndman and G.~Athanasopoulos, \emph{Forecasting: Principles and
 G.~E.~P. Box, G.~M. Jenkins, G.~C. Reinsel, and G.~M. Ljung, \emph{Time Series
   Analysis: Forecasting and Control}, 5th~ed.\hskip 1em plus 0.5em minus
   0.4em\relax Wiley, 2015.
-
-\bibitem{szabo2010predicting}
-G.~Szabo and B.~A. Huberman, ``Predicting the popularity of online content,''
-  \emph{Communications of the ACM}, vol.~53, no.~8, pp. 80--88, 2010.
 
 \end{thebibliography}

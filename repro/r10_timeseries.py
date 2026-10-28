@@ -171,8 +171,14 @@ def run_trajectory():
 
 
 # --------------------------------------------------------------------------- trend
-def run_trend():
-    df = load_kaggle()
+TREND = ["trend_dist", "trend_along"]
+TDEV = [f"tdev_{c}" for c in AUDIO]
+
+
+def add_trend(df):
+    """Market-trend features (strictly earlier decades only): distance of the standardised audio to the
+    previous decade's hit centroid, projection on the direction that centroid moved, and the 13
+    per-feature deviations."""
     y = df["target"].values
     Z = df[AUDIO].astype(float)
     Z = (Z - Z.mean()) / Z.std()
@@ -189,11 +195,15 @@ def run_trend():
     df.loc[dec_idx == 0, "trend_dist"] = np.nan
     proj = np.nansum(prev * move, axis=1) / np.maximum(np.sqrt(np.nansum(move ** 2, axis=1)), 1e-9)
     df["trend_along"] = np.where(dec_idx >= 2, proj, np.nan)
-    TREND = ["trend_dist", "trend_along"]
     df[TREND] = df[TREND].fillna(df[TREND].median())
     for j, c in enumerate(AUDIO):
         df[f"tdev_{c}"] = np.nan_to_num(prev[:, j])
-    TDEV = [f"tdev_{c}" for c in AUDIO]
+    return df
+
+
+def run_trend():
+    df = add_trend(load_kaggle())
+    y = df["target"].values
     print("Previous-decade hit centroids are computed from the benchmark's own hits (strictly earlier decade).")
     configs = {
         "main (audio + decade + artist)": make_pipeline(AUDIO + DEC_COLS + [ART]),

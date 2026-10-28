@@ -163,3 +163,18 @@ logistic probability. Reference = final ISMIR model (592 Essentia + year + artis
   AUC +.047, p=1e-6)**. Survives Bonferroni.
 → Lyrics are the first CONTENT feature that survives every control (year matching, English only, unseen
 artists). Changes the paper's "nothing in the content survives" statement: true for audio, not for lyrics.
+
+## R12 — report review (2026-10-28, `repro/r12_report.py`)
+
+Asked at the review of the report: PCA, ablation, "train everything together", what happens in the first weeks.
+- **PCA of the 13 Spotify descriptors**: PC1 = intensity (energy +.48, loudness +.47, acousticness −.43), 23.6 %
+  of variance, AUC .70 alone; PC2 = mood (danceability +.48, valence +.44), 11.1 %, AUC .62; PC3–PC6 (33 % of
+  variance) AUC .50–.52. 8 PCs for 81 %. Single descriptors: instrumentalness .74 (lower in hits), danceability .70,
+  loudness .64, valence .64; key/duration/tempo ≈ .51. RF on k PCs: 1 → .575, 6 → .710, 13 → .765 vs raw .782
+  (−1.7, 0/25, p=2e-8). → keep raw descriptors.
+- **First weeks on the Hot 100** (k=3 model): permutation importance (AUC drop) week-3 position .088, climb per week
+  .029, best rank .025, year .023, artist's earlier songs .009, debut position .004. Debut 61–80 and falling: 3 %
+  reach the top 10; climbing ≥30 places by week 3: 55 %. Median position of future top-10s: 73 → 53 → 39; others
+  stay ≈80.
+- **Lyrics words** (ISMIR B English): hit side love, la, oh, yeah, ooh, night, need, girl; non-hit side kill,
+  the, him, their, mind, game, hate, crime. Hits: love share 1.3 % vs 0.65 %, richness .34 vs .42.

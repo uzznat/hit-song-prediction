@@ -4,7 +4,7 @@
 Lior Shalon, Nathanael Uzzan — Technion, *Project in Artificial Intelligence*
 
 **Deliverables**
-* Paper (IEEE conference format, 10 pages): [`paper/main.pdf`](paper/main.pdf) ← source `paper/main.tex`
+* Paper (IEEE conference format, 19 pages): [`paper/main.pdf`](paper/main.pdf) ← source `paper/main.tex`
 * Slides (23): [`presentation/hit_prediction_deck.pdf`](presentation/hit_prediction_deck.pdf) ← source `hit_prediction_deck.html`
 * Audit of every claim: [`paper_results/FINDINGS.md`](paper_results/FINDINGS.md)
 * Handoff / where to continue: [`docs/HANDOFF.md`](docs/HANDOFF.md)

@@ -151,6 +151,22 @@ def main():
     print(f"English share (>= 25 % common English words): hits {eng[data.target == 1].mean():.3f}, "
           f"non-hits {eng[data.target == 0].mean():.3f}")
     summaries, folds = [], []
+    if "words" in sys.argv[1:]:     # what the lyrics model reads: year-matched, English-only sample
+        s = ri.balanced_sample(data[eng], True, None).reset_index(drop=True)
+        B = M[[row_of[t] for t in s["msd_id"]]]
+        X = TfidfTransformer(sublinear_tf=True).fit_transform(B)
+        lr = LogisticRegression(C=1.0, max_iter=2000).fit(X, s["target"])
+        coef = pd.Series(lr.coef_[0], index=vocab)
+        df_w = (B > 0).sum(axis=0).A1
+        coef = coef[df_w >= 30]                          # words used in at least 30 songs
+        top = pd.concat([coef.nlargest(15).rename("coef").to_frame().assign(side="hit"),
+                         coef.nsmallest(15).rename("coef").to_frame().assign(side="non-hit")])
+        show(top.reset_index().rename(columns={"index": "word"}))
+        save(top.reset_index().rename(columns={"index": "word"}), "r11_lyrics_words.csv")
+        lexm = s.groupby("target")[LEX].mean().T.rename(columns={0: "non_hits", 1: "hits"}).round(4)
+        show(lexm)
+        save(lexm.reset_index().rename(columns={"index": "feature"}), "r11_lyrics_lexical_means.csv")
+        return
     if "grouped" in sys.argv[1:]:
         from feature_experiments import normalize_artist
         for name, matched in [("A_random_english_grouped", False), ("B_yearmatched_english_grouped", True)]:

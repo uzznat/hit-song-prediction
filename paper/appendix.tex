@@ -1,0 +1,225 @@
+% =====================================================================
+\appendices
+
+\section{Inputs in detail}\label{app:inputs}
+
+\begin{table}[h]
+\centering
+\caption{The 13 Spotify audio descriptors (Spotify Web API definitions) and how well each one alone
+separates hits on the Hit Predictor (ROC-AUC; Sec.~\ref{sec:ablation}).}
+\label{tab:descriptors}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{4.6cm}c@{}}
+\toprule
+Descriptor & Meaning & AUC \\
+\midrule
+instrumentalness & likelihood that the track has no vocals (0--1); lower in hits & .74 \\
+danceability & suitability for dancing from tempo, rhythm stability, beat strength (0--1) & .70 \\
+loudness & average loudness in dB & .64 \\
+valence & musical positiveness, sad (0) to happy (1) & .64 \\
+acousticness & confidence that the track is acoustic (0--1); lower in hits & .60 \\
+energy & perceived intensity and activity (0--1) & .59 \\
+speechiness & presence of spoken words (0--1) & .58 \\
+mode & major (1) or minor (0) & .54 \\
+time signature & estimated beats per bar & .53 \\
+liveness & probability that the track was recorded live & .53 \\
+tempo & estimated beats per minute & .52 \\
+duration & length in milliseconds & .51 \\
+key & pitch class of the track (0 = C, \dots, 11 = B) & .51 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Decade.} Six indicators (1960s \dots\ 2010s), exactly one equal to 1. On ISMIR and SpotGenTrack,
+the release year (or decade) as a number.
+
+\textbf{Artist history.} Defined in Sec.~\ref{sec:features} and Fig.~\ref{fig:history}. Artist names are
+lower-cased, accents and punctuation are removed, and only the first credited artist is kept
+(the name is cut at ``featuring'', ``feat.'', ``ft.'', ``with'', ``\&'', ``x'', ``+'', ``/'', ``vs.'',
+``and'' or a comma), so that ``Madonna feat.\ Justin Timberlake'' counts for Madonna.
+On the Hit Predictor the reference set is the weekly Hot~100 since August 1958, counted in distinct
+titles per artist and decade; on ISMIR and SpotGenTrack it is the set of positive songs of the dataset,
+counted by release year.
+
+\textbf{Rejected candidates.} \emph{Song title}: TF-IDF of word uni- and bigrams, logistic regression,
+out-of-fold probability as one feature. \emph{Title length}: number of words. \emph{chorus\_hit,
+sections}: the two Echo Nest analysis fields of the Hit Predictor. \emph{Rich librosa} (185): 20 MFCCs
+with first and second derivatives, chroma, tonnetz, spectral contrast, centroid, bandwidth, roll-off,
+flatness, zero-crossing rate, RMS and onset/tempogram statistics, each by mean and standard deviation,
+reduced to 40 principal components inside each fold. \emph{FFT} (31): from the short-time Fourier transform of the 30-second clip, the mean and standard
+deviation of the spectral centroid, bandwidth, roll-off, flatness and contrast, 13 mean MFCCs, the chroma mean
+and standard deviation, and six rhythm descriptors (estimated tempo, onset-envelope mean and standard
+deviation, pulse clarity, mean and variation of inter-onset intervals).
+\emph{Genre} (16 families, control only): Spotify artist tags mapped by keyword to hip-hop, R\&B/soul,
+country, rock, metal, electronic, pop, jazz, classical, folk, blues, Latin, reggae, gospel, world, other.
+\emph{Market trend}: distance of the standardised descriptors to the previous decade's hit centroid,
+projection on the direction in which that centroid moved, and the 13 per-descriptor deviations.
+
+\textbf{Lyrics} (ISMIR). From musiXmatch word counts: log number of words, log number of distinct words,
+richness (distinct/total), repetition (count of the most frequent word/total), shares of \emph{I, me,
+my}, of \emph{you, your}, of \emph{love}, and of the 29 most common English words; plus the out-of-fold
+TF-IDF logistic-regression probability.
+
+\textbf{Early trajectory.} For $k$ weeks: the $k$ positions (101 = off the chart), the best position, the
+number of weeks on the chart, the slope $(p_k-p_1)/(k-1)$ (negative = climbing), the acceleration
+$(p_k-p_{k-1})-(p_{k-1}-p_{k-2})$; context: debut year and month, $\log(1+{}$earlier songs of the
+artist$)$ and $\log(1+{}$earlier top-10 hits that had already reached the top~10 before the debut$)$.
+
+\section{Models and settings}\label{app:models}
+
+\begin{table}[h]
+\centering
+\caption{Every model used, with all non-default settings. None was tuned on the test data.}
+\label{tab:settings}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{5.6cm}@{}}
+\toprule
+Model & Settings \\
+\midrule
+Random Forest (main) & 80 trees, 8 candidate features per split, Gini, fully grown trees, seed 42 (configuration of~\cite{middlebrook2019song}) \\
+Random Forest (external, trajectories) & 200 trees, $\sqrt{d}$ candidate features per split \\
+XGBoost & 400 trees, depth 6, learning rate 0.05, subsample 0.8, column sample 0.8 \\
+Logistic regression & standardised inputs, L2, $C=1$ \\
+$k$-NN & standardised inputs, $k=25$ \\
+SVM & standardised inputs, RBF kernel, $C=1$, $\gamma$ = scale \\
+Du's models~\cite{du2022spotify} & RF 450 trees, $m_{\text{try}}=2$, at most 30 leaves; logistic regression; one model per decade \\
+Title / lyrics text model & TF-IDF + logistic regression ($C=4$ titles, $C=1$ lyrics), inner 5-fold out-of-fold \\
+Rich audio & standardisation + PCA (40) fitted inside each training fold \\
+\midrule
+Cross-validation & repeated stratified $k$-fold: $5{\times}5$ (Hit Predictor), $5{\times}2$ (ISMIR), $5{\times}1$ (SpotGenTrack), $5{\times}3$ (trajectories); stratified group $k$-fold by artist for the unseen-artist tests \\
+Tests & corrected resampled $t$-test~\cite{nadeau2003inference} for CV; McNemar~\cite{dietterich1998approximate} for single splits; Bonferroni over $\approx$\,60 tests \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Which script produces what}\label{app:scripts}
+
+\begin{table}[h]
+\centering
+\caption{Scripts in \texttt{repro/} and the results they produce (\texttt{paper\_results/r*\_*.csv}).}
+\label{tab:scripts}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{3.6cm}@{}}
+\toprule
+Script & Results \\
+\midrule
+\texttt{r1\_kaggle\_core.py} & main result, per decade, titles, chorus\_hit (Tables~\ref{tab:main}, \ref{tab:decade}) \\
+\texttt{r2\_models\_time.py} & five classifiers, SHAP, future decades (Table~\ref{tab:models}) \\
+\texttt{r3\_audio\_subset.py} & audio subset, librosa, FFT (Table~\ref{tab:audit}, Fig.~\ref{fig:subset}) \\
+\texttt{r4\_external.py} & ISMIR, SpotGenTrack (Tables~\ref{tab:ismir}, \ref{tab:sgt}) \\
+\texttt{r5\_tilburg.py} & head-to-head with Du (Table~\ref{tab:tilburg}) \\
+\texttt{r6\_robustness.py} & unseen artists, cold start (Table~\ref{tab:robust}) \\
+\texttt{r7\_fft\_full.py} & FFT on the whole benchmark \\
+\texttt{r8\_future\_work.py} & artist matching, genre control, decay, SpotGenTrack lyrics (Tables~\ref{tab:genre}, \ref{tab:decay}) \\
+\texttt{r9\_metrics.py} & precision, recall, F1 \\
+\texttt{r10\_timeseries.py} & market trend, early trajectories (Table~\ref{tab:traj}) \\
+\texttt{r11\_lyrics\_ismir.py} & lyrics on ISMIR (Table~\ref{tab:lyrics}, Fig.~\ref{fig:lyrics}) \\
+\texttt{r12\_report.py} & PCA, ablation, everything together, trajectory figure (Sec.~\ref{sec:ablation}, Fig.~\ref{fig:traj}) \\
+\texttt{make\_figures.py} & all data figures \\
+\texttt{timeseries/} \texttt{build\_notebook.py} & STL, periodogram, Fourier, ARIMA forecasting (App.~\ref{app:ts}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Time-series details}\label{app:ts}
+
+The chart analysis of Sec.~\ref{sec:timeseries} is in a notebook (\texttt{timeseries/time\_series\_hot100.ipynb})
+that follows the standard sequence of a time-series study~\cite{hyndman2021forecasting}: plot the series,
+decompose it into trend, seasonality and residual, look for cycles with the periodogram, model the cycles
+with Fourier terms, test stationarity (ADF, KPSS) and autocorrelation (ACF, PACF, Ljung--Box), and compare
+forecasting methods by rolling origin.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{ts_decomposition.png}
+\caption{STL decomposition of the monthly mean number of debuts per chart week (1959--2025). The trend
+dominates (strength 0.72); seasonality is weak (0.11). The spike of December 1998 is the rule change that
+admitted songs not released as singles.}
+\label{fig:stl}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{ts_periodogram.png}
+\caption{Periodogram (FFT) of the weekly number of holiday songs on the chart: peaks at one year and its
+harmonics (26.1, 17.4, 13.0 weeks), which a Fourier regression turns into the seasonal pattern.}
+\label{fig:periodogram}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{ts_forecasts.png}
+\caption{Twelve-month forecasts of monthly debuts from the last origin (January 2025).}
+\label{fig:forecasts}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\caption{Forecasting monthly debuts 12 months ahead, rolling origin (11 origins, 2015--2025). MASE: mean
+absolute error divided by that of the in-sample seasonal naive forecast (lower is better).}
+\label{tab:forecast}
+\footnotesize
+\begin{tabular}{@{}lc@{}}
+\toprule
+Method & MASE \\
+\midrule
+ARIMA$(1,1,2)$ & \textbf{1.82} \\
+ARIMA$(1,1,2)$ + Fourier terms & \textbf{1.82} \\
+Damped Holt--Winters (ETS) & 1.85 \\
+Seasonal ARIMA & 1.89 \\
+Gradient boosting, lags + Fourier & 1.94 \\
+Random forest, lags + Fourier & 1.99 \\
+Seasonal naive & 2.32 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{ARIMA in one paragraph.} ARIMA$(p,d,q)$ models a series by differencing it $d$ times until it has
+no trend, then explaining each value from its own $p$ previous values (autoregression) and from the $q$
+previous forecast errors (moving average). We chose $d=1$ from the stationarity tests and $(p,q)$ by AIC
+over $p,q\leq2$. Adding Fourier terms as regressors captures yearly seasonality with few parameters.
+
+\section{Questions a reader may ask}\label{app:faq}
+
+\textbf{Is artist history not cheating?} No information from the song's own period or later is used
+(Fig.~\ref{fig:history}), so it is available on release day. What inflates its gain on the Hit Predictor
+is the construction of the negatives (artists of hits are excluded), which is why we report the
+year-matched ISMIR gain ($+2.6$\pp) as the transferable number.
+
+\textbf{Why does the paper say the gain holds for unseen artists but not for new artists?} The two words
+mean different things (Sec.~\ref{sec:features}): an unseen artist is absent from the training folds but may
+have earlier hits; a new artist has none, so $h(s)=0$.
+
+\textbf{Why Random Forest and not XGBoost?} XGBoost is 1.3 points better under cross-validation but ties
+on the canonical split ($p=0.87$); the frozen Random Forest keeps our numbers comparable with the published
+configuration, and the gain of our features is the same for all five classifiers (Table~\ref{tab:models}).
+
+\textbf{Why no deep learning?} The question is which inputs carry signal, at equal model. A learned audio
+representation could capture what the descriptors miss, and is future work.
+
+\textbf{Why reject the song title when it is the strongest feature?} A title does not make a song a hit.
+It reveals how the non-hits were collected (niche-genre catalogue tracks), so its gain would not transfer
+to any other dataset.
+
+\textbf{Why does release year alone score below chance (0.448) in ISMIR protocol~B?} Every hit has a
+non-hit from the same year, so the year carries no information, and a Random Forest on a single input with
+many distinct values fits noise in the training folds; with exactly balanced years, what it learns for a
+year is then, on average, the opposite of the test fold's labels for that year, which pushes it below 0.5.
+
+\textbf{Why is FFT rejected although its gain is significant on the whole benchmark?} Because it vanishes
+when hits and non-hits come from the same genres (Table~\ref{tab:genre}): spectral descriptors recognise the
+niche genres from which the benchmark draws its non-hits.
+
+\textbf{Why are the canonical numbers lower than the cross-validated ones?} The canonical split trains on
+20{,}000 songs, cross-validation on 32{,}448; with more training data every configuration is about one point
+better, and the differences between configurations are the same.
+
+\textbf{Why are lyrics kept but not genre, if lyrics also partly reflect genre?} Spotify genre tags
+describe the artist as known today, so they are not known on release day.
+The words of a song are known on release day. On ISMIR the negatives are random catalogue songs, so the
+difference in themes between chart songs and the rest is real rather than built into the dataset; we
+nevertheless state that lyrics measure mainstream-ness more than the appeal of one song
+(Sec.~\ref{sec:lyrics}).
