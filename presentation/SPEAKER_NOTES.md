@@ -1,6 +1,6 @@
 # Speaker notes
 
-Deck: `presentation/hit_prediction_deck.html` (43 slides, arrow keys), PDF alongside.
+Deck: `presentation/hit_prediction_deck.html` (44 slides, arrow keys), PDF alongside.
 
 The deck is **one story** from start to finish: plain-words slides say what we did, and the detailed slides
 (charts, tables) appear where they happen in the story. Every slide ends with a blue arrow "→ ...": read it aloud
@@ -129,7 +129,7 @@ release: yes** (the first three weeks predict a top-10 hit, AUC .89). Two differ
 **36 · Details of both experiments** (table): AUC .59 without the weeks; .75 / .85 / .89 / .92 with 1 / 2 / 3 / 4
 weeks; .87 on songs not yet in the top 10; .85 when testing after 2000.
 
-### The end (slides 37–43)
+### The end (slides 37–44)
 
 **37 · Statistics**: ~60 tests, Bonferroni; every key result stays solid.
 
@@ -138,17 +138,22 @@ weeks; .87 on songs not yet in the top 10; .85 when testing after 2000.
 **39 · What is new**: artist history existed (Interiano 2018, Middlebrook 2019); we add the tests, the head-to-head,
 the external validation and the audit of traps.
 
-**40 · Scoreboard: how much we improved each dataset** (table). Spotify Hit Predictor 78.2 → 83.2 %;
+**40 · Our final model.** One Random Forest (80 trees, 8 features per question, never tuned) on 20 numbers
+per song: the 13 Spotify descriptors, 6 decade boxes, and artist history. Other datasets: same recipe with their own
+sound descriptors. Not in the model: titles, detailed sound, FFT, genre, market trend, chorus_hit / sections. A
+separate model, after release, uses the first three weeks on the chart.
+
+**41 · Scoreboard: how much we improved each dataset** (table). Spotify Hit Predictor 78.2 → 83.2 %;
 Du's method 84.6 → 86.7 % (2000s) and 82.9 → 86.1 % (2010s), above his published 84 / 82 %; ISMIR 73.9 → 76.3 %,
 above the best published 75.04 %; ISMIR fair test 68.2 → 70.8 %; SpotGenTrack AUC .690 → .777 (hits found
 8 % → 25 %); Hot 100 after release AUC .59 → .89 with the first three weeks.
 
-**41 · What we proved.** Closing line: a hit is mostly **who sings it and when** — and, once it is out, **how its
+**42 · What we proved.** Closing line: a hit is mostly **who sings it and when** — and, once it is out, **how its
 first weeks go**.
 
-**42 · Limitations and next steps**: new artists, deep learning, lyrics, a dataset without traps.
+**43 · Limitations and next steps**: new artists, deep learning, lyrics, a dataset without traps.
 
-**43 · Thank you, questions.**
+**44 · Thank you, questions.**
 
 ---
 

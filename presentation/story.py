@@ -243,3 +243,33 @@ SCORE = slide(CE, "Scoreboard", "How much our model improved each dataset",
     </table>
   </div>
   <p class="tiny" style="margin-top:8px">“Without our clues”: the same model on the dataset's usual inputs (13 Spotify descriptors; Du's own inputs; 592 Essentia descriptors + year on ISMIR; year, month and artist history for the Hot 100). Cross-validated means.</p>""")
+
+MODEL = slide(CE, "Our final model", "Our final model: one Random Forest, 20 numbers per song",
+              f"""<div class="body cols-2" style="margin-top:22px;align-items:start;gap:34px">
+    <div class="stack" style="gap:14px">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center">
+        <div class="panel stack" style="gap:6px;padding:16px"><p class="mid" style="font-size:48px">13</p><p class="say-s">Spotify sound descriptors</p></div>
+        <p class="mid" style="font-size:40px;color:var(--muted)">+</p>
+        <div class="panel stack" style="gap:6px;padding:16px"><p class="mid k-era" style="font-size:48px">6</p><p class="say-s">decade boxes (when)</p></div>
+        <p class="mid" style="font-size:40px;color:var(--muted)">+</p>
+        <div class="panel stack" style="gap:6px;padding:16px"><p class="mid k-artist" style="font-size:48px">1</p><p class="say-s">artist history (who)</p></div>
+      </div>
+      <p class="say-s">Artist history = log(1 + the artist's Hot 100 songs in <strong>earlier decades only</strong>).</p>
+      <p class="say" style="font-size:24px">→ <strong>Random Forest</strong>: 80 trees, 8 features per question, <strong>never tuned</strong> → hit / not hit</p>
+      <p class="say-s" style="font-size:19px">Same setting as the reference paper, so results compare. XGBoost is 1 point better on average, not significantly (p = .87).</p>
+    </div>
+    <div class="stack" style="gap:14px">
+      <div class="stack rule" style="gap:8px">
+        <p class="src" style="letter-spacing:.16em">OTHER DATASETS, SAME RECIPE</p>
+        <p class="say-s" style="font-size:19px">Their own sound descriptors (592 Essentia on ISMIR) + year or decade + artist history; Random Forest, 200 trees.</p>
+      </div>
+      <div class="stack rule" style="gap:8px">
+        <p class="src k-bad" style="letter-spacing:.16em">NOT IN THE MODEL</p>
+        <p class="say-s" style="font-size:19px">Titles, detailed sound, FFT, genre, market trend, chorus_hit / sections: traps or noise. Lyrics: promising, one dataset only.</p>
+      </div>
+      <div class="stack rule" style="gap:8px">
+        <p class="src k-both" style="letter-spacing:.16em">A SEPARATE MODEL, AFTER RELEASE</p>
+        <p class="say-s" style="font-size:19px">Songs already on the chart: first 3 weeks (positions, best rank, slope, acceleration) + year, month, artist history → Random Forest → top 10 or not. AUC .89.</p>
+      </div>
+    </div>
+  </div>""")
