@@ -47,7 +47,10 @@ how the benchmark was assembled, and a 185-dimensional librosa representation th
 significant on a single split ($+3.8$\pp) is not significant under repeated
 cross-validation. Spectral descriptors of 30-second previews add $+1.4$\pp{} on the whole
 benchmark, but the gain vanishes on a genre-matched sample: the benchmark's negatives are
-chosen by genre, and the artist's genre alone lifts accuracy to $0.928$. All numbers are reproduced by released scripts.
+chosen by genre, and the artist's genre alone lifts accuracy to $0.928$. Treated as time
+series, chart data add nothing before release (market-trend features carry only the era),
+but once a song has charted its first three weeks predict a top-10 peak with an AUC of
+0.89. All numbers are reproduced by released scripts.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -104,6 +107,9 @@ encode dataset construction, and a rich audio representation whose single-split 
 disappears under repeated cross-validation (Sec.~\ref{sec:audit}), and a genre control
 showing that a significant spectral-feature gain on the whole benchmark is a genre
 shortcut (Sec.~\ref{sec:further}).
+\item A \emph{time-series} analysis of the Hot~100: components and forecasting of chart
+dynamics, market-trend features before release, and early chart trajectories after release
+(Sec.~\ref{sec:timeseries}).
 \end{enumerate}
 
 % =====================================================================
@@ -730,6 +736,69 @@ is modest in accuracy because of the class imbalance, but it is the only content
 in this study that adds to artist history on a dataset whose negatives are not selected
 by genre.
 
+% ---------------------------------------------------------------------
+\subsection{Time series: chart dynamics}\label{sec:timeseries}
+
+\textbf{The chart as a time series.} The weekly Hot~100 (3{,}545 charts, 1958--2026) also
+forms time series. The monthly mean number of debuts per chart week (1959--2025) is mostly
+trend: an STL decomposition~\cite{cleveland1990stl} gives a trend strength of 0.72 and a
+seasonal strength of 0.11~\cite{hyndman2021forecasting}. Debuts fall from 11.0 per week in
+1959 to 5.5 in 2001 and return to 10.9 in 2025, after the chart started counting streams;
+the largest residual is a rule change (60 debuts in the chart of 5 December 1998, when
+songs not released as singles became eligible). The weekly number of holiday songs on the
+chart is almost purely seasonal: its periodogram peaks at 52.1, 26.1, 17.4 and 13.0 weeks,
+and a Fourier regression fitted on the streaming era ($K=20$ harmonics) explains 94\,\% of
+its variance. Forecasting monthly debuts 12 months ahead under rolling-origin evaluation
+(11 origins, 2015--2025), ARIMA$(1,1,2)$~\cite{box2015time} and ARIMA with Fourier terms
+(MASE 1.82) and damped Holt-Winters (1.85) are best and indistinguishable ($p=0.97$); they
+beat the seasonal naive forecast (2.32) at 10 of 11 origins ($p=0.006$). A seasonal ARIMA
+(1.89) and gradient boosting or random forests on lag and Fourier features (1.94, 1.99) do
+worse: the series has little seasonality, and 800 points leave tree models little to learn.
+
+\textbf{Before release: market trends.} We describe each Hit Predictor song by the
+distance of its standardised audio descriptors to the centroid of the previous decade's
+hits, and by its projection on the direction in which that centroid moved. On top of the
+main model these two features add $+0.07$\pp{} ($p=0.66$); the 13 per-feature deviations add
+$+0.46$\pp{} (23/25, $p=0.006$). On audio alone the trend features add $+1.8$\pp{}
+($p=7\times10^{-10}$), less than the decade alone ($+2.0$\pp): they carry era information,
+which the main model already has.
+
+\textbf{After release: early trajectories.} A different question can be asked once a song
+has entered the chart: will it become a big hit? We take the 31{,}925 songs with a complete
+history (debut after the first chart and at least 52 weeks of follow-up; 16.4\,\% reach
+the top~10) and describe each by its positions in its first $k$ weeks (101 if off the
+chart), best rank, slope and acceleration, with the year, month and the artist's earlier
+songs and earlier top-10 hits reached before the debut as context (Random Forest, 200 trees,
+$5{\times}3$ CV). Table~\ref{tab:traj} shows that the trajectory dominates: three weeks give
+an AUC of 0.892 against 0.593 for the context alone, and context adds $+0.03$ to $+0.05$ on
+top (15/15 folds, $p<10^{-6}$ for every $k$). The prediction is not limited to songs already
+at the top: among the songs not yet in the top~10 after three weeks, the AUC is 0.870, and a
+model trained on songs before 2000 reaches 0.852 on songs from 2000 onwards. As for online
+content~\cite{szabo2010predicting}, early popularity predicts later popularity. This task
+differs from that of Sec.~\ref{sec:main}: every song has already charted, so it separates
+big hits from small ones and cannot be used before release. A second target, at least
+20~weeks on the chart, depends on chart rules that remove older songs and is not reported.
+
+\begin{table}[t]
+\centering
+\caption{Predicting a top-10 peak from a song's first $k$ weeks on the Hot~100 (31{,}925
+songs, 16.4\,\% top-10; Random Forest, $5{\times}3$ CV). Context: year, month and the
+artist's earlier chart history. Last column: songs not yet in the top~10 after $k$ weeks.}
+\label{tab:traj}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc|c}
+\toprule
+ & \multicolumn{4}{c|}{All songs} & Not yet top 10 \\
+$k$ & weeks & + context & F1 & context only & + context \\
+\midrule
+1 & .700 & .750 & .401 & .593 & .720 \\
+2 & .796 & .850 & .531 & .593 & .828 \\
+3 & .845 & \textbf{.892} & .610 & .593 & .870 \\
+4 & .891 & \textbf{.917} & .674 & .593 & .894 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 % =====================================================================
 \section{Discussion}\label{sec:discussion}
 
@@ -770,10 +839,12 @@ Tables~\ref{tab:main} and~\ref{tab:models}, the head-to-head of Table~\ref{tab:t
 the temporal hold-out, the ISMIR gains of artist history in both protocols, and the
 artist-grouped gains. The full-benchmark FFT gain on top of the main model also survives
 ($p=4\times10^{-9}$) but is explained by genre (Sec.~\ref{sec:further}); the genre-control
-results themselves ($p\leq5\times10^{-7}$) survive as well. Results with $8\times10^{-4} < p < 0.05$ should be read as
+results themselves ($p\leq5\times10^{-7}$) survive as well, and so do the early-trajectory
+gains of Table~\ref{tab:traj} ($p<10^{-6}$). Results with $8\times10^{-4} < p < 0.05$ should be read as
 indicative only: the decade and FFT gains on the 3{,}562-song audio subset (including FFT
 on top of artist history), audio + artist + FFT against the main model on the whole
-benchmark ($p=0.04$), the lyrics gains on SpotGenTrack ($5{\times}1$ CV, $p=0.002$ for
+benchmark ($p=0.04$), the per-feature market-trend deviations ($p=0.006$), the
+forecasting comparison of Sec.~\ref{sec:timeseries} ($p=0.006$, 11 origins), the lyrics gains on SpotGenTrack ($5{\times}1$ CV, $p=0.002$ for
 accuracy), most single-split gains on
 that subset, the SpotGenTrack accuracy gain of artist history alone ($p=10^{-3}$; with
 decade, $p=3\times10^{-4}$), and the ISMIR cold-start gains of artist history for known
@@ -807,6 +878,8 @@ audio embeddings, evaluated with the same audit protocol.
 independently of artist, genre and date. Our genre-matched sample is a small, post-hoc
 approximation of it; a purpose-built one would let content features be compared without
 construction shortcuts.
+(iv) \emph{Early trajectories}: Sec.~\ref{sec:timeseries} uses weekly chart positions only;
+daily streams and radio plays would allow the same prediction days after release.
 
 \section{Conclusion}
 A song's artist history is a simple, leakage-free signal that improves hit prediction
@@ -818,7 +891,8 @@ artists, whereas era context helps newcomers; spectral descriptors of a 30-secon
 preview appear to help them too, but that gain disappears under a genre control. The same audit
 shows that larger gains---song titles, release dates, genre-driven audio features, rich
 audio on a single split---can
-come from how the data were built or from chance. Knowing which gains are real matters more
+come from how the data were built or from chance. Chart time series add nothing before
+release, but after release a song's first weeks are the strongest predictor we found. Knowing which gains are real matters more
 than the headline number.
 
 \section*{Reproducibility}

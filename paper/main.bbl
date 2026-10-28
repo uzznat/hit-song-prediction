@@ -158,4 +158,23 @@ T.~Chen and C.~Guestrin, ``{XGBoost}: A scalable tree boosting system,'' in
   \emph{Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery
   and Data Mining}, 2016, pp. 785--794.
 
+\bibitem{cleveland1990stl}
+R.~B. Cleveland, W.~S. Cleveland, J.~E. McRae, and I.~Terpenning, ``{STL}: A
+  seasonal-trend decomposition procedure based on loess,'' \emph{Journal of
+  Official Statistics}, vol.~6, no.~1, pp. 3--73, 1990.
+
+\bibitem{hyndman2021forecasting}
+R.~J. Hyndman and G.~Athanasopoulos, \emph{Forecasting: Principles and
+  Practice}, 3rd~ed.\hskip 1em plus 0.5em minus 0.4em\relax Melbourne,
+  Australia: OTexts, 2021.
+
+\bibitem{box2015time}
+G.~E.~P. Box, G.~M. Jenkins, G.~C. Reinsel, and G.~M. Ljung, \emph{Time Series
+  Analysis: Forecasting and Control}, 5th~ed.\hskip 1em plus 0.5em minus
+  0.4em\relax Wiley, 2015.
+
+\bibitem{szabo2010predicting}
+G.~Szabo and B.~A. Huberman, ``Predicting the popularity of online content,''
+  \emph{Communications of the ACM}, vol.~53, no.~8, pp. 80--88, 2010.
+
 \end{thebibliography}
