@@ -148,3 +148,18 @@ acceleration; context = year, month, log earlier songs, log earlier top-10s alre
 **Trend (before release), Kaggle 5x5 CV.** Distance of z-scored audio to the previous decade's hit centroid and
 projection on the trend direction: on the main model +0.07 (p=.66) → removed; 13 per-feature deviations +0.46
 (23/25, p=.006, indicative); on audio alone +1.8 (p=7e-10) < decade alone +2.0 → carries only the era.
+
+## R11 — lyrics on ISMIR 2019 (2026-10-28, `repro/r11_lyrics_ismir.py`)
+
+musiXmatch bag-of-words (official MSD lyrics release, 237,662 tracks, top 5,000 words; downloaded to
+`data/musixmatch/`). Lyrics exist for 56 % of ISMIR hits but 36 % of the non-hit pool → only songs WITH lyrics on
+both sides. Hits are 97.5 % English vs 80.5 % of non-hits → English-only control. Features: 8 lexical (log words,
+log distinct words, richness, repetition, I/me/my, you/your, love, common-English share) + 1 out-of-fold TF-IDF
+logistic probability. Reference = final ISMIR model (592 Essentia + year + artist), RF-200, 5x2 CV.
+- A random (6,526): final .728 → + lyrics **.775** (+4.7, 10/10, p=3e-4; AUC .798 → .851).
+- B year-matched (6,478): .676 → **.727** (+5.1, 10/10, p=2e-5; AUC .732 → .802). Lyrics alone .702 > final .676.
+- English only, A: .718 → .745 (+2.7, p=6e-4); B: .658 → **.708** (+4.9, 10/10, p=1e-4; AUC .720 → .772).
+- English only + **artist-grouped CV** (no test artist in training): A +3.0 (p=6e-4), B **+4.4 (10/10, p=3e-5;
+  AUC +.047, p=1e-6)**. Survives Bonferroni.
+→ Lyrics are the first CONTENT feature that survives every control (year matching, English only, unseen
+artists). Changes the paper's "nothing in the content survives" statement: true for audio, not for lyrics.

@@ -1,0 +1,7 @@
+set,n,config,acc,auc,d_accuracy,p_accuracy,d_auc,p_auc,wins_acc
+A_random_english_grouped,6364,final: audio + year + artist,0.7117,0.7846,,,,,
+A_random_english_grouped,6364,final + lexical + bag of words,0.7416,0.8172,0.0299,0.0006020368482636485,0.0326,6.75967923978902e-06,10.0
+A_random_english_grouped,6364,lyrics only (lexical + bag of words),0.6929,0.7545,-0.0189,0.04172800004718116,-0.0301,0.015076400020107105,1.0
+B_yearmatched_english_grouped,6294,final: audio + year + artist,0.6563,0.7165,,,,,
+B_yearmatched_english_grouped,6294,final + lexical + bag of words,0.6999,0.7639,0.0435,3.3512717041222676e-05,0.0474,1.091808791024695e-06,10.0
+B_yearmatched_english_grouped,6294,lyrics only (lexical + bag of words),0.6675,0.7303,0.0111,0.20449674748600455,0.0138,0.12879921494474067,8.0
