@@ -7,6 +7,8 @@ and orders everything in six parts.
 import os
 import re
 
+import story
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "deck_v1_source.html")      # the 23-slide version of 2026-09-15
 OUT = os.path.join(HERE, "hit_prediction_deck.html")
@@ -48,7 +50,7 @@ head = R(head, "</style>", """  .t.dense th { padding: 0 10px 8px 0; }
   .roadmap .ttl { font: 700 24px/1.15 var(--display); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chips span { font: 500 15px/1 var(--mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--raise); color: var(--ink2); }
-</style>""")
+""" + story.CSS + """</style>""")
 
 # --------------------------------------------------------------------------- new slides
 roadmap = f"""<section class="slide" data-foot="Roadmap">
@@ -302,21 +304,18 @@ O[22] = R(O[22], """        <li>Canonical artist IDs (MusicBrainz / Spotify) to 
         <li>Lyrics and learned audio embeddings, under the same audit</li>""",
           """        <li>Features that help <strong>first-time artists</strong>: label, collaborators, early streams — always with a genre-matched control</li>
         <li>Semantic lyrics and learned audio embeddings, under the same audit</li>
-        <li>Early-trajectory forecasting (Part 6) with streaming data</li>""")
+        <li>Early-trajectory forecasting (Chapter 6) with streaming data</li>""")
 O[23] = R(O[23], "Song titles, release dates and rich audio on one split looked better still — and were artefacts or chance.",
           "Song titles, release dates, FFT and rich audio on one split looked better still — and were artefacts, genre or chance.")
 
 # --------------------------------------------------------------------------- order and part labels
-order = [
-    (O[1], None), (roadmap, None),
-    (O[2], P1), (O[3], P1),
-    (start, P2), (O[4], P2), (algos, P2), (tools, P2), (O[5], P2),
-    (O[6], P3), (O[7], P3), (O[8], P3), (O[9], P3), (O[10], P3), (O[11], P3),
-    (O[12], P4), (O[13], P4), (O[14], P4), (O[15], P4), (O[16], P4), (O[17], P4),
-    (O[18], P5), (fft, P5), (decay, P5), (checks, P5), (ledger, P5), (O[19], P5), (O[20], P5),
-    (ts1, P6), (ts2, P6),
-    (O[21], PC), (O[22], PC), (O[23], PC), (proved, PC),
-]
+# The talk is the story (story.py); the detailed slides follow as an appendix for questions.
+O[1] = R(O[1], "Artist history, era context and shortcut features — tested on four datasets, with every gain checked for chance and for artefacts.",
+         "The story of our project: what we tried, what worked, and what turned out to be a trap.")
+APX = "Appendix · details"
+order = ([(O[1], None)] + [(x, None) for x in story.STORY + story.ENDING] + [(story.APPENDIX_TITLE, None)] +
+         [(x, APX) for x in [O[3], algos, tools, O[5], O[8], O[9], O[10], O[11], O[13], O[14], O[15], O[16],
+                             O[17], O[18], fft, decay, checks, ledger, O[19], O[20], O[21], O[22], ts1, ts2]])
 slides = [foot(sec, lab) if lab else sec for sec, lab in order]
 
 # --------------------------------------------------------------------------- R10 numbers (filled by fill_r10)
@@ -333,7 +332,12 @@ charts = """
     { label: "genre-matched: main", value: 79.0, color: BO },
     { label: "genre-matched: + FFT", value: 79.1, color: css("--bad"), bold: true } ] });
 """
-tail = R(tail, "  /* ---------- navigation ---------- */", charts + "\n  /* ---------- navigation ---------- */")
+# a chart whose slide is not in this deck must not stop the script
+tail = R(tail, """    const s = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img" });
+    document.getElementById(host).appendChild(s);""", """    const s = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img" });
+    const hostEl = document.getElementById(host);
+    if (hostEl) hostEl.appendChild(s);""")
+tail = R(tail, "  /* ---------- navigation ---------- */", charts + story.CHARTS + "\n  /* ---------- navigation ---------- */")
 tail = re.sub(r'<span id="counter" aria-live="polite">1 / \d+</span>',
               f'<span id="counter" aria-live="polite">1 / {len(slides)}</span>', tail)
 

@@ -121,6 +121,10 @@
   .roadmap .ttl { font: 700 24px/1.15 var(--display); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chips span { font: 500 15px/1 var(--mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--raise); color: var(--ink2); }
+  .say { font-size: 28px; line-height: 1.38; color: var(--ink); max-width: 48ch; }
+  .say-h { font: 700 27px/1.2 var(--display); color: var(--ink); }
+  .say-s { font-size: 22px; line-height: 1.45; color: var(--ink2); }
+  .next { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); font: 600 20px/1.3 var(--body); color: var(--era-ink); }
 </style>
 
 <div class="stage" id="stage"><div class="deck" id="deck">
@@ -130,7 +134,7 @@
   <div>
     <p class="eyebrow">Hit song prediction · Technion · Project in AI</p>
     <h1>What really predicts a <em>hit</em>?</h1>
-    <p class="lede" style="font-size:26px;max-width:40ch;margin-top:22px">Artist history, era context and shortcut features — tested on four datasets, with every gain checked for chance and for artefacts.</p>
+    <p class="lede" style="font-size:26px;max-width:40ch;margin-top:22px">The story of our project: what we tried, what worked, and what turned out to be a trap.</p>
   </div>
   <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:40px">
     <div class="stack" style="gap:6px">
@@ -144,33 +148,275 @@
 </section>
 
 <!-- 2 -->
-<section class="slide" data-foot="Roadmap">
-  <p class="eyebrow">Roadmap</p>
-  <h2>The project in six steps</h2>
-  <div class="roadmap">
-    <div class="step"><span class="no">1</span><span class="ttl">Problem &amp; data</span><p class="small">Why published accuracies cannot be compared; the four datasets we use.</p></div>
-    <div class="step"><span class="no">2</span><span class="ttl">Method</span><p class="small">The starting features, the two signals we add, the algorithms, and how every gain is tested.</p></div>
-    <div class="step"><span class="no k-both">3</span><span class="ttl">Results on the benchmark</span><p class="small">+5.0 points with every classifier, every decade, and against the only prior model.</p></div>
-    <div class="step"><span class="no k-artist">4</span><span class="ttl">Is it real?</span><p class="small">How the benchmark was built, independent datasets, unseen and new artists.</p></div>
-    <div class="step"><span class="no k-bad">5</span><span class="ttl">What we tried and removed</span><p class="small">Titles, rich audio, FFT, genre, lyrics: what we keep, what we drop, and why.</p></div>
-    <div class="step"><span class="no k-era">6</span><span class="ttl">Time series</span><p class="small">Components and forecasting of the Hot 100, and predicting big hits from their first weeks.</p></div>
+<section class="slide" data-foot="The question">
+  <p class="eyebrow">The question</p>
+  <h2>Can a computer guess, before a song comes out, whether it will be a hit?</h2>
+  <div class="body cols-3" style="margin-top:40px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h ">What is a hit?</p><p class="say-s">A song that entered the <strong>Billboard Hot 100</strong>, the weekly chart of the most popular songs in the USA.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">How the computer learns</p><p class="say-s">We show it thousands of songs whose answer we already know. It finds patterns. Then we test it on songs it has <strong>never seen</strong>.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">What is a good score?</p><p class="say-s">Guessing at random gives <strong>50 %</strong> right, like tossing a coin. Everything we do is compared to that.</p></div>
   </div>
+  <p class="next">→ We started with the most obvious clue: the sound of the song.</p>
 </section>
 
 <!-- 3 -->
-<section class="slide" data-foot="Part 1 · Problem & data">
-  <p class="eyebrow">The problem</p>
-  <h2>Hit-prediction papers report 86 %, 88 %, 89 % — and none of these numbers can be compared</h2>
-  <div class="body cols-3" style="align-items:start;margin-top:44px">
-    <div class="stack rule"><p class="mid">≠</p><p style="font:700 24px/1.2 var(--display)">Different datasets</p><p class="small">Each study builds its own hits and non-hits. An 88 % on one set says nothing about another.</p></div>
-    <div class="stack rule"><p class="mid">1×</p><p style="font:700 24px/1.2 var(--display)">One split, no test</p><p class="small">Gains are measured on a single train/test split, usually without a significance test.</p></div>
-    <div class="stack rule"><p class="mid k-bad">⚠</p><p style="font:700 24px/1.2 var(--display)">Shortcuts</p><p class="small">A feature can separate hits from non-hits because of <strong>how the negatives were chosen</strong>, not because of anything that makes a song succeed.</p></div>
+<section class="slide" data-foot="Chapter 1 · The sound">
+  <p class="eyebrow">Step 1</p>
+  <h2>We started with the sound</h2>
+  <div class="body cols-2" style="margin-top:34px;align-items:start">
+    <div class="stack">
+      <p class="say">Spotify describes every song with <strong>13 numbers</strong>: how danceable, how energetic, how fast, how loud, how acoustic, how happy it sounds...</p>
+      <div class="chips"><span>danceability</span><span>energy</span><span>tempo</span><span>loudness</span><span>acousticness</span><span>valence (happy)</span><span>+ 7 more</span></div>
+    </div>
+    <div class="stack">
+      <p class="big">78<span class="unit">%</span></p>
+      <p class="say-s">right, on 40,560 songs (half hits, half not). Much better than a coin, but <strong>1 song in 5 is still wrong</strong>.</p>
+    </div>
   </div>
-  <p class="small" style="margin-top:18px">Our question: which gains are <strong>real</strong> — and how big are they once all three problems are controlled?</p>
+  <p class="next">→ But how does the computer learn, and how do we know the score is not luck?</p>
 </section>
 
 <!-- 4 -->
-<section class="slide" data-foot="Part 1 · Problem & data">
+<section class="slide" data-foot="Chapter 1 · The sound">
+  <p class="eyebrow">How it works</p>
+  <h2>How the computer learns, and how we test it</h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h ">A Random Forest = 80 small decision trees</p><p class="say-s">Each tree asks simple questions — <em>is it danceable? is it long? is it acoustic?</em> — and votes “hit” or “not hit”. The majority wins. We never tune it, so any improvement comes from the clues we give it, not from tweaking.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">We test it 25 times</p><p class="say-s">We hide 1/5 of the songs, train on the rest, and guess the hidden ones. Then again with other hidden songs: <strong>25 tests</strong> in total. An improvement counts only if it appears again and again, and passes a statistical test.</p></div>
+  </div>
+  <p class="next">→ The sound alone was not enough. So we asked: what else makes a hit?</p>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-foot="Chapter 2 · Who and when">
+  <p class="eyebrow">Step 2 · Our idea</p>
+  <h2>A hit is not only a sound — it is also <span class="k-artist">who</span> sings it and <span class="k-era">when</span></h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h k-artist">WHO · the artist's history</p><p class="say-s">Has this artist had hits <strong>before</strong>? We count their Hot 100 songs in <strong>earlier decades only</strong>, never the future — the computer could know this on the day the song comes out.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h k-era">WHEN · the decade</p><p class="say-s">A hit in 1965 does not sound like a hit in 2015. Knowing the decade lets the computer use the right “taste” for each era.</p></div>
+  </div>
+  <p class="next">→ We added these two clues to the 13 sound numbers.</p>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-foot="Chapter 2 · Who and when">
+  <p class="eyebrow">Step 2 · Result</p>
+  <h2>From 78 % to 83 % right</h2>
+  <div class="body cols-2">
+    <div><div class="chart" id="s-main"></div></div>
+    <div class="stack">
+      <p class="big k-both">+5<span class="unit">points</span></p>
+      <p class="say-s">Better in <strong>25 out of 25</strong> tests. Each clue helps on its own; together they help the most.</p>
+    </div>
+  </div>
+  <p class="next">→ Why does “who” work so well?</p>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-foot="Chapter 2 · Who and when">
+  <p class="eyebrow">Step 2 · Why it works</p>
+  <h2>One earlier hit changes everything</h2>
+  <div class="body cols-2">
+    <div><div class="chart" id="s-curve"></div><p class="src" style="margin-top:6px">Share of songs that are hits, by the artist's number of earlier hits</p></div>
+    <div class="stack">
+      <p class="say">Artist with <strong>no</strong> earlier hit: <strong>39 %</strong> of their songs are hits.</p>
+      <p class="say">With <strong>1 or 2</strong> earlier hits: <strong class="k-artist">91 %</strong>.</p>
+    </div>
+  </div>
+  <p class="next">→ +5 points is a lot. Too much? We tried hard to prove it was luck.</p>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-foot="Chapter 3 · Is it luck?">
+  <p class="eyebrow">Step 3</p>
+  <h2>Is it luck? We tried to break it — it held</h2>
+  <div class="body" style="grid-template-columns:repeat(4,1fr);margin-top:36px;align-items:start;gap:26px">
+    <div class="stack rule" style="gap:10px"><p class="say-h ">5 different algorithms</p><p class="say-s">Random Forest, XGBoost, SVM, k-NN, logistic regression: all gain <strong>+4.6 to +5.7</strong>. It is the clues, not the algorithm.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">Every decade</p><p class="say-s">From the 1960s to the 2010s: <strong>+3.7 to +6.6</strong> every time.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">The future</p><p class="say-s">Trained on old decades, tested on a decade it never saw: still <strong>+1.9 to +3.4</strong>.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">The only other study</p><p class="say-s">We redid its exact method (Du, 2022) and added our clue: <strong>better in 50 out of 50</strong> tries.</p></div>
+  </div>
+  <p class="next">→ It was not luck. But then we read how the dataset had been built...</p>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-foot="Chapter 4 · A trap in the data">
+  <p class="eyebrow">Step 4 · A surprise</p>
+  <h2>A trap: how the non-hits were chosen</h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack">
+      <p class="say">The dataset's own rules: a non-hit must come from an artist who <strong>had no hit</strong> that decade, in a <strong>niche genre</strong> (jazz, Latin, classical...).</p>
+      <p class="say-s">So “the artist had hits before” is partly the dataset's rule, not the music.</p>
+    </div>
+    <div class="stack">
+      <p class="big k-bad">97<span class="unit">%</span></p>
+      <p class="say-s">of songs by an artist with an earlier hit are hits <strong>in this dataset</strong>. Our +5 is too optimistic here.</p>
+    </div>
+  </div>
+  <p class="next">→ So we needed a dataset built differently.</p>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-foot="Chapter 4 · A trap in the data">
+  <p class="eyebrow">Step 4 · Another dataset</p>
+  <h2>We tested on another dataset, built without that rule</h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack">
+      <p class="say-s">ISMIR 2019 dataset (published, 11,662 songs): non-hits are <strong>random songs</strong>.</p>
+      <p class="big k-both">76.3<span class="unit">%</span></p>
+      <p class="say-s">with our clue — <strong>better than the best published result (75.0 %)</strong>.</p>
+    </div>
+    <div class="stack">
+      <p class="say-h k-bad">But another trap</p>
+      <p class="say">The <strong>year alone</strong> already gets <strong>70 %</strong>: the hits in this dataset are older songs. The computer can win just by looking at the date.</p>
+    </div>
+  </div>
+  <p class="next">→ So we made the test fair: every hit against a non-hit from the same year.</p>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-foot="Chapter 4 · A trap in the data">
+  <p class="eyebrow">Step 4 · The fair test</p>
+  <h2>Same year for hits and non-hits: the date is useless, the artist still helps</h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack">
+      <p class="say-h k-era">The year</p>
+      <p class="mid">useless</p>
+      <p class="say-s">It was only a trick of the dataset.</p>
+    </div>
+    <div class="stack">
+      <p class="say-h k-artist">The artist's history</p>
+      <p class="mid k-artist">+2.6<span class="unit">points</span></p>
+      <p class="say-s">Better in 10 out of 10 tests. <strong>This is our honest number</strong>: smaller than +5, but real.</p>
+    </div>
+  </div>
+  <p class="next">→ And for artists the computer has never seen?</p>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-foot="Chapter 4 · A trap in the data">
+  <p class="eyebrow">Step 4 · New artists</p>
+  <h2>Artists never seen, and brand-new artists</h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h ">Artists never seen in training</p><p class="say-s">We made sure no test artist appeared in training. The gain <strong>stays the same</strong> (+5.0): the computer does not just memorise names.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">A brand-new artist (first song ever)</p><p class="say-s">No history, so “who” <strong>cannot help</strong> (+0.4, nothing). “When” helps a little (+2.2). This is the hardest case — and the main thing left to solve.</p></div>
+  </div>
+  <p class="next">→ Next, we tried to give the computer more musical information.</p>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-foot="Chapter 5 · Trying more, catching false gains">
+  <p class="eyebrow">Step 5 · Adding more</p>
+  <h2>We tried more clues — and checked every gain</h2>
+  <div class="body cols-3" style="margin-top:34px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h k-bad">Song titles: +6.7</p><p class="say-s">Too good to be true. The titles reveal <strong>how the dataset was collected</strong>, not what makes a hit. <span class="pill k-bad">✗ removed</span></p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h k-bad">Detailed sound (185 measures)</p><p class="say-s">+3.8 on one test... but only <strong>+0.9 over 25 tests</strong>, which is nothing. The first result was luck. <span class="pill k-bad">✗ removed</span></p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h k-bad">Small details</p><p class="say-s">Length of the title, where the chorus starts, number of sections: <strong>nothing</strong>. <span class="pill k-bad">✗ removed</span></p></div>
+  </div>
+  <p class="next">→ Then one clue looked really good: splitting the sound into frequencies (FFT).</p>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-foot="Chapter 5 · Trying more, catching false gains">
+  <p class="eyebrow">Step 5 · The FFT</p>
+  <h2>The FFT looked like a real gain — it was recognising the genre</h2>
+  <div class="body cols-3" style="margin-top:34px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h ">It looked good</p><p class="say-s">The FFT splits the sound into frequencies (bass, middle, treble). <strong>+1.4 points</strong> on 35,000 songs, very significant.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">Why it was a trap</p><p class="say-s">Non-hits come from niche genres (rule of the dataset), and the sound <strong>tells the genre</strong>. The computer was recognising jazz or Latin, not hits.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">Fair test</p><p class="say-s">Same number of hits and non-hits in every genre: <strong>+0.1, nothing</strong>. <span class="pill k-bad">✗ removed</span></p></div>
+  </div>
+  <p class="next">→ Lesson: a big gain can be a trap. Then our teacher asked us to study time series.</p>
+</section>
+
+<!-- 15 -->
+<section class="slide" data-foot="Chapter 6 · Time series">
+  <p class="eyebrow">Step 6 · Time series</p>
+  <h2>We learned to read the chart as a signal over time</h2>
+  <div class="body cols-3" style="margin-top:30px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h ">3 parts of a time series</p><p class="say-s"><strong>Trend</strong>: slow change over years. <strong>Seasonality</strong>: repeats every year. <strong>Residual</strong>: what is left.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">What we found</p><p class="say-s">New songs per week: mostly a <strong>trend</strong> (fewer until 2001, more again with streaming). Christmas songs: pure <strong>seasonality</strong> — the FFT finds the 52-week cycle by itself.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">Forecasting next year</p><p class="say-s"><strong>ARIMA</strong> and Holt-Winters are the best <span class="pill k-both">✓ kept</span>. Machine learning is not better here: 800 data points are too few.</p></div>
+  </div>
+  <p class="next">→ Then the big question: can time series help predict a hit?</p>
+</section>
+
+<!-- 16 -->
+<section class="slide" data-foot="Chapter 6 · Time series">
+  <p class="eyebrow">Step 6 · Time series and hits</p>
+  <h2>Can time series predict a hit? It depends on <em>when</em> you ask</h2>
+  <div class="body cols-2e" style="margin-top:30px;align-items:start">
+    <div class="stack rule" style="gap:10px">
+      <p class="say-h">BEFORE the song comes out <span class="tiny">(our question)</span></p>
+      <p class="say-s">Does the song sound like the recent hits? <strong>+0.1, nothing</strong>: the trend only knows the decade, which we already had. <span class="pill k-bad">✗ removed</span></p>
+      <p class="mid k-bad">No</p>
+    </div>
+    <div class="stack rule" style="gap:10px">
+      <p class="say-h">AFTER it comes out <span class="tiny">(another question)</span></p>
+      <p class="say-s">The song just entered the chart. Its <strong>first 3 weeks</strong> tell if it will reach the <strong>top 10</strong>: right 89 times out of 100 when comparing two songs (AUC .89). <span class="pill k-both">✓ kept</span></p>
+      <p class="mid k-both">Yes</p>
+    </div>
+  </div>
+  <p class="say-s" style="margin-top:10px">Both are true. Time series do not help guess a hit <em>before</em> it is out — but once it is out, they are the best clue we found.</p>
+  <p class="next">→ So, what did we prove in the end?</p>
+</section>
+
+<!-- 17 -->
+<section class="slide" data-foot="The end">
+  <p class="eyebrow">Summary</p>
+  <h2>What we proved</h2>
+  <div class="body cols-2e" style="margin-top:24px;align-items:start;gap:36px">
+    <div class="stack" style="gap:12px">
+      <p class="src k-both" style="letter-spacing:.16em">TRUE — IT SURVIVED EVERY TEST</p>
+      <p class="say-s">1 · <strong>Who sings it matters</strong>: +5 points on the big dataset, <strong>+2.6 on a fair test</strong>.</p>
+      <p class="say-s">2 · We <strong>beat the published results</strong>: 76.3 % vs 75.0 %, and the other study 50 times out of 50.</p>
+      <p class="say-s">3 · It works with <strong>any algorithm</strong> and for <strong>artists never seen</strong>.</p>
+      <p class="say-s">4 · For a <strong>brand-new artist</strong>, only the era helps a little.</p>
+      <p class="say-s">5 · <strong>After</strong> a song comes out, its first 3 weeks predict a top-10 hit (AUC .89). <strong>Before</strong>, time series add nothing.</p>
+    </div>
+    <div class="stack" style="gap:12px">
+      <p class="src k-bad" style="letter-spacing:.16em">FALSE — IT WAS A TRAP</p>
+      <p class="say-s"><strong>Song titles</strong>: reveal how the data was collected.</p>
+      <p class="say-s"><strong>Detailed sound</strong>: the gain was luck.</p>
+      <p class="say-s"><strong>FFT</strong>: it was recognising the genre.</p>
+      <p class="say-s"><strong>The year</strong>: hits were just older songs.</p>
+      <p class="say-s"><strong>Music trends</strong>: they only know the decade.</p>
+      <p class="say-s rule"><strong>In the sound itself, nothing survived every test.</strong></p>
+    </div>
+  </div>
+  <p class="say" style="margin-top:14px">A hit is mostly <span class="k-artist">who sings it</span> and <span class="k-era">when</span> — and, once it is out, <span class="k-both">how its first weeks go</span>.</p>
+</section>
+
+<!-- 18 -->
+<section class="slide" data-foot="The end">
+  <p class="eyebrow">What is left</p>
+  <h2>What we cannot do yet</h2>
+  <div class="body cols-3" style="margin-top:36px;align-items:start">
+    <div class="stack rule" style="gap:10px"><p class="say-h ">Brand-new artists</p><p class="say-s">With no history, we have almost nothing. Next: the record label, the collaborators, the first streams.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">Lyrics and deep learning</p><p class="say-s">Lyrics helped a little on one dataset (+0.6). Neural networks on the raw sound are still to try — with the same careful tests.</p></div>
+    <div class="stack rule" style="gap:10px"><p class="say-h ">A dataset without traps</p><p class="say-s">Every dataset we used had a trap (artist, genre or year). A fair one would make the question much cleaner.</p></div>
+  </div>
+</section>
+
+<!-- 19 -->
+<section class="slide" data-foot="The end">
+  <p class="eyebrow">Thank you</p>
+  <h2>Thank you — questions?</h2>
+  <div class="body" style="grid-template-columns:1fr;margin-top:34px">
+    <p class="say">The slides after this one are the <strong>details</strong>: every algorithm and why, every clue we kept or removed and why, every table of results.</p>
+  </div>
+</section>
+
+<!-- 20 -->
+<section class="slide title-slide" data-foot="Appendix">
+  <div>
+    <p class="eyebrow">Appendix</p>
+    <h1 style="font-size:88px">The details</h1>
+    <p class="lede" style="font-size:24px;max-width:46ch;margin-top:22px">Algorithms, feature by feature results, statistics, and every table — for questions.</p>
+  </div>
+</section>
+
+<!-- 21 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Data</p>
   <h2>Four datasets — the definition of “hit” changes every time</h2>
   <div class="body" style="grid-template-columns:1fr;margin-top:34px">
@@ -188,47 +434,8 @@
   <p class="src">Paper · Table I</p>
 </section>
 
-<!-- 5 -->
-<section class="slide" data-foot="Part 2 · Method">
-  <p class="eyebrow">Method · the starting point</p>
-  <h2>We start from the 13 audio descriptors that Spotify computes for every song</h2>
-  <div class="body cols-2" style="margin-top:34px;align-items:start">
-    <div class="stack">
-      <div class="chips"><span>danceability</span><span>energy</span><span>key</span><span>loudness</span><span>mode</span><span>speechiness</span><span>acousticness</span><span>instrumentalness</span><span>liveness</span><span>valence</span><span>tempo</span><span>duration</span><span>time signature</span></div>
-      <p class="small rule">Each song is a row of 13 numbers; the label is <strong>1 = hit</strong> (on the weekly Hot 100 in its decade), <strong>0 = non-hit</strong>. The task is <strong>binary classification</strong>.</p>
-      <p class="tiny">The dataset also has <em>chorus_hit</em> and <em>sections</em>; we test them in Part 5 and they add nothing.</p>
-    </div>
-    <div class="stack">
-      <p class="src">BASELINE · RANDOM FOREST ON THE 13 DESCRIPTORS</p>
-      <p class="big">78.2<span class="unit">%</span></p>
-      <p class="small">accuracy, 5×5 cross-validation, 40,560 songs (49 % hits). Every gain in this talk is measured <strong>against this number</strong>.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 6 -->
-<section class="slide" data-foot="Part 2 · Method">
-  <p class="eyebrow">Method · the two signals</p>
-  <h2>Two cheap, non-audio signals added to the 13 Spotify audio features</h2>
-  <div class="body cols-2e" style="margin-top:38px">
-    <div class="stack rule">
-      <p class="src k-era" style="letter-spacing:.2em">ERA</p>
-      <p style="font:800 40px/1 var(--display)">Decade / release year</p>
-      <p class="small">A hit in the 1960s does not sound like a hit in the 2010s. The era lets the model apply <strong>era-specific rules</strong>.</p>
-      <p class="tiny">One-hot decade on the Hit Predictor; year or decade as a number elsewhere.</p>
-    </div>
-    <div class="stack rule">
-      <p class="src k-artist" style="letter-spacing:.2em">ARTIST HISTORY</p>
-      <p style="font:800 40px/1 var(--display)">Earlier Hot 100 songs</p>
-      <p style="font:500 21px/1.4 var(--mono);background:var(--raise);border:1px solid var(--line);border-radius:6px;padding:14px 18px">h(s) = log(1 + #hits by the same artist <span class="k-artist">strictly before</span> the song’s period)</p>
-      <p class="small">Strictly earlier periods only → <strong>no information from the song’s own period or the future.</strong></p>
-      <p class="tiny">Artist names normalised (accents, “feat.”, “&amp;” removed). 99.99 % of hits are found in the chart history.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 7 -->
-<section class="slide" data-foot="Part 2 · Method">
+<!-- 22 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Method · the classifiers</p>
   <h2>One main model, four others to check that the result is not tied to it</h2>
   <div class="body" style="grid-template-columns:1fr;margin-top:24px">
@@ -246,8 +453,8 @@
   <p class="small" style="margin-top:6px">All five gain <strong>+4.6 to +5.7 points</strong>: the improvement comes from the features, not the model. External datasets use a 200-tree Random Forest. <span class="src">5-fold CV · Table IV</span></p>
 </section>
 
-<!-- 8 -->
-<section class="slide" data-foot="Part 2 · Method">
+<!-- 23 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Method · the other algorithms</p>
   <h2>Feature extraction, explanation and statistics</h2>
   <div class="body cols-3" style="margin-top:30px;align-items:start;gap:30px">
@@ -272,8 +479,8 @@
   </div>
 </section>
 
-<!-- 9 -->
-<section class="slide" data-foot="Part 2 · Method">
+<!-- 24 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Method · how every gain is tested</p>
   <h2>Two estimates for every comparison — and a test that is not fooled by overlap</h2>
   <div class="body cols-2e" style="margin-top:34px;align-items:start">
@@ -295,47 +502,8 @@
   </div>
 </section>
 
-<!-- 10 -->
-<section class="slide" data-foot="Part 3 · Results on the benchmark">
-  <p class="eyebrow">Result 1 · Spotify Hit Predictor, 40,560 songs</p>
-  <h2>Decade and artist add <span class="k-both">+5.0 points</span>, and the gains stack</h2>
-  <div class="body cols-2">
-    <div>
-      <div class="chart" id="c-main"></div>
-      <p class="src" style="margin-top:8px">Random Forest · 5×5 CV mean accuracy · paper Table II</p>
-    </div>
-    <div class="stack">
-      <p class="big">83.2<span class="unit">%</span></p>
-      <p class="small">from 78.2 % with audio alone · ROC-AUC .859 → .918</p>
-      <div class="foldrow"><span class="folds" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span>25 / 25 folds<br>p = 7·10⁻¹⁷</span></div>
-      <p class="tiny">F1 of the hit class .787 → .831 (precision .758 → .828, recall .819 → .833).</p>
-      <p class="tiny rule">Canonical split: .773 → .796 → .800 → .822. The two signals alone reach only 67.0 %: they complement the audio, they do not replace it.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 11 -->
-<section class="slide" data-foot="Part 3 · Results on the benchmark">
-  <p class="eyebrow">Why artist history works</p>
-  <h2>One earlier hit changes everything: 39 % → 91 %</h2>
-  <div class="body cols-2">
-    <div>
-      <div class="chart" id="c-curve"></div>
-      <p class="src" style="margin-top:8px">Share of songs that are hits, by the artist’s Hot 100 songs in earlier decades · paper Fig. 1</p>
-    </div>
-    <div class="stack">
-      <p class="small">A strong, very non-linear relation: the first hits matter most, then it plateaus near 100 %.</p>
-      <div class="panel stack" style="gap:10px">
-        <p class="src">MEAN EARLIER HITS</p>
-        <p style="font:700 30px/1.1 var(--display)">hits <span class="k-artist">3.21</span> · non-hits <span style="color:var(--ink2)">0.037</span></p>
-      </div>
-      <p class="tiny">Keep that 0.037 in mind — it comes back in Part 4.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 12 -->
-<section class="slide" data-foot="Part 3 · Results on the benchmark">
+<!-- 25 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Robustness · every decade</p>
   <h2>The gain holds in all six decades, from +3.7 to +6.6 points</h2>
   <div class="body cols-2">
@@ -351,8 +519,8 @@
   </div>
 </section>
 
-<!-- 13 -->
-<section class="slide" data-foot="Part 3 · Results on the benchmark">
+<!-- 26 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Robustness · every classifier</p>
   <h2>Five very different models, the same +5 points: it is the features, not the model</h2>
   <div class="body cols-2">
@@ -370,8 +538,8 @@
   </div>
 </section>
 
-<!-- 14 -->
-<section class="slide" data-foot="Part 3 · Results on the benchmark">
+<!-- 27 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Robustness · the future</p>
   <h2>Train on the past, predict a decade the model has never seen</h2>
   <div class="body cols-2">
@@ -387,8 +555,8 @@
   </div>
 </section>
 
-<!-- 15 -->
-<section class="slide" data-foot="Part 3 · Results on the benchmark">
+<!-- 28 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Head-to-head · Du (2022), the only academic study on this dataset</p>
   <h2>Their exact models and inputs, plus our feature: better on 50 out of 50 splits</h2>
   <div class="body cols-2">
@@ -404,30 +572,8 @@
   </div>
 </section>
 
-<!-- 16 -->
-<section class="slide" data-foot="Part 4 · Is it real?">
-  <p class="eyebrow">The catch · how the benchmark was built</p>
-  <h2>The Kaggle dataset chose its non-hits partly <span class="k-bad">by artist</span></h2>
-  <div class="body cols-2e" style="margin-top:34px;align-items:start">
-    <div class="stack">
-      <p class="src">DATASET README — A “FLOP” MUST SATISFY ALL OF</p>
-      <ol class="small" style="margin:0;padding-left:22px;display:grid;gap:10px">
-        <li>The track is not in that decade’s hit list.</li>
-        <li><strong>The track’s artist is not in that decade’s hit list.</strong></li>
-        <li>It belongs to a “non-mainstream and/or avant-garde” genre.</li>
-        <li>That genre has no song in the hit list.</li>
-      </ol>
-    </div>
-    <div class="stack">
-      <p class="big">96.6<span class="unit">%</span></p>
-      <p class="small">of songs by an artist with an earlier hit are hits. On this benchmark, “known artist” almost means “hit”.</p>
-      <p class="small rule">So the <strong>+5.0</strong> is a <strong>benchmark-specific upper bound</strong>. We need data whose negatives are not chosen by artist → ISMIR 2019.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 17 -->
-<section class="slide" data-foot="Part 4 · Is it real?">
+<!-- 29 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">External validation · ISMIR 2019, protocol A (as in the original study)</p>
   <h2>With artist history we reach <span class="k-both">76.3 %</span>, above the best published 75.04 %</h2>
   <div class="body cols-2">
@@ -442,8 +588,8 @@
   </div>
 </section>
 
-<!-- 18 -->
-<section class="slide" data-foot="Part 4 · Is it real?">
+<!-- 30 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">The control · protocol B, non-hits matched to hits year by year</p>
   <h2>Match the years: release year becomes useless, artist history still adds <span class="k-artist">+2.6</span></h2>
   <div class="body cols-2">
@@ -459,8 +605,8 @@
   </div>
 </section>
 
-<!-- 19 -->
-<section class="slide" data-foot="Part 4 · Is it real?">
+<!-- 31 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">External validation · SpotGenTrack, 101,909 tracks</p>
   <h2>With 81 % non-hits, accuracy hides the signal — ROC-AUC shows it</h2>
   <div class="body cols-2e" style="margin-top:30px">
@@ -476,8 +622,8 @@
   <p class="small" style="margin-top:14px">Artist history: AUC <strong>.690 → .762</strong> (+ decade .777). The 207 low-level audio features add nothing on top of it. Hits found: 8 % → 25 % (F1 .147 → .358). <span class="src">5-fold CV · paper Table VII</span></p>
 </section>
 
-<!-- 20 -->
-<section class="slide" data-foot="Part 4 · Is it real?">
+<!-- 32 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Robustness · folds grouped by artist</p>
   <h2>Does the model just recognise artists? No — the gains survive when test artists are never seen</h2>
   <div class="body cols-3" style="margin-top:36px;align-items:start">
@@ -488,8 +634,8 @@
   <p class="small" style="margin-top:22px">All accuracies drop by up to one point — the audio carried a little artist identity — but the gains remain (ISMIR A loses at most half a point). <span class="src">Paper Table VIII</span></p>
 </section>
 
-<!-- 21 -->
-<section class="slide" data-foot="Part 4 · Is it real?">
+<!-- 33 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Robustness · cold start</p>
   <h2>For a new artist, it is the <span class="k-era">era</span> that helps — not the artist feature</h2>
   <div class="body" style="grid-template-columns:1fr;margin-top:30px">
@@ -505,8 +651,8 @@
   <p class="small">Gain in points over audio, artist-grouped CV. On the benchmark, artist history’s whole gain comes from the 17.6 % of songs by established artists. <span class="src">Paper Table VIII</span></p>
 </section>
 
-<!-- 22 -->
-<section class="slide" data-foot="Part 5 · What we tried and removed">
+<!-- 34 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Audit · which gains are not real</p>
   <h2>A big, significant gain can still be wrong: artefact or luck</h2>
   <div class="body cols-2">
@@ -523,8 +669,8 @@
   </div>
 </section>
 
-<!-- 23 -->
-<section class="slide" data-foot="Part 5 · What we tried and removed">
+<!-- 35 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Audit · spectral features (FFT) on the whole benchmark</p>
   <h2>FFT looked like a real gain for new artists — it was the <span class="k-bad">genre</span></h2>
   <div class="body cols-2">
@@ -541,8 +687,8 @@
   </div>
 </section>
 
-<!-- 24 -->
-<section class="slide" data-foot="Part 5 · What we tried and removed">
+<!-- 36 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Further experiment · how fast does a model age?</p>
   <h2>Train on one decade, test k decades later: artist history ages well, FFT does not</h2>
   <div class="body cols-2" style="align-items:start;margin-top:28px">
@@ -566,8 +712,8 @@
   </div>
 </section>
 
-<!-- 25 -->
-<section class="slide" data-foot="Part 5 · What we tried and removed">
+<!-- 37 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Further experiments · artist matching, lyrics, hit-class metrics</p>
   <h2>Three more checks</h2>
   <div class="body cols-3" style="margin-top:30px;align-items:start;gap:30px">
@@ -592,8 +738,8 @@
   </div>
 </section>
 
-<!-- 26 -->
-<section class="slide" data-foot="Part 5 · What we tried and removed">
+<!-- 38 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Summary · every feature we tried</p>
   <h2>What we keep, what we removed, and why</h2>
   <div class="body" style="grid-template-columns:1fr;margin-top:18px">
@@ -609,14 +755,14 @@
         <tr><td>Spotify artist genre</td><td>+10.1</td><td><span class="pill k-era">control only</span></td><td>Assigned afterwards: would leak</td></tr>
         <tr><td>Low-level audio (207)</td><td>≈ 0 on top of artist history</td><td><span class="pill k-bad">remove</span></td><td>Nothing beyond artist history</td></tr>
         <tr><td>Lyrics, lexical (6)</td><td>AUC +.023, accuracy +0.6 (p = .002)</td><td><span class="pill k-artist">promising</span></td><td>Small; indicative only</td></tr>
-        <tr><td>Market trend (vs last decade's hits)</td><td>+0.1, n.s.</td><td><span class="pill k-bad">remove</span></td><td>Only carries the era (Part 6)</td></tr>
+        <tr><td>Market trend (vs last decade's hits)</td><td>+0.1, n.s.</td><td><span class="pill k-bad">remove</span></td><td>Only carries the era (Chapter 6)</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- 27 -->
-<section class="slide" data-foot="Part 5 · What we tried and removed">
+<!-- 39 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Statistics · about 60 p-values in one study</p>
   <h2>With many tests, some pass by chance — so we apply Bonferroni: p &lt; 0.05 / 60 ≈ 8·10⁻⁴</h2>
   <div class="body cols-2e" style="margin-top:34px;align-items:start">
@@ -645,8 +791,8 @@
   </div>
 </section>
 
-<!-- 28 -->
-<section class="slide" data-foot="Part 5 · What we tried and removed">
+<!-- 40 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Honesty · what changed since our first presentation</p>
   <h2>Eight claims did not survive re-checking</h2>
   <div class="body" style="grid-template-columns:1fr;margin-top:18px">
@@ -666,8 +812,60 @@
   </div>
 </section>
 
-<!-- 29 -->
-<section class="slide" data-foot="Part 6 · Time series">
+<!-- 41 -->
+<section class="slide" data-foot="Appendix · details">
+  <p class="eyebrow">What is new</p>
+  <h2>Artist history is not a new idea. Proving what it is worth is.</h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack rule">
+      <p class="src">ALREADY EXISTED</p>
+      <p class="small"><strong>Interiano et al. (2018)</strong>: a “superstar” indicator (did the artist chart recently?) improves a Random Forest on 500,000 UK songs.</p>
+      <p class="small"><strong>Middlebrook &amp; Sheik (2019)</strong> list an artist past-performance field, but never isolate or test it.</p>
+      <p class="small">Neither tests significance, compares on the same data, or checks for sampling artefacts.</p>
+    </div>
+    <div class="stack rule">
+      <p class="src k-both" style="letter-spacing:.16em">OUR CONTRIBUTION</p>
+      <ul class="small" style="margin:0;padding-left:20px;display:grid;gap:8px">
+        <li>A <strong>leakage-free</strong> version (strictly earlier periods)</li>
+        <li>A significance-tested <strong>head-to-head</strong> on the same data as prior work</li>
+        <li><strong>External validation</strong> with a year-matched control</li>
+        <li><strong>Unseen-artist</strong> and <strong>cold-start</strong> analysis</li>
+        <li>An <strong>audit</strong> of artefacts and single-split luck</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 42 -->
+<section class="slide" data-foot="Appendix · details">
+  <p class="eyebrow">Limitations and next steps</p>
+  <h2>What this study cannot say</h2>
+  <div class="body cols-2e" style="margin-top:34px;align-items:start">
+    <div class="stack rule">
+      <p class="src">LIMITATIONS</p>
+      <ul class="small" style="margin:0;padding-left:20px;display:grid;gap:8px">
+        <li>Artists matched by name, not by a canonical ID (homonyms)</li>
+        <li>No deep-learning model: we compare inputs at equal model</li>
+        <li>Artist history partly measures <strong>cumulative advantage</strong>, not a song’s appeal</li>
+        <li>ISMIR: a Random Forest and a different draw of negatives, not their network</li>
+        <li>Du: re-drawn splits, since the original R seed cannot be replayed</li>
+        <li>Audio clips come from Deezer, not from Spotify</li>
+      </ul>
+    </div>
+    <div class="stack rule">
+      <p class="src">NEXT</p>
+      <ul class="small" style="margin:0;padding-left:20px;display:grid;gap:8px">
+        <li>Features that help <strong>first-time artists</strong>: label, collaborators, early streams — always with a genre-matched control</li>
+        <li>Semantic lyrics and learned audio embeddings, under the same audit</li>
+        <li>Early-trajectory forecasting (Chapter 6) with streaming data</li>
+        <li>A benchmark whose negatives ignore artist, genre and date</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 43 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Time series · the Hot 100 as a signal (our supervisor's reading plan)</p>
   <h2>Trend, seasonality, residual — and which forecasting algorithms work</h2>
   <div class="body cols-2e" style="margin-top:22px;align-items:start;gap:34px">
@@ -694,8 +892,8 @@
   </div>
 </section>
 
-<!-- 30 -->
-<section class="slide" data-foot="Part 6 · Time series">
+<!-- 44 -->
+<section class="slide" data-foot="Appendix · details">
   <p class="eyebrow">Time series for hit prediction</p>
   <h2 id="ts2-title">After release, the first weeks predict a top-10 hit; before release, trends add nothing</h2>
   <div class="body cols-2e" style="margin-top:22px;align-items:start;gap:34px">
@@ -725,101 +923,11 @@
   </div>
 </section>
 
-<!-- 31 -->
-<section class="slide" data-foot="Conclusion">
-  <p class="eyebrow">What is new</p>
-  <h2>Artist history is not a new idea. Proving what it is worth is.</h2>
-  <div class="body cols-2e" style="margin-top:34px;align-items:start">
-    <div class="stack rule">
-      <p class="src">ALREADY EXISTED</p>
-      <p class="small"><strong>Interiano et al. (2018)</strong>: a “superstar” indicator (did the artist chart recently?) improves a Random Forest on 500,000 UK songs.</p>
-      <p class="small"><strong>Middlebrook &amp; Sheik (2019)</strong> list an artist past-performance field, but never isolate or test it.</p>
-      <p class="small">Neither tests significance, compares on the same data, or checks for sampling artefacts.</p>
-    </div>
-    <div class="stack rule">
-      <p class="src k-both" style="letter-spacing:.16em">OUR CONTRIBUTION</p>
-      <ul class="small" style="margin:0;padding-left:20px;display:grid;gap:8px">
-        <li>A <strong>leakage-free</strong> version (strictly earlier periods)</li>
-        <li>A significance-tested <strong>head-to-head</strong> on the same data as prior work</li>
-        <li><strong>External validation</strong> with a year-matched control</li>
-        <li><strong>Unseen-artist</strong> and <strong>cold-start</strong> analysis</li>
-        <li>An <strong>audit</strong> of artefacts and single-split luck</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- 32 -->
-<section class="slide" data-foot="Conclusion">
-  <p class="eyebrow">Limitations and next steps</p>
-  <h2>What this study cannot say</h2>
-  <div class="body cols-2e" style="margin-top:34px;align-items:start">
-    <div class="stack rule">
-      <p class="src">LIMITATIONS</p>
-      <ul class="small" style="margin:0;padding-left:20px;display:grid;gap:8px">
-        <li>Artists matched by name, not by a canonical ID (homonyms)</li>
-        <li>No deep-learning model: we compare inputs at equal model</li>
-        <li>Artist history partly measures <strong>cumulative advantage</strong>, not a song’s appeal</li>
-        <li>ISMIR: a Random Forest and a different draw of negatives, not their network</li>
-        <li>Du: re-drawn splits, since the original R seed cannot be replayed</li>
-        <li>Audio clips come from Deezer, not from Spotify</li>
-      </ul>
-    </div>
-    <div class="stack rule">
-      <p class="src">NEXT</p>
-      <ul class="small" style="margin:0;padding-left:20px;display:grid;gap:8px">
-        <li>Features that help <strong>first-time artists</strong>: label, collaborators, early streams — always with a genre-matched control</li>
-        <li>Semantic lyrics and learned audio embeddings, under the same audit</li>
-        <li>Early-trajectory forecasting (Part 6) with streaming data</li>
-        <li>A benchmark whose negatives ignore artist, genre and date</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- 33 -->
-<section class="slide" data-foot="Conclusion">
-  <p class="eyebrow">Take-home</p>
-  <h2>Knowing which gains are real matters more than the headline number</h2>
-  <div class="body cols-3" style="margin-top:44px;align-items:start">
-    <div class="stack rule"><p class="big k-both" style="font-size:96px">+5.0</p><p class="small"><strong>points on the Kaggle benchmark</strong>, every classifier, every decade — an upper bound inflated by how non-hits were chosen.</p></div>
-    <div class="stack rule"><p class="big k-artist" style="font-size:96px">+2.6</p><p class="small"><strong>points on independent data</strong>, years matched, artists unseen: the value we defend.</p></div>
-    <div class="stack rule"><p class="big" style="font-size:96px">76.3<span class="unit">%</span></p><p class="small"><strong>above the best published 75.04 %</strong> on ISMIR 2019, and ahead of the only prior model on the benchmark on 50/50 splits.</p></div>
-  </div>
-  <p class="small" style="margin-top:18px">Song titles, release dates, FFT and rich audio on one split looked better still — and were artefacts, genre or chance. Every number: <span class="src">repro/ scripts → paper_results/</span></p>
-</section>
-
-<!-- 34 -->
-<section class="slide" data-foot="Conclusion">
-  <p class="eyebrow">Summary · what we proved</p>
-  <h2>What we managed to prove</h2>
-  <div class="body cols-2e" style="margin-top:22px;align-items:start;gap:36px">
-    <div class="stack" style="gap:11px">
-      <p class="src k-both" style="letter-spacing:.16em">PROVED · SURVIVES EVERY CONTROL</p>
-      <p class="small"><strong>1 · Artist history is a real signal.</strong> +5.0 points on the benchmark (25/25 folds, p = 7·10⁻¹⁷) and <strong>+2.6 on independent data</strong> with years matched (p = 3·10⁻⁵).</p>
-      <p class="small"><strong>2 · It beats published work.</strong> 76.3 % vs the best published 75.04 % on ISMIR 2019; better than Du (2022) on 50 of 50 splits.</p>
-      <p class="small"><strong>3 · It is not a trick of one model or of known artists.</strong> Five classifiers gain +4.6 to +5.7; the gain stays +5.0 when test artists are never seen in training.</p>
-      <p class="small"><strong>4 · For a new artist, the era helps</strong> (+2.2, p = 2·10⁻⁹) — artist history cannot.</p>
-      <p class="small"><strong>5 · After release, the first 3 weeks predict a top-10 hit</strong> (AUC .89; .87 on songs not yet in the top 10).</p>
-    </div>
-    <div class="stack" style="gap:11px">
-      <p class="src k-bad" style="letter-spacing:.16em">DISPROVED · GAINS THAT WERE NOT REAL</p>
-      <p class="small"><strong>Song titles</strong> (+6.7): an artefact of how non-hits were collected.</p>
-      <p class="small"><strong>Rich audio</strong> (+3.8 on one split): luck — +0.9, not significant over 25 folds.</p>
-      <p class="small"><strong>FFT spectral features</strong> (+1.4): a genre shortcut — +0.1 on a genre-matched sample.</p>
-      <p class="small"><strong>Release year</strong> on ISMIR (70 % alone): a date shortcut — useless once years are matched.</p>
-      <p class="small"><strong>Market trends</strong> before release: +0.1, they only carry the era.</p>
-      <p class="small rule"><strong>In the sound itself, nothing survives every control.</strong></p>
-    </div>
-  </div>
-  <p class="small" style="margin-top:12px;font-size:19px;color:var(--ink)">What predicts a hit is mostly <span class="k-artist">who sings it</span> and <span class="k-era">when</span> — and, once it is out, <span class="k-both">how its first weeks go</span>.</p>
-</section>
-
 </div></div>
 
 <nav class="nav" aria-label="Slide navigation">
   <button id="prev" type="button" aria-label="Previous slide">←</button>
-  <span id="counter" aria-live="polite">1 / 34</span>
+  <span id="counter" aria-live="polite">1 / 44</span>
   <button id="next" type="button" aria-label="Next slide">→</button>
   <span class="hint">arrow keys · click the slide</span>
 </nav>
@@ -837,7 +945,8 @@
   }
   function svg(host, w, h) {
     const s = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img" });
-    document.getElementById(host).appendChild(s);
+    const hostEl = document.getElementById(host);
+    if (hostEl) hostEl.appendChild(s);
     return s;
   }
   function axis(s, x, top, bottom, min, max, step, fmt) {
@@ -988,6 +1097,18 @@
     { label: "main + genre + FFT", value: 91.7, color: css("--bad") },
     { label: "genre-matched: main", value: 79.0, color: BO },
     { label: "genre-matched: + FFT", value: 79.1, color: css("--bad"), bold: true } ] });
+
+  dotRows("s-main", { min: 76, max: 85, step: 1, tick: tickPct, fmt: pct, rows: [
+    { label: "sound only", value: 78.2, color: B },
+    { label: "+ when", value: 80.2, color: E },
+    { label: "+ who", value: 81.0, color: A },
+    { label: "+ who + when", value: 83.2, color: BO, bold: true } ], rowH: 64 });
+  columns("s-curve", { ref: { value: 49.4, label: "all songs 49%" }, items: [
+    { label: "0", value: 39.3, n: "33,438", color: B },
+    { label: "1–2", value: 91.0, n: "1,838", color: A },
+    { label: "3–5", value: 97.2, n: "1,752", color: A },
+    { label: "6–10", value: 99.6, n: "1,495", color: A },
+    { label: "11+", value: 98.9, n: "2,037", color: A } ] });
 
   /* ---------- navigation ---------- */
   const slides = Array.from(document.querySelectorAll(".slide"));
