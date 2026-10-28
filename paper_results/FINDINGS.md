@@ -178,3 +178,10 @@ Asked at the review of the report: PCA, ablation, "train everything together", w
   stay ≈80.
 - **Lyrics words** (ISMIR B English): hit side love, la, oh, yeah, ooh, night, need, girl; non-hit side kill,
   the, him, their, mind, game, hate, crime. Hits: love share 1.3 % vs 0.65 %, richness .34 vs .42.
+- **Ablation** (drop one input from the final 20, 5x5): artist −3.0 (p=7e-13), decade −2.2 (5e-13),
+  instrumentalness −1.6 (6e-9), duration −1.1 (2e-7); acousticness/speechiness/energy/danceability/valence
+  −0.3 to −0.6 (p .004–.04); key, liveness, time signature, mode, tempo ≈0. Permutation: artist 8.9, instr. 6.3,
+  acoustic. 4.9, decade 4.3, duration 3.9.
+- **Everything together** (35,370 with preview): everything .883 vs final .825 (+5.8); − title → .843 (−4.0);
+  remaining +1.8 = FFT (−0.4) + trend (−0.3) (both fail controls); decade redundant once FFT+trend in (−0.2, p=.11);
+  artist −1.9, Spotify −1.2. → keep the 20 inputs.
