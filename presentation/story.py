@@ -226,3 +226,20 @@ CHARTS = """
     { label: "6–10", value: 99.6, n: "1,495", color: A },
     { label: "11+", value: 98.9, n: "2,037", color: A } ] });
 """
+
+SCORE = slide(CE, "Scoreboard", "How much our model improved each dataset",
+              """<div class="body" style="grid-template-columns:1fr;margin-top:20px">
+    <table class="t dense">
+      <thead><tr><th style="width:30%">Dataset</th><th style="width:9%">Measure</th><th class="n" style="width:14%">Without our clues</th><th class="n" style="width:13%">With our model</th><th class="n" style="width:9%">Gain</th><th style="width:25%">Compared with published work</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Spotify Hit Predictor</strong> · 40,560 songs</td><td>accuracy</td><td class="n">78.2 %</td><td class="n k-both"><strong>83.2 %</strong></td><td class="n">+5.0</td><td>F1 of hits .787 → .831</td></tr>
+        <tr><td>Same data, Du (2022) method · 2000s</td><td>accuracy</td><td class="n">84.6 %</td><td class="n k-both"><strong>86.7 %</strong></td><td class="n">+2.1</td><td>Du published 84 % · we win 50/50 splits</td></tr>
+        <tr><td>Same data, Du (2022) method · 2010s</td><td>accuracy</td><td class="n">82.9 %</td><td class="n k-both"><strong>86.1 %</strong></td><td class="n">+3.2</td><td>Du published 82 % · we win 50/50 splits</td></tr>
+        <tr><td><strong>ISMIR 2019</strong> · as in the original study</td><td>accuracy</td><td class="n">73.9 %</td><td class="n k-both"><strong>76.3 %</strong></td><td class="n">+2.4</td><td>best published <strong>75.04 %</strong> → beaten</td></tr>
+        <tr><td><strong>ISMIR 2019</strong> · fair test (same years)</td><td>accuracy</td><td class="n">68.2 %</td><td class="n k-artist"><strong>70.8 %</strong></td><td class="n">+2.6</td><td>our honest number</td></tr>
+        <tr><td><strong>SpotGenTrack</strong> · 101,909 tracks (19 % hits)</td><td>AUC</td><td class="n">.690</td><td class="n k-both"><strong>.777</strong></td><td class="n">+.087</td><td>hits found 8 % → 25 %</td></tr>
+        <tr><td><strong>Hot 100, after release</strong> · 31,925 songs</td><td>AUC (top 10)</td><td class="n">.59</td><td class="n k-both"><strong>.89</strong></td><td class="n">+.30</td><td>with the first 3 weeks on the chart</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tiny" style="margin-top:8px">“Without our clues”: the same model on the dataset's usual inputs (13 Spotify descriptors; Du's own inputs; 592 Essentia descriptors + year on ISMIR; year, month and artist history for the Hot 100). Cross-validated means.</p>""")
