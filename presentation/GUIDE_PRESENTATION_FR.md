@@ -1,6 +1,6 @@
 # Guide pour présenter le projet à la prof
 
-Présentation : `presentation/hit_prediction_deck.html` (33 slides, flèches du clavier), PDF à côté.
+Présentation : `presentation/hit_prediction_deck.html` (34 slides, flèches du clavier), PDF à côté.
 Pour chaque slide : **le message en une phrase**, puis ce qu'il faut dire. Les chiffres viennent tous du papier
 (`paper/main.pdf`) et de `paper_results/`.
 
@@ -157,6 +157,16 @@ la validation externe et l'audit des raccourcis.
 **Slide 33 · À retenir.** +5,0 sur le benchmark (borne haute, gonflée), **+2,6 sur des données
 indépendantes** (le chiffre honnête), 76,3 % au-dessus du meilleur publié. Savoir quels gains sont réels
 compte plus que le chiffre affiché.
+
+**Slide 34 · Ce qu'on a réussi à prouver.** La slide de fin, à laisser affichée pendant les questions.
+- *Prouvé* : (1) l'historique de l'artiste est un vrai signal (+5,0 sur le benchmark, +2,6 sur des données
+  indépendantes) ; (2) il bat les travaux publiés (76,3 % contre 75,04 %, et Du sur 50 découpages sur 50) ;
+  (3) ce n'est pas un effet d'un modèle ou des artistes connus ; (4) pour un nouvel artiste, c'est l'époque qui
+  aide ; (5) après la sortie, les 3 premières semaines prédisent un top 10 (AUC 0,89).
+- *Réfuté* : titres (artefact), son riche (chance), FFT (genre), année sur ISMIR (raccourci de date), tendance
+  du marché (ne porte que l'époque). Dans le son lui-même, rien ne résiste à tous les contrôles.
+- Phrase de fin : ce qui prédit un hit, c'est surtout **qui chante et quand**, et une fois sortie, **comment se
+  passent ses premières semaines**.
 
 ---
 

@@ -245,6 +245,31 @@ ts2 = f"""<section class="slide" data-foot="{P6}">
   TS2_BODY
 </section>"""
 
+proved = f"""<section class="slide" data-foot="{PC}">
+  <p class="eyebrow">Summary · what we proved</p>
+  <h2>What we managed to prove</h2>
+  <div class="body cols-2e" style="margin-top:22px;align-items:start;gap:36px">
+    <div class="stack" style="gap:11px">
+      <p class="src k-both" style="letter-spacing:.16em">PROVED · SURVIVES EVERY CONTROL</p>
+      <p class="small"><strong>1 · Artist history is a real signal.</strong> +5.0 points on the benchmark (25/25 folds, p = 7·10⁻¹⁷) and <strong>+2.6 on independent data</strong> with years matched (p = 3·10⁻⁵).</p>
+      <p class="small"><strong>2 · It beats published work.</strong> 76.3 % vs the best published 75.04 % on ISMIR 2019; better than Du (2022) on 50 of 50 splits.</p>
+      <p class="small"><strong>3 · It is not a trick of one model or of known artists.</strong> Five classifiers gain +4.6 to +5.7; the gain stays +5.0 when test artists are never seen in training.</p>
+      <p class="small"><strong>4 · For a new artist, the era helps</strong> (+2.2, p = 2·10⁻⁹) — artist history cannot.</p>
+      <p class="small"><strong>5 · After release, the first 3 weeks predict a top-10 hit</strong> (AUC .89; .87 on songs not yet in the top 10).</p>
+    </div>
+    <div class="stack" style="gap:11px">
+      <p class="src k-bad" style="letter-spacing:.16em">DISPROVED · GAINS THAT WERE NOT REAL</p>
+      <p class="small"><strong>Song titles</strong> (+6.7): an artefact of how non-hits were collected.</p>
+      <p class="small"><strong>Rich audio</strong> (+3.8 on one split): luck — +0.9, not significant over 25 folds.</p>
+      <p class="small"><strong>FFT spectral features</strong> (+1.4): a genre shortcut — +0.1 on a genre-matched sample.</p>
+      <p class="small"><strong>Release year</strong> on ISMIR (70 % alone): a date shortcut — useless once years are matched.</p>
+      <p class="small"><strong>Market trends</strong> before release: +0.1, they only carry the era.</p>
+      <p class="small rule"><strong>In the sound itself, nothing survives every control.</strong></p>
+    </div>
+  </div>
+  <p class="small" style="margin-top:12px;font-size:19px;color:var(--ink)">What predicts a hit is mostly <span class="k-artist">who sings it</span> and <span class="k-era">when</span> — and, once it is out, <span class="k-both">how its first weeks go</span>.</p>
+</section>"""
+
 # --------------------------------------------------------------------------- fixes to kept slides
 O[4] = R(O[4], "Artist names normalised (accents, “feat.”, “&amp;” removed); 52 % of benchmark songs match the chart history.",
          "Artist names normalised (accents, “feat.”, “&amp;” removed). 99.99 % of hits are found in the chart history.")
@@ -290,7 +315,7 @@ order = [
     (O[12], P4), (O[13], P4), (O[14], P4), (O[15], P4), (O[16], P4), (O[17], P4),
     (O[18], P5), (fft, P5), (decay, P5), (checks, P5), (ledger, P5), (O[19], P5), (O[20], P5),
     (ts1, P6), (ts2, P6),
-    (O[21], PC), (O[22], PC), (O[23], PC),
+    (O[21], PC), (O[22], PC), (O[23], PC), (proved, PC),
 ]
 slides = [foot(sec, lab) if lab else sec for sec, lab in order]
 
