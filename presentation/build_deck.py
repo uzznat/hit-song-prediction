@@ -309,14 +309,71 @@ O[23] = R(O[23], "Song titles, release dates and rich audio on one split looked 
           "Song titles, release dates, FFT and rich audio on one split looked better still — and were artefacts, genre or chance.")
 
 # --------------------------------------------------------------------------- order and part labels
-# The talk is the story (story.py); the detailed slides follow as an appendix for questions.
+# The talk is one story: plain-words slides (story.py) with the detailed slides and charts placed where they
+# happen in the story. Every slide ends with the step that comes next.
 O[1] = R(O[1], "Artist history, era context and shortcut features — tested on four datasets, with every gain checked for chance and for artefacts.",
          "The story of our project: what we tried, what worked, and what turned out to be a trap.")
-APX = "Appendix · details"
-order = ([(O[1], None)] + [(x, None) for x in story.STORY + story.ENDING] + [(story.APPENDIX_TITLE, None)] +
-         [(x, APX) for x in [O[3], algos, tools, O[5], O[8], O[9], O[10], O[11], O[13], O[14], O[15], O[16],
-                             O[17], O[18], fft, decay, checks, ledger, O[19], O[20], O[21], O[22], ts1, ts2]])
-slides = [foot(sec, lab) if lab else sec for sec, lab in order]
+S, E = story.STORY, story.ENDING
+C0, C1, C2, C3, C4, C5, C6, CE = (story.C0, story.C1, story.C2, story.C3, story.C4, story.C5, story.C6, story.CE)
+thanks = story.slide(CE, "Thank you", "Thank you — questions?",
+                     '<div class="body" style="grid-template-columns:1fr;margin-top:34px"><p class="say">'
+                     'Lior Shalon &amp; Nathanael Uzzan · every number comes from the scripts in '
+                     '<span class="src">repro/</span> and the paper.</p></div>')
+order = [
+    (O[1], None, None),
+    (S[0], C0, "To answer, we need songs whose answer we already know. We used four datasets."),
+    (O[3], C0, "We started with the biggest one, and with the most obvious clue: the sound."),
+    (S[1], C1, "How does the computer learn, and how do we know the score is not luck?"),
+    (S[2], C1, "Which algorithms exactly, and why these?"),
+    (algos, C1, "We also used other algorithms: to measure the sound, to explain, and to test."),
+    (tools, C1, "And this is exactly how every improvement is tested."),
+    (O[5], C1, "The sound alone was not enough. So we asked: what else makes a hit?"),
+    (S[3], C2, "We added these two clues to the 13 sound numbers."),
+    (S[4], C2, "Why does “who” work so well?"),
+    (S[5], C2, "+5 points is a lot. Too much? We tried hard to prove it was luck."),
+    (S[6], C3, "First check, in detail: every decade."),
+    (O[8], C3, "Second check: every classifier."),
+    (O[9], C3, "Third check: predicting a decade the model has never seen."),
+    (O[10], C3, "Fourth check: against the only other study on this dataset."),
+    (O[11], C3, "It was not luck. But then we read how the dataset had been built..."),
+    (S[7], C4, "So we needed a dataset built differently."),
+    (S[8], C4, "The numbers on that dataset."),
+    (O[13], C4, "So we made the test fair: every hit against a non-hit from the same year."),
+    (S[9], C4, "The numbers of the fair test."),
+    (O[14], C4, "One more dataset: SpotGenTrack, 100,000 songs, where hits are rare."),
+    (O[15], C4, "And for artists the computer has never seen?"),
+    (S[10], C4, "The numbers: artists never seen in training."),
+    (O[16], C4, "And the numbers for brand-new artists."),
+    (O[17], C4, "Next, we tried to give the computer more musical information."),
+    (S[11], C5, "All these gains, measured on one test and on 25 tests."),
+    (O[18], C5, "One clue still looked good: the FFT."),
+    (S[12], C5, "The numbers of the genre test."),
+    (fft, C5, "We also checked how fast each model gets old."),
+    (decay, C5, "And three last checks."),
+    (checks, C5, "Everything we tried, in one table."),
+    (ledger, C5, "Then our teacher asked us to study time series."),
+    (S[13], C6, "The details: the components and the forecasting algorithms."),
+    (ts1, C6, "Then the big question: can time series help predict a hit?"),
+    (S[14], C6, "The details of both experiments."),
+    (ts2, C6, "We ran about 60 statistical tests in total, so we checked which results are solid."),
+    (O[19], CE, "On the way, we also corrected our own earlier claims."),
+    (O[20], CE, "So what is really new compared with other studies?"),
+    (O[21], CE, "So, what did we prove in the end?"),
+    (E[0], CE, "And what we cannot do yet."),
+    (O[22], CE, None),
+    (thanks, CE, None),
+]
+
+
+def with_next(sec, text):
+    sec = re.sub(r'\n  <p class="next">.*?</p>', "", sec)
+    if text:
+        i = sec.rindex("</section>")
+        sec = sec[:i] + f'  <p class="next">→ {text}</p>\n' + sec[i:]
+    return sec
+
+
+slides = [with_next(foot(sec, lab) if lab else sec, nxt) for sec, lab, nxt in order]
 
 # --------------------------------------------------------------------------- R10 numbers (filled by fill_r10)
 import json
@@ -332,6 +389,7 @@ charts = """
     { label: "genre-matched: main", value: 79.0, color: BO },
     { label: "genre-matched: + FFT", value: 79.1, color: css("--bad"), bold: true } ] });
 """
+tail = R(tail, 'nameB: "cross-validation", labelW: 250, rowH: 62,', 'nameB: "cross-validation", labelW: 250, rowH: 50,')
 # a chart whose slide is not in this deck must not stop the script
 tail = R(tail, """    const s = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img" });
     document.getElementById(host).appendChild(s);""", """    const s = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img" });

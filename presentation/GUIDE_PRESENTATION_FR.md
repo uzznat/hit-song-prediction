@@ -1,10 +1,11 @@
 # Guide pour présenter le projet à la prof
 
-Présentation : `presentation/hit_prediction_deck.html` (flèches du clavier), PDF à côté.
+Présentation : `presentation/hit_prediction_deck.html` (42 slides, flèches du clavier), PDF à côté.
 
-- **Slides 1 à 19 : l'histoire du projet**, à raconter dans l'ordre. Chaque slide se termine par une flèche
-  bleue « → ... » : c'est la phrase qui fait passer à la suivante (« donc on a fait ça »).
-- **Slides 20 à 44 : l'annexe**, pour les questions (tableaux d'algorithmes, de variables, tous les chiffres).
+C'est **une seule histoire**, du début à la fin : les slides simples racontent ce qu'on a fait, et les slides de
+détails (graphiques, tableaux) arrivent au moment où elles se passent dans l'histoire. Chaque slide se termine par
+une flèche bleue « → ... » : c'est la phrase qui fait passer à la suivante (« donc ensuite on a fait ça »).
+Il suffit de lire la flèche à voix haute pour enchaîner.
 
 Les chiffres viennent tous du papier (`paper/main.pdf`) et de `paper_results/`.
 
@@ -23,132 +24,151 @@ semaines prédisent très bien le top 10.
 
 ---
 
-## Slide par slide (ce qu'il faut dire)
+## Slide par slide
+
+### La question (slides 1 à 3)
 
 **1 · Titre.** « On va vous raconter notre projet : ce qu'on a essayé, ce qui a marché, et ce qui était un piège. »
 
 **2 · La question.** Un hit = une chanson entrée au Billboard Hot 100. L'ordinateur apprend sur des chansons dont
-on connaît la réponse, puis on le teste sur des chansons qu'il n'a jamais vues. Au hasard, on aurait 50 %.
+on connaît la réponse, puis on le teste sur des chansons qu'il n'a jamais vues. Au hasard : 50 %.
 
-**Chapitre 1 · Le son**
+**3 · Les quatre jeux de données** (tableau). Kaggle (40 560 chansons, notre jeu principal), ISMIR 2019 (publié,
+sert de vérification), SpotGenTrack (100 000 morceaux, peu de hits), et le Billboard de fin d'année, abandonné
+parce que 2 911 lignes sur 3 397 n'avaient pas de données audio.
 
-**3 · On a commencé par le son.** Spotify décrit chaque chanson avec 13 nombres (dansabilité, énergie, tempo...).
-Résultat : **78 %**. Mieux qu'une pièce, mais 1 chanson sur 5 est encore fausse.
+### Chapitre 1 · Le son (slides 4 à 8)
 
-**4 · Comment l'ordinateur apprend et comment on teste.** Forêt aléatoire = 80 petits arbres de décision qui posent
-des questions simples et votent. On ne la règle jamais, pour que toute amélioration vienne des indices qu'on lui
-donne. On teste 25 fois avec des chansons cachées différentes, et un test statistique dit si l'amélioration est
-réelle.
+**4 · On a commencé par le son.** 13 nombres Spotify par chanson → **78 %**. Une chanson sur 5 encore fausse.
 
-**Chapitre 2 · Qui et quand**
+**5 · Comment l'ordinateur apprend.** Forêt aléatoire = 80 petits arbres qui posent des questions et votent. On
+teste 25 fois avec des chansons cachées différentes.
 
-**5 · Notre idée.** Un hit, ce n'est pas que du son. *Qui* : l'artiste a-t-il eu des hits **avant** (seulement
-les décennies précédentes, jamais le futur) ? *Quand* : la décennie, car un hit de 1965 ne sonne pas comme un
-hit de 2015.
+**6 · Les classifieurs** (tableau). La forêt aléatoire est le modèle principal : même configuration que le papier
+de référence, jamais réglée. XGBoost est le meilleur (84,5 %) mais pas significativement mieux. SVM, k-NN et
+régression logistique servent à montrer que le gain ne dépend pas du modèle.
 
-**6 · Résultat.** 78 → 83 % (+5 points), mieux dans les 25 tests sur 25.
+**7 · Les autres algorithmes.** Pour mesurer le son (librosa, FFT, PCA, Essentia), pour le texte et l'explication
+(TF-IDF, SHAP), et pour tester (McNemar, t-test corrigé, Bonferroni).
 
-**7 · Pourquoi « qui » marche.** Artiste sans hit avant : 39 % de ses chansons sont des hits. Avec 1 ou 2 hits
-avant : 91 %.
+**8 · Comment on teste chaque gain.** Un ancien découpage unique, et surtout 25 découpages (validation croisée
+5×5) avec un t-test corrigé, parce que le t-test normal est trop optimiste quand les découpages se chevauchent.
 
-**Chapitre 3 · Est-ce de la chance ?**
+### Chapitre 2 · Qui et quand (slides 9 à 11)
 
-**8 · On a essayé de casser le résultat.** 5 algorithmes différents : tous +4,6 à +5,7. Chaque décennie :
-+3,7 à +6,6. Prédire une décennie jamais vue : +1,9 à +3,4. La seule autre étude (Du, 2022), refaite à
-l'identique : on fait mieux 50 fois sur 50.
+**9 · Notre idée.** *Qui* : l'artiste a-t-il eu des hits **avant** (seulement les décennies précédentes) ?
+*Quand* : la décennie.
 
-**Chapitre 4 · Un piège dans les données**
+**10 · Résultat** (graphique). 78 → 83 % (+5 points), mieux dans 25 tests sur 25.
 
-**9 · Le piège.** Les règles du jeu de données : un non-hit doit venir d'un artiste **sans hit** cette décennie,
-dans un genre de niche. Donc « l'artiste a eu des hits » reflète en partie la règle, pas la musique (97 % des
-chansons d'artistes déjà connus sont des hits ici). Notre +5 est trop optimiste.
+**11 · Pourquoi « qui » marche** (graphique). Sans hit avant : 39 % de hits. Avec 1 ou 2 hits avant : 91 %.
 
-**10 · Un autre jeu de données (ISMIR 2019).** Les non-hits y sont des chansons au hasard. On obtient **76,3 %**,
-mieux que le meilleur résultat publié (75,0 %). Mais nouveau piège : l'année seule donne déjà 70 %, parce que
-les hits de ce jeu sont des chansons plus anciennes.
+### Chapitre 3 · Est-ce de la chance ? (slides 12 à 16)
 
-**11 · Le test équitable.** Chaque hit contre un non-hit **de la même année**. L'année devient inutile ; l'artiste
-ajoute encore **+2,6 points** (10 tests sur 10). C'est **notre chiffre honnête**.
+**12 · On a essayé de casser le résultat** : vue d'ensemble des 4 vérifications.
 
-**12 · Nouveaux artistes.** Si aucun artiste du test n'a été vu à l'entraînement, le gain reste le même (+5,0) :
-l'ordinateur ne mémorise pas des noms. Mais pour un **tout nouvel artiste** (première chanson), « qui » ne peut pas
-aider (+0,4, rien) ; « quand » aide un peu (+2,2). C'est le cas le plus difficile.
+**13 · Chaque décennie** (graphique) : +3,7 à +6,6.
 
-**Chapitre 5 · Ajouter plus, et attraper les faux gains**
+**14 · Chaque classifieur** (graphique) : +4,6 à +5,7. On garde la forêt aléatoire. SHAP : l'artiste est la
+variable n° 1.
 
-**13 · Plus d'indices.** Titres des chansons : +6,7, trop beau pour être vrai, les titres trahissent comment le jeu
-a été collecté → enlevé. Son détaillé (185 mesures) : +3,8 sur un test, mais +0,9 sur 25 tests → c'était de la
-chance → enlevé. Petits détails (longueur du titre, refrain) : rien → enlevés.
+**15 · Prédire le futur** (graphique) : entraîné sur les anciennes décennies, testé sur une décennie jamais vue :
++1,9 à +3,4.
 
-**14 · La FFT.** Elle découpe le son en fréquences (basses, médiums, aigus) : +1,4 point, très significatif. Mais
-les non-hits viennent de genres de niche, et le son révèle le genre : l'ordinateur reconnaissait le jazz ou la
-musique latine, pas les hits. Test équitable (autant de hits que de non-hits dans chaque genre) : +0,1, rien →
-enlevée. Leçon : un gros gain peut être un piège.
+**16 · Contre la seule autre étude (Du, 2022)** (graphique) : on refait sa méthode, on retrouve ses chiffres, et
+avec notre variable on fait mieux 50 fois sur 50.
 
-**Chapitre 6 · Séries temporelles (le plan de lecture de la prof)**
+### Chapitre 4 · Un piège dans les données (slides 17 à 25)
 
-**15 · Lire le classement comme un signal.** Une série temporelle se découpe en tendance (changement lent),
-saisonnalité (se répète chaque année) et résidu. Le nombre de nouvelles chansons par semaine est surtout une
-tendance ; les chansons de Noël sont de la saisonnalité pure, et la FFT trouve seule le cycle de 52 semaines.
-Pour prévoir l'année suivante, ARIMA et Holt-Winters sont les meilleurs ; le machine learning ne fait pas mieux
-(800 points, c'est trop peu).
+**17 · Le piège.** Un non-hit doit venir d'un artiste **sans hit** cette décennie, dans un genre de niche. 97 % des
+chansons d'artistes déjà connus sont des hits ici : notre +5 est trop optimiste.
 
-**16 · Les séries temporelles prédisent-elles un hit ?** Ça dépend de **quand** on pose la question.
-- **Avant la sortie** (notre question) : est-ce que la chanson ressemble aux hits récents ? +0,1, rien. La tendance
-  ne connaît que la décennie, qu'on avait déjà. **Non.**
-- **Après la sortie** (une autre question) : la chanson vient d'entrer au classement. Ses 3 premières semaines
-  disent si elle atteindra le top 10 : quand on compare deux chansons, l'ordinateur les classe bien 89 fois sur
-  100 (AUC 0,89). **Oui.**
-- Les deux sont vrais en même temps : pas d'aide pour deviner un hit avant sa sortie, mais le meilleur indice une
-  fois qu'il est sorti.
+**18 · Un autre jeu de données (ISMIR).** 76,3 %, mieux que le meilleur publié (75,0 %). Mais l'année seule donne
+déjà 70 % : les hits y sont plus anciens.
 
-**Fin**
+**19 · Les chiffres d'ISMIR** (graphique) : année seule 70,2 %, son 70,8 %, son + année 73,9 %, son + année +
+artiste 76,3 %.
 
-**17 · Ce qu'on a prouvé.** Vrai : qui chante compte (+5, et +2,6 sur un test équitable) ; on bat les résultats
-publiés ; ça marche avec tous les algorithmes et pour des artistes jamais vus ; pour un tout nouvel artiste, seule
-l'époque aide un peu ; après la sortie, les 3 premières semaines prédisent le top 10. Faux (pièges) : titres, son
-détaillé, FFT, année, tendances. Dans le son lui-même, rien n'a résisté à tous les tests. Phrase de fin : un hit,
-c'est surtout **qui chante et quand**, et une fois sorti, **comment se passent ses premières semaines**.
+**20 · Le test équitable.** Chaque hit contre un non-hit de la même année : l'année devient inutile, l'artiste
+ajoute encore **+2,6** — notre chiffre honnête.
 
-**18 · Ce qu'on ne sait pas encore faire.** Les tout nouveaux artistes ; les paroles et le deep learning ; un jeu de
-données sans piège.
+**21 · Les chiffres du test équitable** (graphique) : +2,6, p = 3·10⁻⁵, 10 tests sur 10.
 
-**19 · Merci, questions.** Les slides suivantes sont les détails.
+**22 · SpotGenTrack** (graphiques). 81 % de non-hits, donc on regarde l'AUC : 0,690 → 0,777. On trouve 25 % des
+hits au lieu de 8 %.
 
----
+**23 · Nouveaux artistes** : vue d'ensemble.
 
-## L'annexe (slides 20 à 44), pour répondre aux questions
+**24 · Artistes jamais vus** : le gain reste (+5,0 ; +2,9 sur ISMIR équitable ; 75,9 % toujours au-dessus du
+publié).
 
-| Si la prof demande... | Slide |
-|---|---|
-| Les jeux de données | 21 |
-| Quels algorithmes, pourquoi, lequel on garde | 22 |
-| Les autres algorithmes (librosa, FFT, PCA, TF-IDF, SHAP, tests statistiques) | 23 |
-| Comment on teste (validation croisée, test corrigé) | 24 |
-| Chaque décennie, chaque classifieur, prédire le futur, Du | 25 à 28 |
-| ISMIR (protocoles A et B), SpotGenTrack | 29 à 31 |
-| Artistes jamais vus, nouveaux artistes | 32 et 33 |
-| Les faux gains, la FFT et le genre | 34 et 35 |
-| Vieillissement du modèle, appariement des artistes, paroles, F1 | 36 et 37 |
-| **Toutes les variables : gardée ou enlevée, et pourquoi** | **38** |
-| Statistiques (Bonferroni), ce qu'on a corrigé | 39 et 40 |
-| Ce qui est nouveau par rapport aux autres, limites | 41 et 42 |
-| Séries temporelles en détail | 43 et 44 |
+**25 · Tout nouveaux artistes** (tableau) : l'historique ne peut pas aider (+0,4), l'époque aide (+2,2).
+
+### Chapitre 5 · Ajouter plus, et attraper les faux gains (slides 26 à 32)
+
+**26 · Plus d'indices** : titres (artefact), son détaillé (chance), petits détails (rien). Tous enlevés.
+
+**27 · Les chiffres** (graphique) : un seul test contre 25 tests. Le son détaillé passe de +3,8 à +0,9.
+
+**28 · La FFT** : elle avait l'air bonne (+1,4), mais elle reconnaissait le genre.
+
+**29 · Le test du genre** (graphique) : avec le genre connu, la FFT fait baisser ; avec des genres équilibrés,
++0,1. Le genre lui-même n'est pas utilisé comme variable : Spotify l'attribue après coup.
+
+**30 · Le modèle vieillit** (tableau) : le son seul passe de 0,809 à 0,689 trois décennies plus tard ;
+l'historique de l'artiste vieillit bien, la FFT vieillit mal.
+
+**31 · Trois vérifications** : 99,99 % des hits retrouvés (pas de problème d'appariement) ; les paroles aident un
+peu (prometteur) ; les F1 confirment les gains.
+
+**32 · Tableau récapitulatif de toutes les variables** : gardée, enlevée, contrôle ou prometteuse, et pourquoi.
+**La slide à garder en tête pour les questions.**
+
+### Chapitre 6 · Séries temporelles, le plan de lecture de la prof (slides 33 à 36)
+
+**33 · Lire le classement comme un signal** : tendance, saisonnalité, résidu ; ARIMA est le meilleur pour prévoir.
+
+**34 · Les détails** (tableau) : nouvelles chansons par semaine = surtout une tendance ; chansons de Noël =
+saisonnalité pure, la FFT trouve le cycle de 52 semaines. ARIMA, ARIMA + Fourier, Holt-Winters gardés ;
+SARIMA et machine learning enlevés.
+
+**35 · Les séries temporelles prédisent-elles un hit ?** **Avant la sortie : non** (+0,1, la tendance ne connaît
+que la décennie). **Après la sortie : oui** (les 3 premières semaines prédisent le top 10, AUC 0,89). Ce sont
+deux questions différentes, et les deux réponses sont vraies.
+
+**36 · Les détails des deux expériences** (tableau) : AUC 0,59 sans les semaines, 0,75 / 0,85 / 0,89 / 0,92 avec
+1 / 2 / 3 / 4 semaines ; 0,87 sur les chansons pas encore dans le top 10 ; 0,85 en testant après 2000.
+
+### La fin (slides 37 à 42)
+
+**37 · Statistiques** : ~60 tests, Bonferroni ; tous les résultats importants restent solides.
+
+**38 · Ce qu'on a corrigé** : 8 affirmations de nos anciennes slides étaient fausses.
+
+**39 · Ce qui est nouveau** : l'idée de l'historique d'artiste existait (Interiano 2018, Middlebrook 2019) ; ce
+qu'on apporte, ce sont les tests, la comparaison directe, la validation externe et l'audit des pièges.
+
+**40 · Ce qu'on a prouvé.** Phrase de fin : un hit, c'est surtout **qui chante et quand**, et une fois sorti,
+**comment se passent ses premières semaines**.
+
+**41 · Limites et suite** : nouveaux artistes, deep learning, paroles, un jeu de données sans piège.
+
+**42 · Merci, questions.**
 
 ---
 
 ## Questions probables de la prof
 
 - **« Pourquoi pas du deep learning ? »** On cherchait quelles *entrées* portent un signal, à modèle égal. Les cinq
-  classifieurs donnent le même gain. Le deep learning sur le son brut reste une piste future.
+  classifieurs donnent le même gain (slide 14). Le deep learning sur le son brut reste une piste future.
 - **« Pourquoi la forêt aléatoire et pas XGBoost, qui est meilleur ? »** Pour être comparable au papier de
-  référence, et la différence n'est pas significative sur le découpage canonique (p = 0,87).
+  référence, et la différence n'est pas significative (slide 6).
 - **« L'historique de l'artiste, ce n'est pas de la triche ? »** Non : on ne compte que les décennies *précédentes*,
-  connues le jour de la sortie. Mais sur le jeu Kaggle le gain est gonflé par sa construction ; c'est pour ça qu'on
-  donne +2,6 (test équitable sur ISMIR) comme chiffre honnête.
-- **« Et pour un nouvel artiste ? »** L'historique ne peut pas aider ; l'époque aide un peu. C'est la principale
-  limite et la suite naturelle.
-- **« Pourquoi avoir enlevé la FFT si elle est significative ? »** Parce qu'elle reconnaît le genre, et le genre a
-  servi à choisir les non-hits. Avec des genres équilibrés, elle n'apporte plus rien.
-- **« Les séries temporelles servent à quoi pour votre problème ? »** Pas à deviner un hit avant sa sortie (+0,1).
-  Mais une fois la chanson sortie, ses premières semaines prédisent le top 10 (AUC 0,89).
+  connues le jour de la sortie. Mais sur Kaggle le gain est gonflé par la construction du jeu (slide 17) ; c'est
+  pour ça qu'on donne +2,6 (slide 21) comme chiffre honnête.
+- **« Et pour un nouvel artiste ? »** L'historique ne peut pas aider ; l'époque aide un peu (slide 25). C'est la
+  principale limite.
+- **« Pourquoi avoir enlevé la FFT si elle est significative ? »** Elle reconnaît le genre, et le genre a servi à
+  choisir les non-hits. Avec des genres équilibrés, elle n'apporte rien (slide 29).
+- **« Les séries temporelles servent à quoi pour votre problème ? »** Pas à deviner un hit avant sa sortie ; mais
+  une fois la chanson sortie, ses premières semaines prédisent le top 10 (slides 35-36).
