@@ -1,0 +1,11 @@
+depth,question,value,answer,n_songs,hit_share
+0,danceability <= 0.487,0.737,no,20560,0.495
+1,acousticness <= 0.758,0.0038,yes,13065,0.611
+2,duration_ms <= 3.41e+05,316813.0,yes,11398,0.664
+3,artist_prior_hits_log <= 0.347,2.9957,no,10607,0.685
+4,loudness <= -6.91,-6.449,no,2485,0.978
+5,instrumentalness <= 0.837,0.0035,yes,1053,0.992
+6,danceability <= 0.941,0.737,yes,1051,0.994
+7,artist_prior_hits_log <= 1.24,2.9957,no,1047,0.995
+8,key <= 1.5,6.0,no,809,0.998
+9,leaf,,,646,1.0

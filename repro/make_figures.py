@@ -344,6 +344,26 @@ def fig_ablation():
     plt.close(fig)
 
 
+def fig_decade():
+    d = rd("r13_decade_medians.csv")
+    decs = ["60s", "70s", "80s", "90s", "00s", "10s"]
+    labs = ["1960s", "70s", "80s", "90s", "2000s", "10s"]
+    panels = [("loudness", "Loudness (dB)", 1), ("acousticness", "Acousticness", 1),
+              ("duration_ms", "Duration (min)", 1 / 60000)]
+    fig, axes = plt.subplots(1, 3, figsize=(TEXT_W, 1.85))
+    x = np.arange(len(decs))
+    for ax, (c, name, k) in zip(axes, panels):
+        g = d[d.descriptor == c].set_index("decade").loc[decs]
+        ax.plot(x, k * g.hits, color=BLUE, marker="o", ms=3.5, lw=1.6, label="hits")
+        ax.plot(x, k * g.non_hits, color=GRAY, marker="o", ms=3.5, lw=1.6, label="non-hits")
+        ax.set_xticks(x, labs, fontsize=6.5)
+        ax.set_title(name + " (median)", color=INK)
+    axes[0].legend(frameon=False, loc="upper left")
+    fig.tight_layout(pad=0.3, w_pad=1.2)
+    fig.savefig(os.path.join(OUT, "fig_decade.pdf"), bbox_inches="tight", pad_inches=0.02)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     import sys
     todo = sys.argv[1:] or ["artist_curve", "tilburg", "ismir", "subset", "traj"]

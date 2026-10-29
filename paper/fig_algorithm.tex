@@ -1,0 +1,58 @@
+% Fig.: the algorithm in detail -- training once, then one real song followed step by step.
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[font=\scriptsize, >=Stealth, node distance=5mm,
+  box/.style={draw=black!60, fill=white, rounded corners=2pt, align=left, inner sep=3pt},
+  blu/.style={draw=blue!60!black, fill=blue!6, rounded corners=2pt, align=left, inner sep=3pt},
+  res/.style={draw=blue!60!black, fill=blue!18, rounded corners=2pt, align=center, inner sep=3pt},
+  hd/.style={font=\footnotesize\bfseries, anchor=south west, inner sep=1pt}]
+% ------------------------------------------------------------------ training
+\node[hd] at (0,0.15) {A. Training (done once)};
+\node[box, anchor=north west, text width=3.9cm] (t1) at (0,0)
+ {\textbf{Labelled songs}\\32{,}447 songs (80\,\% of the data), each with its answer: hit (entered the Hot~100) or non-hit};
+\node[blu, right=of t1, text width=3.0cm] (t2)
+ {\textbf{20 inputs per song}\\built as in B, steps 1--2};
+\node[box, right=of t2, text width=6.6cm] (t3)
+ {\textbf{Grow 80 decision trees.} Each tree gets its own random sample of the training songs (drawn with
+ replacement). At every node, 8 of the 20 inputs are drawn at random; the tree keeps the input and the threshold
+ that best separate hits from non-hits (lowest Gini impurity) and splits the songs in two. It splits again
+ until every leaf holds songs of one kind.};
+\node[res, right=of t3, text width=2.0cm] (t4) {\textbf{The forest}\\80 trees, kept fixed (never tuned)};
+\draw[->] (t1) -- (t2); \draw[->] (t2) -- (t3); \draw[->] (t3) -- (t4);
+% ------------------------------------------------------------------ prediction
+\path (t3.south) ++(0,-3mm) coordinate (y0);
+\node[hd, anchor=north west] (hb) at (t1.west |- y0) {B. Predicting a song the model has never seen: \textit{Vogue}, Madonna, 1990};
+\node[box, anchor=north west, text width=3.9cm] (s1) at ([yshift=-1mm]hb.south west)
+ {\textbf{1. Raw data}\\[1pt]
+ \emph{Spotify audio (13 values):}\\ danceability 0.737, energy 0.880,\\ loudness $-6.4$\,dB, acousticness 0.004,\\
+ instrumentalness 0.004, duration 5.3\,min, valence 0.33, tempo 116\,bpm, \dots\\[2pt]
+ \emph{Release decade:} the song is in the file of the 1990s\\[2pt]
+ \emph{Artist:} Madonna; Hot~100 history};
+\node[blu, right=of s1, text width=3.9cm] (s2)
+ {\textbf{2. Build the 20 inputs}\\[1pt]
+ (a) the 13 audio values, unchanged\\[2pt]
+ (b) decade $\rightarrow$ 6 yes/no boxes:\\
+ \hspace*{1mm}{\setlength{\tabcolsep}{2.5pt}\begin{tabular}{@{}cccccc@{}}60s&70s&80s&\textbf{90s}&00s&10s\\0&0&0&\textbf{1}&0&0\end{tabular}}\\[2pt]
+ (c) artist history: Madonna had 19 Hot~100 songs \emph{before} the 1990s
+ $\rightarrow$ \mbox{$h=\log(1+19)=3.0$}};
+\node[box, right=of s2, text width=5.1cm] (s3)
+ {\textbf{3. Each tree asks questions} (tree 1 shown)\\[1pt]
+ danceability $\leq 0.49$? \textbf{no} {\color{black!55}(20{,}560 songs, 50\,\% hits)}\\
+ acousticness $\leq 0.76$? \textbf{yes} {\color{black!55}(61\,\% hits)}\\
+ duration $\leq 5.7$\,min? \textbf{yes} {\color{black!55}(66\,\%)}\\
+ artist history $\leq 0.35$? \textbf{no} {\color{black!55}(69\,\%)}\\
+ loudness $\leq -6.9$\,dB? \textbf{no} {\color{black!55}(98\,\%)}\\
+ \dots\ 4 more questions \dots\\
+ $\Rightarrow$ leaf: 646 training songs, \textbf{100\,\% hits}};
+\node[res, right=of s3, text width=2.6cm] (s4)
+ {\textbf{4. Vote}\\[1pt] 80 of 80 trees say ``hit''\\[2pt] $P(\text{hit}) = 1.00$\\[2pt]
+ $\geq 0.5$ $\Rightarrow$ \textbf{HIT}\\[2pt] {\color{black!60}(correct: \textit{Vogue} reached no.~1)}};
+\draw[->] (s1) -- (s2); \draw[->] (s2) -- (s3); \draw[->] (s3) -- (s4);
+\draw[->, dashed, black!50] (t4.south) -- (s4.north);
+\end{tikzpicture}
+\caption{The algorithm in detail. A: the Random Forest is trained once on labelled songs. B: one real song from
+the test part, never seen in training, followed through the four steps; the percentages in step~3 are the share of
+hits among the training songs that reach each question in that tree. Every song is processed in exactly the same
+way; across the 8{,}113 test songs of this split, the answer is right 83.3\,\% of the time.}
+\label{fig:algorithm}
+\end{figure*}

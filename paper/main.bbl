@@ -99,35 +99,16 @@ G.~Szabo and B.~A. Huberman, ``Predicting the popularity of online content,''
 D.~Herremans, D.~Martens, and K.~S{\"o}rensen, ``Dance hit song prediction,''
   \emph{Journal of New Music Research}, vol.~43, no.~3, pp. 291--302, 2014.
 
-\bibitem{bogdanov2013essentia}
-D.~Bogdanov, N.~Wack, E.~G{\'o}mez, S.~Gulati, P.~Herrera, O.~Mayor, G.~Roma,
-  J.~Salamon, J.~R. Zapata, and X.~Serra, ``Essentia: An audio analysis library
-  for music information retrieval,'' in \emph{Proc. 14th International Society
-  for Music Information Retrieval Conference (ISMIR)}, 2013, pp. 493--498.
-
-\bibitem{bertinmahieux2011million}
-T.~Bertin-Mahieux, D.~P.~W. Ellis, B.~Whitman, and P.~Lamere, ``The million
-  song dataset,'' in \emph{Proc. 12th International Society for Music
-  Information Retrieval Conference (ISMIR)}, 2011, pp. 591--596.
-
-\bibitem{salganik2006experimental}
-M.~J. Salganik, P.~S. Dodds, and D.~J. Watts, ``Experimental study of
-  inequality and unpredictability in an artificial cultural market,''
-  \emph{Science}, vol. 311, no. 5762, pp. 854--856, 2006.
-
 \bibitem{ansari2020dataset}
 {fortyTwo102}, ``The {Spotify} hit predictor dataset (1960--2019),'' GitHub
   repository,
   \url{https://github.com/fortyTwo102/The-Spotify-Hit-Predictor-Dataset},
   accessed Sep. 2026.
 
-\bibitem{rompolas2024predicting}
-G.~Rompolas, A.~Smpoukis, E.~Kafeza, and C.~Makris, ``Predicting song
-  popularity through machine learning and sentiment analysis on social
-  networks,'' in \emph{Artificial Intelligence Applications and Innovations.
-  AIAI 2024 IFIP WG 12.5 International Workshops}, ser. IFIP Advances in
-  Information and Communication Technology.\hskip 1em plus 0.5em minus
-  0.4em\relax Springer, 2024, pp. 314--324.
+\bibitem{salganik2006experimental}
+M.~J. Salganik, P.~S. Dodds, and D.~J. Watts, ``Experimental study of
+  inequality and unpredictability in an artificial cultural market,''
+  \emph{Science}, vol. 311, no. 5762, pp. 854--856, 2006.
 
 \bibitem{dietterich1998approximate}
 T.~G. Dietterich, ``Approximate statistical tests for comparing supervised
@@ -148,11 +129,6 @@ A.~Flexer, ``A closer look on artist filters for musical genre
   classification,'' in \emph{Proc. 8th International Conference on Music
   Information Retrieval (ISMIR)}, 2007, pp. 341--344.
 
-\bibitem{mcfee2015librosa}
-B.~McFee, C.~Raffel, D.~Liang, D.~P.~W. Ellis, M.~McVicar, E.~Battenberg, and
-  O.~Nieto, ``librosa: Audio and music signal analysis in {Python},'' in
-  \emph{Proc. 14th Python in Science Conference (SciPy)}, 2015, pp. 18--24.
-
 \bibitem{breiman2001random}
 L.~Breiman, ``Random forests,'' \emph{Machine Learning}, vol.~45, no.~1, pp.
   5--32, 2001.
@@ -161,6 +137,30 @@ L.~Breiman, ``Random forests,'' \emph{Machine Learning}, vol.~45, no.~1, pp.
 T.~Chen and C.~Guestrin, ``{XGBoost}: A scalable tree boosting system,'' in
   \emph{Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery
   and Data Mining}, 2016, pp. 785--794.
+
+\bibitem{bogdanov2013essentia}
+D.~Bogdanov, N.~Wack, E.~G{\'o}mez, S.~Gulati, P.~Herrera, O.~Mayor, G.~Roma,
+  J.~Salamon, J.~R. Zapata, and X.~Serra, ``Essentia: An audio analysis library
+  for music information retrieval,'' in \emph{Proc. 14th International Society
+  for Music Information Retrieval Conference (ISMIR)}, 2013, pp. 493--498.
+
+\bibitem{bertinmahieux2011million}
+T.~Bertin-Mahieux, D.~P.~W. Ellis, B.~Whitman, and P.~Lamere, ``The million
+  song dataset,'' in \emph{Proc. 12th International Society for Music
+  Information Retrieval Conference (ISMIR)}, 2011, pp. 591--596.
+
+\bibitem{rompolas2024predicting}
+G.~Rompolas, A.~Smpoukis, E.~Kafeza, and C.~Makris, ``Predicting song
+  popularity through machine learning and sentiment analysis on social
+  networks,'' in \emph{Artificial Intelligence Applications and Innovations.
+  AIAI 2024 IFIP WG 12.5 International Workshops}, ser. IFIP Advances in
+  Information and Communication Technology.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer, 2024, pp. 314--324.
+
+\bibitem{mcfee2015librosa}
+B.~McFee, C.~Raffel, D.~Liang, D.~P.~W. Ellis, M.~McVicar, E.~Battenberg, and
+  O.~Nieto, ``librosa: Audio and music signal analysis in {Python},'' in
+  \emph{Proc. 14th Python in Science Conference (SciPy)}, 2015, pp. 18--24.
 
 \bibitem{cleveland1990stl}
 R.~B. Cleveland, W.~S. Cleveland, J.~E. McRae, and I.~Terpenning, ``{STL}: A
