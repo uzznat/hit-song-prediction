@@ -30,4 +30,4 @@ A_random_english_grouped 6364 lyrics only (lexical + bag of words) 0.6929 0.7545
 B_yearmatched_english_grouped 6294         final: audio + year + artist 0.6563 0.7165         NaN         NaN    NaN      NaN       NaN
 B_yearmatched_english_grouped 6294       final + lexical + bag of words 0.6999 0.7639      0.0435    0.000034 0.0474 0.000001      10.0
 B_yearmatched_english_grouped 6294 lyrics only (lexical + bag of words) 0.6675 0.7303      0.0111    0.204497 0.0138 0.128799       8.0
--> C:\Users\uzzna\prectionsong\paper_results\r11_lyrics_ismir_grouped_summary.csv
+-> paper_results/r11_lyrics_ismir_grouped_summary.csv

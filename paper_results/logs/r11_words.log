@@ -33,7 +33,7 @@ English share (>= 25 % common English words): hits 0.975, non-hits 0.805
 mother -1.178727 non-hit
   call -1.169151 non-hit
 affect -1.166417 non-hit
--> C:\Users\uzzna\prectionsong\paper_results\r11_lyrics_words.csv
+-> paper_results/r11_lyrics_words.csv
  non_hits   hits
    5.2979 5.5711
    4.3753 4.4665
@@ -43,4 +43,4 @@ affect -1.166417 non-hit
    0.0459 0.0551
    0.0065 0.0127
    0.3852 0.3988
--> C:\Users\uzzna\prectionsong\paper_results\r11_lyrics_lexical_means.csv
+-> paper_results/r11_lyrics_lexical_means.csv

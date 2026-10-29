@@ -15,7 +15,7 @@
      1     6    0.9679        16.0  8.0  29.0              20.17  5238
      1     7    0.9647        12.0  6.0  24.0              16.85  5238
      1     8    0.9616        10.0  5.0  20.0              14.57  5238
--> C:\Users\uzzna\prectionsong\paper_results\r12_traj_weekly.csv
+-> paper_results/r12_traj_weekly.csv
 debut_bin       move3   mean  size
      1-40 fell / left 0.2823  1782
      1-40        +0-9 0.6255   275
@@ -37,7 +37,7 @@ debut_bin       move3   mean  size
    91-100        +0-9 0.0193  2433
    91-100      +10-29 0.0685  3550
    91-100 +30 or more 0.2903  1378
--> C:\Users\uzzna\prectionsong\paper_results\r12_traj_grid.csv
+-> paper_results/r12_traj_grid.csv
 held-out AUC 0.8925
           input  auc_drop    std
            pos3    0.0875 0.0023
@@ -51,4 +51,4 @@ prior_top10_log    0.0036 0.0007
        onchart3    0.0028 0.0008
          accel3    0.0020 0.0019
           month    0.0012 0.0010
--> C:\Users\uzzna\prectionsong\paper_results\r12_traj_importance.csv
+-> paper_results/r12_traj_importance.csv

@@ -40,9 +40,9 @@ instrumentalness 0.7399  lower in hits
            tempo 0.5221 higher in hits
      duration_ms 0.5105 higher in hits
              key 0.5056 higher in hits
--> C:\Users\uzzna\prectionsong\paper_results\r12_pca_variance.csv
--> C:\Users\uzzna\prectionsong\paper_results\r12_pca_loadings.csv
--> C:\Users\uzzna\prectionsong\paper_results\r12_univariate_auc.csv
+-> paper_results/r12_pca_variance.csv
+-> paper_results/r12_pca_loadings.csv
+-> paper_results/r12_univariate_auc.csv
   [pca] fold 1/25  (29 s)
   [pca] fold 2/25  (75 s)
   [pca] fold 3/25  (108 s)
@@ -79,5 +79,5 @@ instrumentalness 0.7399  lower in hits
                  first 13 PCs    0.7647   0.0033        0.7633         0.7661    0.8396       25       -0.0170       -8.160 2.217869e-08   0.0    25.0
 first 6 PCs + decade + artist    0.7758   0.0052        0.7736         0.7779    0.8703       25       -0.0059       -1.921 6.662903e-02   2.0    23.0
                    final (20)    0.8321   0.0043        0.8303         0.8339    0.9177       25        0.0504       20.805 7.298767e-17  25.0     0.0
--> C:\Users\uzzna\prectionsong\paper_results\r12_pca_cv_summary.csv
--> C:\Users\uzzna\prectionsong\paper_results\r12_pca_cv_folds.csv
+-> paper_results/r12_pca_cv_summary.csv
+-> paper_results/r12_pca_cv_folds.csv

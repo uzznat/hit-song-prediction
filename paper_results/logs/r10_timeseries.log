@@ -7,7 +7,7 @@ songs with complete history: 31,925 (1958 to 2025); top-10 share 0.164, >=20 wee
   [big_20wk] k=2 done
   [big_20wk] k=3 done
   [big_20wk] k=4 done
--> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_folds.csv
+-> paper_results/r10_trajectory_folds.csv
 
 === trajectory: summary ===
    target  k         model                                     config  accuracy    auc     f1
@@ -63,7 +63,7 @@ big_top10  4      logistic                  first 4 week(s) + context    0.8931 
 big_top10  4 random forest context only (year, month, artist history)    0.8068 0.5925 0.1511
 big_top10  4 random forest                            first 4 week(s)    0.8936 0.8906 0.6312
 big_top10  4 random forest                  first 4 week(s) + context    0.9067 0.9174 0.6740
--> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_summary.csv
+-> paper_results/r10_trajectory_summary.csv
 
 === trajectory: tests ===
    target  k                 comparison  delta_auc  wins  n            p
@@ -83,7 +83,7 @@ big_top10  4 weeks only vs context only     0.2981    15 15 1.337462e-17
  big_20wk  3 weeks only vs context only    -0.0898     0 15 4.089485e-10
  big_20wk  4    + context vs weeks only     0.1756    15 15 1.190356e-16
  big_20wk  4 weeks only vs context only    -0.0361     0 15 3.330714e-06
--> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_tests.csv
+-> paper_results/r10_trajectory_tests.csv
 
 === trajectory: open ===
  k  n_songs_not_yet_top10  later_top10_share  auc_rf_weeks_plus_context
@@ -91,7 +91,7 @@ big_top10  4 weeks only vs context only     0.2981    15 15 1.337462e-17
  2                  31264             0.1464                     0.8280
  3                  31072             0.1411                     0.8699
  4                  30749             0.1321                     0.8942
--> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_open.csv
+-> paper_results/r10_trajectory_open.csv
 
 === trajectory: temporal ===
    target                  config    auc  accuracy
@@ -101,7 +101,7 @@ big_top10            context only 0.5724    0.8416
  big_20wk           first 3 weeks 0.6788    0.7286
  big_20wk first 3 weeks + context 0.7906    0.7669
  big_20wk            context only 0.5511    0.6267
--> C:\Users\uzzna\prectionsong\paper_results\r10_trajectory_temporal.csv
+-> paper_results/r10_trajectory_temporal.csv
 Previous-decade hit centroids are computed from the benchmark's own hits (strictly earlier decade).
   [trend] fold 1/25  (29 s)
   [trend] fold 2/25  (58 s)
@@ -136,8 +136,8 @@ Previous-decade hit centroids are computed from the benchmark's own hits (strict
 + per-feature deviation from last decade's hits (13)    0.8367   0.0041        0.8350         0.8384    0.9220       25        0.0046        3.046 5.555840e-03  23.0     2.0
                                           audio only    0.7817   0.0050        0.7796         0.7838    0.8592       25       -0.0504      -20.805 7.298767e-17   0.0    25.0
                                    audio + trend (2)    0.7995   0.0041        0.7978         0.8012    0.8758       25       -0.0326      -17.280 4.799505e-15   0.0    25.0
--> C:\Users\uzzna\prectionsong\paper_results\r10_trend_cv_summary.csv
--> C:\Users\uzzna\prectionsong\paper_results\r10_trend_cv_folds.csv
+-> paper_results/r10_trend_cv_summary.csv
+-> paper_results/r10_trend_cv_folds.csv
   [trend-audio] fold 1/25  (14 s)
   [trend-audio] fold 2/25  (28 s)
   [trend-audio] fold 3/25  (37 s)
@@ -168,4 +168,4 @@ Previous-decade hit centroids are computed from the benchmark's own hits (strict
            config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
        audio only    0.7817   0.0050        0.7796         0.7838    0.8592       25           NaN          NaN          NaN   NaN     NaN
 audio + trend (2)    0.7995   0.0041        0.7978         0.8012    0.8758       25        0.0178        9.798 7.312597e-10  25.0     0.0
--> C:\Users\uzzna\prectionsong\paper_results\r10_trend_audio_cv_summary.csv
+-> paper_results/r10_trend_audio_cv_summary.csv
