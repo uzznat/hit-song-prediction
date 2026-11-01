@@ -75,7 +75,7 @@ and backslashes removed), keeping the 30-second preview of the first result (the
 quoted fields make Deezer require both the artist and the title; the match is not checked further, so a few
 previews may be another version of the song). 3{,}562 songs
 had a preview and complete descriptors; this is the \emph{audio subset}. The same search was later run on every
-song (35{,}370 found, Sec.~\ref{sec:audit}). From the previews we extracted 31 spectral/rhythmic descriptors (``FFT'') and 185 richer
+song (35{,}370 found, App.~\ref{sec:audit}). From the previews we extracted 31 spectral/rhythmic descriptors (``FFT'') and 185 richer
 librosa~\cite{mcfee2015librosa} descriptors (20 MFCCs and their first and second
 derivatives, chroma, tonnetz, spectral contrast, centroid, bandwidth, roll-off, flatness,
 zero-crossing rate, RMS and onset/tempogram statistics, each summarised by mean and
@@ -89,7 +89,7 @@ missing or zero year are removed. On ISMIR the artist name is only lower-cased a
 featuring removal). We flatten all numeric descriptors of the Essentia JSON files: numbers are kept, lists of
 numbers are summarised by their mean, while booleans, strings, lists of lists, the whole \texttt{metadata} block
 (bit rate, codec, \dots) and the beat positions in seconds are skipped; we then keep the columns present for more
-than 95\,\% of the tracks, giving 592, drop every track with a missing value in one of them (no imputation),
+than 95\,\% of the tracks (computed over all tracks with descriptors: the hits and the whole non-hit pool), giving 592, drop every track with a missing value in one of them (no imputation),
 keep the 5{,}831 hits with complete
 descriptors and, like the original study, draw an equal number of non-hits (protocol A, 11{,}662 songs). The
 year-matched sample of protocol B also has 11{,}662 songs. Hits have a median release year of 1987 and non-hits of 2001, a fact that matters
@@ -187,7 +187,7 @@ one component, 0.710 with six and 0.765 with all 13, against 0.782 for the raw d
 even though no information is removed, 0/25 folds, $p=2\times10^{-8}$). Trees split on one input at a
 time, and rotating the axes mixes a sparse, highly informative descriptor (instrumentalness) into
 components shared with uninformative ones. We therefore keep the raw descriptors; PCA is used only for the
-185-dimensional librosa representation (Sec.~\ref{sec:audit}).
+185-dimensional librosa representation (App.~\ref{sec:audit}).
 
 \begin{figure*}[t]
 \centering
@@ -205,10 +205,10 @@ this on the 35{,}370 songs that have a preview (needed for FFT), with the same f
 $5{\times}5$ CV (Table~\ref{tab:all}). The full model reaches 0.883, 5.8 points above the final model
 (0.825 on these songs). That gain does not come from music. Removing the song title alone takes it down to
 0.843 ($-4.0$\pp, $p=3\times10^{-19}$), and the title is an artefact of how the non-hits were collected
-(Sec.~\ref{sec:audit}). The remaining $+1.8$\pp{} over the final model must come, by elimination, from FFT and
+(App.~\ref{sec:audit}). The remaining $+1.8$\pp{} over the final model must come, by elimination, from FFT and
 the market-trend features, the only other blocks that matter (removing either one costs $-0.4$ and $-0.3$\pp; title
 length and \texttt{chorus\_hit}/\texttt{sections} change nothing; the two overlap, so each costs less alone), whose gains vanish under the genre control and carry
-only the era (Sec.~\ref{sec:further}, \ref{sec:timeseries}). Once FFT and trend are in, the decade
+only the era (App.~\ref{sec:further} and Sec.~\ref{sec:timeseries}). Once FFT and trend are in, the decade
 indicators become redundant ($-0.2$\pp, $p=0.11$): all three describe the era. Artist history remains the
 input whose removal costs the most among the legitimate ones ($-1.9$\pp, $p=2\times10^{-11}$), ahead of
 the 13 descriptors ($-1.2$\pp), while \texttt{chorus\_hit}/\texttt{sections} and title length change nothing.
@@ -218,7 +218,9 @@ model we keep is the one whose inputs survive the controls: the 20 inputs of the
 \begin{table}[!htbp]
 \centering
 \caption{Training on every input at once (35{,}370 songs with a preview, frozen Random Forest, $5{\times}5$
-CV). Left: one block removed from ``everything'' ($\Delta$ vs everything). Right: the block alone.}
+CV). Left: one block removed from ``everything'' ($\Delta$ vs everything). Right: the block alone.
+$^{*}$Decade alone scores .532 here, not the .503 of the full benchmark, because these songs are 53.2\,\% hits: the
+decade carries no information and the model predicts the majority class.}
 \label{tab:all}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -245,7 +247,7 @@ Everything except song title & .843 & .925 & +1.8 ($6{\cdot}10^{-10}$) vs final 
 \quad Spotify (13) / FFT (31) & .777 / .773 & .849 / .847 & -- \\
 \quad artist history / song title & .648 / .660 & .669 / .740 & -- \\
 \quad market trend / title length & .629 / .546 & .672 / .545 & -- \\
-\quad chorus\_hit + sections / decade & .543 / .532 & .563 / .516 & -- \\
+\quad chorus\_hit + sections / decade & .543 / .532$^{*}$ & .563 / .516 & -- \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -336,7 +338,9 @@ $p=6\times10^{-13}$).
 grouped by artist (no test artist seen in training). Era = decade (Hit Predictor) or
 release year (ISMIR). Bottom: gain over audio in grouped CV, on songs whose artist had no
 earlier hit (new) or at least one (known). New/known songs: 33{,}438/7{,}122 (Hit
-Predictor), 7{,}480/4{,}182 (ISMIR A), 7{,}269/4{,}393 (ISMIR B).}
+Predictor), 7{,}480/4{,}182 (ISMIR A), 7{,}269/4{,}393 (ISMIR B). The accuracy on each group is computed inside
+each test fold; the corrected $t$-test uses the per-fold differences on that group and the ratio
+$n_{\text{test}}/n_{\text{train}}$ of the whole fold.}
 \label{tab:robust}
 \footnotesize
 \setlength{\tabcolsep}{2.6pt}
@@ -421,7 +425,7 @@ Decade + artist & +3.6 (.006) & +5.1 & $10^{-8}$ & robust \\
 feature. Its largest weights show why. On the non-hit side: \emph{remastered, feat, live, version, remix, mix,
 edit, demo, mono, medley}, genre words (\emph{blues, metal, ambient, punk, rock, death, jazz, hardcore}) and
 non-English words (\emph{remasterizado, de, te, en}); on the hit side: ordinary words (\emph{nights, you, party,
-kiss, love, sunshine}). On the genre-matched sample of Sec.~\ref{sec:further} (7{,}554 songs), 13.5\,\% of the
+kiss, love, sunshine}). On the genre-matched sample of App.~\ref{sec:further} (7{,}554 songs), 13.5\,\% of the
 non-hit titles contain `` - '' (a Spotify suffix such as ``- Remastered 2011''), against 0.1\,\% of the hits;
 5.7\,\% contain ``remaster'' (hits: 0), and 5.7\,\% contain non-ASCII letters (hits: 0.1\,\%). The hit titles have
 evidently been cleaned and the non-hit titles have not. We test this directly (\texttt{r8\_future\_work.py title},
@@ -461,7 +465,7 @@ artists stay at $0.977$ ($-0.1$\pp, n.s.). Unlike on the small subset, decade re
 useful once FFT is present: audio + artist + FFT reaches only $0.829$ ($+0.4$\pp{} over the
 main model, $p=0.04$). FFT thus appears to address the cold-start weakness of artist
 history, but the benchmark's flops come from non-mainstream genres by construction, and
-spectral descriptors can recognise genre. Sec.~\ref{sec:further} shows that this gain does
+spectral descriptors can recognise genre. App.~\ref{sec:further} shows that this gain does
 not survive a genre control.
 
 \begin{figure}[!htbp]
@@ -521,7 +525,7 @@ decade vs audio, $\Delta$ ($p$) & \multicolumn{2}{c}{--} & \multicolumn{2}{c}{$+
 artist vs audio, $\Delta$ ($p$) & \multicolumn{2}{c}{--} & \multicolumn{2}{c}{$+4.2$ ($2{\cdot}10^{-8}$)} \\
 main vs audio, $\Delta$ ($p$) & \multicolumn{2}{c}{--} & \multicolumn{2}{c}{$+6.7$ ($9{\cdot}10^{-13}$)} \\
 FFT vs main, $\Delta$ ($p$) & \multicolumn{2}{c}{$+1.3$ ($1.1{\cdot}10^{-4}$)} & \multicolumn{2}{c}{$+0.1$ (.84)} \\
-FFT vs main+genre, $\Delta$ ($p$) & \multicolumn{2}{c}{$-1.1$ ($5\times10^{-7}$)} & \multicolumn{2}{c}{--} \\
+FFT vs main+genre, $\Delta$ ($p$) & \multicolumn{2}{c}{$-1.1$ ($5{\cdot}10^{-7}$)} & \multicolumn{2}{c}{--} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -653,7 +657,7 @@ seasonal strength of 0.11~\cite{hyndman2021forecasting}. Debuts fall from 11.0 p
 the largest residual is a rule change (60 debuts in the chart of 5 December 1998, when
 songs not released as singles became eligible). The weekly number of holiday songs on the
 chart is almost purely seasonal: its periodogram peaks at 52.1, 26.1, 17.4 and 13.0 weeks,
-and a Fourier regression fitted on the streaming era (charts from July 2018 on, a recent window in which streaming dominates the chart; $K=20$ harmonics) explains 94\,\% of
+and a Fourier regression fitted on the streaming era (charts from July 2018 on, a recent window in which streaming dominates the chart; target $\ln(1+\text{count})$, a linear trend plus $K=20$ harmonics) explains 94\,\% of
 its variance. Forecasting monthly debuts 12 months ahead under rolling-origin evaluation
 (11 origins, 2015--2025), ARIMA$(1,1,2)$~\cite{box2015time} and ARIMA with Fourier terms
 (MASE 1.82) and damped Holt-Winters (1.85) are best and indistinguishable (ARIMA + Fourier vs ARIMA, $p=0.97$); they
@@ -716,7 +720,7 @@ the temporal hold-out ($\leq10^{-7}$), the ISMIR gains of artist history in both
 the artist-grouped gains, the genre-matched gains of decade ($8\times10^{-7}$), artist history ($2\times10^{-8}$)
 and both ($9\times10^{-13}$), and the year-matched lyrics tests (protocol B: $2\times10^{-5}$; English only:
 $1.1\times10^{-4}$; English, unseen artists: $3\times10^{-5}$). The full-benchmark FFT gain on top of the main model
-also passes ($p=4\times10^{-9}$) but is explained by genre (Sec.~\ref{sec:further}); the genre-control results
+also passes ($p=4\times10^{-9}$) but is explained by genre (App.~\ref{sec:further}); the genre-control results
 themselves ($p\leq5\times10^{-7}$) pass as well, and so do the early-trajectory gains of Table~\ref{tab:traj}
 ($p<10^{-6}$).
 

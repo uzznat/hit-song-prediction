@@ -72,7 +72,7 @@ dimensions of the harmonic part (12), 7 spectral-contrast bands (14), spectral c
 and the pulse clarity (3); reduced to 40 principal components inside each training fold.
 
 \emph{Genre} (16 families, control only). Spotify artist tags (from the SpotGenTrack artist file, matched by
-normalised artist name; when a name occurs twice, the artist with more followers is kept) are mapped by
+artist name normalised as on the Hit Predictor; when a name occurs twice, the artist with more followers is kept) are mapped by
 substring to families: hip-hop (hip hop, rap, trap, drill, grime, crunk, bounce), R\&B/soul (r\&b, soul, funk,
 motown, disco, new jack, quiet storm, doo-wop), country (country, bluegrass, americana, honky, western swing), rock
 (rock, punk, grunge, emo, britpop, new wave, shoegaze, post-), metal (metal, hardcore, deathcore, grindcore, thrash,
@@ -299,7 +299,7 @@ weights that decrease geometrically, with a level, a trend that flattens out (da
 \noindent\textbf{Cross-validation, fold, stratified.} See Sec.~\ref{sec:protocol}.\par
 \noindent\textbf{Fourier terms.} $\sin(2\pi jt/m)$ and $\cos(2\pi jt/m)$ for $j=1,\dots,K$, where $m$ is the season length (12
 months, or 52.18 weeks) and $K$ the number of harmonics; a regression on them draws any smooth yearly pattern.\par
-\noindent\textbf{Gini impurity.} $1-p^2-(1-p)^2$ for a group with hit share $p$; a split is chosen to lower it the most.\par
+\noindent\textbf{Gini impurity.} $1-q^2-(1-q)^2$ for a group with hit share $q$; a split is chosen to lower it the most.\par
 \noindent\textbf{Ljung--Box test.} Tests whether the first $L$ autocorrelations of a series are all zero (white noise).\par
 \noindent\textbf{Logistic regression.} A linear model whose weighted sum of the inputs is turned into a probability by
 $1/(1+e^{-z})$; $C$ is the inverse strength of the L2 penalty on the weights.\par

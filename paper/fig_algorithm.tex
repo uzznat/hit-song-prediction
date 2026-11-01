@@ -56,7 +56,7 @@ test songs. A: the Random Forest is trained once on the labelled songs. B: \text
 followed through the four steps. The percentages in step~3 are the share of hits among the training songs that reach
 each question in tree~1. The root holds 20{,}560 songs, not 32{,}447, because the tree's sample is drawn \emph{with
 replacement}: it contains 32{,}447 draws, but some songs are drawn several times and about 37\,\% not at all, leaving
-20{,}560 distinct songs. \emph{Gini impurity} measures how mixed a group is ($1-p^2-(1-p)^2$ for a hit share $p$: 0
+20{,}560 distinct songs. \emph{Gini impurity} measures how mixed a group is ($1-q^2-(1-q)^2$ for a hit share $q$: 0
 for a pure group, 0.5 for half and half). Every song is processed in exactly the same way; across the 8{,}113 test
 songs, the answer is right 83.3\,\% of the time.}
 \label{fig:algorithm}
