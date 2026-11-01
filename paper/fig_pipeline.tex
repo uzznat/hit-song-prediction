@@ -9,13 +9,13 @@
   lab/.style={font=\scriptsize\itshape, text=black!60}]
 % ---- inputs
 \node[src] (a) {Song audio\\(Spotify Web API)};
-\node[src, below=of a] (d) {Release date};
+\node[src, below=of a] (d) {Decade file\\of the song};
 \node[src, below=of d] (h) {Artist name +\\Billboard Hot~100, 1958--};
 \node[lab, above=1mm of a] {1. raw inputs};
 % ---- features
 \node[feat, right=7mm of a] (fa) {13 audio descriptors\\{\scriptsize danceability, energy, loudness, \dots}};
 \node[feat, right=7mm of d] (fd) {decade $\rightarrow$ 6 indicators\\{\scriptsize 1960s \dots\ 2010s, one-hot}};
-\node[feat, right=7mm of h] (fh) {artist history \mbox{$h(s)=\log(1+n)$}\\{\scriptsize $n$ = its Hot~100 songs in earlier decades}};
+\node[feat, right=7mm of h] (fh) {artist history \mbox{$h(s)=\ln(1+n)$}\\{\scriptsize $n$ = its Hot~100 songs in earlier decades}};
 \node[lab, above=1mm of fa] {2. features (20 numbers)};
 \foreach \x/\y in {a/fa, d/fd, h/fh} \draw[->] (\x) -- (\y);
 % ---- model
@@ -29,10 +29,10 @@
 \node[lab, above=1mm of p, xshift=6mm] {4. output};
 % ---- evaluation band
 \node[stp, below=8mm of h.south west, anchor=north west, text width=16.2cm, fill=black!3, draw=black!40] (ev)
- {\textbf{How every number is tested.} 5 folds $\times$ 5 repeats: the model is trained on 80\,\% of the songs and
- scored on the 20\,\% it never saw, 25 times $\rightarrow$ mean accuracy and 95\,\% CI $\rightarrow$ corrected
+ {\textbf{How the main numbers are tested.} 5 folds $\times$ 5 repeats on the Hit Predictor (fewer repeats on the other
+ datasets): the model is trained on 80\,\% of the songs and scored on the 20\,\% it never saw, 25 times $\rightarrow$ mean accuracy and 95\,\% CI $\rightarrow$ corrected
  $t$-test (Nadeau--Bengio) against the same model without the feature $\rightarrow$ Bonferroni over all
- $\approx$\,60 tests ($p<8\times10^{-4}$) $\rightarrow$ controls: year-matched negatives, genre-matched negatives,
+ at most 400 tests ($p<1.25\times10^{-4}$) $\rightarrow$ controls: year-matched negatives, genre-matched negatives,
  no artist in both training and test folds.};
 % ---- after release
 \node[src, below=10mm of ev.south west, anchor=north west, text width=2.6cm] (w) {Chart positions in\\weeks 1, 2, 3 after debut};

@@ -9,7 +9,7 @@
 % ------------------------------------------------------------------ training
 \node[hd] at (0,0.15) {A. Training (done once)};
 \node[box, anchor=north west, text width=3.9cm] (t1) at (0,0)
- {\textbf{Labelled songs}\\32{,}447 songs (80\,\% of the data), each with its answer: hit (entered the Hot~100) or non-hit};
+ {\textbf{Labelled songs}\\32{,}447 songs (80\,\% of the data, \textit{Vogue} excluded), each with its answer: hit (entered the Hot~100) or non-hit};
 \node[blu, right=of t1, text width=3.0cm] (t2)
  {\textbf{20 inputs per song}\\built as in B, steps 1--2};
 \node[box, right=of t2, text width=6.6cm] (t3)
@@ -26,7 +26,7 @@
  {\textbf{1. Raw data}\\[1pt]
  \emph{Spotify audio (13 values):}\\ danceability 0.737, energy 0.880,\\ loudness $-6.4$\,dB, acousticness 0.004,\\
  instrumentalness 0.004, duration 5.3\,min, valence 0.33, tempo 116\,bpm, \dots\\[2pt]
- \emph{Release decade:} the song is in the file of the 1990s\\[2pt]
+ \emph{Decade:} the song is in the file of the 1990s\\[2pt]
  \emph{Artist:} Madonna; Hot~100 history};
 \node[blu, right=of s1, text width=3.9cm] (s2)
  {\textbf{2. Build the 20 inputs}\\[1pt]
@@ -34,7 +34,7 @@
  (b) decade $\rightarrow$ 6 yes/no boxes:\\
  \hspace*{1mm}{\setlength{\tabcolsep}{2.5pt}\begin{tabular}{@{}cccccc@{}}60s&70s&80s&\textbf{90s}&00s&10s\\0&0&0&\textbf{1}&0&0\end{tabular}}\\[2pt]
  (c) artist history: Madonna had 19 Hot~100 songs \emph{before} the 1990s
- $\rightarrow$ \mbox{$h=\log(1+19)=3.0$}};
+ $\rightarrow$ \mbox{$h=\ln(1+19)=3.0$}};
 \node[box, right=of s2, text width=5.1cm] (s3)
  {\textbf{3. Each tree asks questions} (tree 1 shown)\\[1pt]
  danceability $\leq 0.49$? \textbf{no} {\color{black!55}(20{,}560 songs, 50\,\% hits)}\\
@@ -43,16 +43,21 @@
  artist history $\leq 0.35$? \textbf{no} {\color{black!55}(69\,\%)}\\
  loudness $\leq -6.9$\,dB? \textbf{no} {\color{black!55}(98\,\%)}\\
  \dots\ 4 more questions \dots\\
- $\Rightarrow$ leaf: 646 training songs, \textbf{100\,\% hits}};
+ $\Rightarrow$ leaf: 646 distinct training songs, \textbf{100\,\% hits}};
 \node[res, right=of s3, text width=2.6cm] (s4)
  {\textbf{4. Vote}\\[1pt] 80 of 80 trees say ``hit''\\[2pt] $P(\text{hit}) = 1.00$\\[2pt]
  $\geq 0.5$ $\Rightarrow$ \textbf{HIT}\\[2pt] {\color{black!60}(correct: \textit{Vogue} reached no.~1)}};
 \draw[->] (s1) -- (s2); \draw[->] (s2) -- (s3); \draw[->] (s3) -- (s4);
 \draw[->, dashed, black!50] (t4.south) -- (s4.north);
 \end{tikzpicture}
-\caption{The algorithm in detail. A: the Random Forest is trained once on labelled songs. B: one real song from
-the test part, never seen in training, followed through the four steps; the percentages in step~3 are the share of
-hits among the training songs that reach each question in that tree. Every song is processed in exactly the same
-way; across the 8{,}113 test songs of this split, the answer is right 83.3\,\% of the time.}
+\caption{The algorithm in detail. For this illustration only, \textit{Vogue} is set aside and the other 40{,}559
+songs are split once 80/20 (seed 42): 32{,}447 for training, 8{,}112 for testing, plus \textit{Vogue}, so 8{,}113
+test songs. A: the Random Forest is trained once on the labelled songs. B: \textit{Vogue}, never seen in training,
+followed through the four steps. The percentages in step~3 are the share of hits among the training songs that reach
+each question in tree~1. The root holds 20{,}560 songs, not 32{,}447, because the tree's sample is drawn \emph{with
+replacement}: it contains 32{,}447 draws, but some songs are drawn several times and about 37\,\% not at all, leaving
+20{,}560 distinct songs. \emph{Gini impurity} measures how mixed a group is ($1-p^2-(1-p)^2$ for a hit share $p$: 0
+for a pure group, 0.5 for half and half). Every song is processed in exactly the same way; across the 8{,}113 test
+songs, the answer is right 83.3\,\% of the time.}
 \label{fig:algorithm}
 \end{figure*}

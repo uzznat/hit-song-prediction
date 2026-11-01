@@ -1,0 +1,63 @@
+genre-matched sample: 7554 songs
+titles changed by cleaning: hits 0.049, flops 0.190
+  [R8-title-a] fold 1/25  (8 s)
+  [R8-title-a] fold 2/25  (16 s)
+  [R8-title-a] fold 3/25  (23 s)
+  [R8-title-a] fold 4/25  (31 s)
+  [R8-title-a] fold 5/25  (39 s)
+  [R8-title-a] fold 6/25  (47 s)
+  [R8-title-a] fold 7/25  (55 s)
+  [R8-title-a] fold 8/25  (62 s)
+  [R8-title-a] fold 9/25  (70 s)
+  [R8-title-a] fold 10/25  (78 s)
+  [R8-title-a] fold 11/25  (86 s)
+  [R8-title-a] fold 12/25  (94 s)
+  [R8-title-a] fold 13/25  (102 s)
+  [R8-title-a] fold 14/25  (110 s)
+  [R8-title-a] fold 15/25  (118 s)
+  [R8-title-a] fold 16/25  (126 s)
+  [R8-title-a] fold 17/25  (134 s)
+  [R8-title-a] fold 18/25  (142 s)
+  [R8-title-a] fold 19/25  (149 s)
+  [R8-title-a] fold 20/25  (157 s)
+  [R8-title-a] fold 21/25  (165 s)
+  [R8-title-a] fold 22/25  (172 s)
+  [R8-title-a] fold 23/25  (180 s)
+  [R8-title-a] fold 24/25  (185 s)
+  [R8-title-a] fold 25/25  (187 s)
+  [R8-title-m] fold 1/25  (2 s)
+  [R8-title-m] fold 2/25  (3 s)
+  [R8-title-m] fold 3/25  (5 s)
+  [R8-title-m] fold 4/25  (7 s)
+  [R8-title-m] fold 5/25  (8 s)
+  [R8-title-m] fold 6/25  (15 s)
+  [R8-title-m] fold 7/25  (22 s)
+  [R8-title-m] fold 8/25  (28 s)
+  [R8-title-m] fold 9/25  (35 s)
+  [R8-title-m] fold 10/25  (42 s)
+  [R8-title-m] fold 11/25  (49 s)
+  [R8-title-m] fold 12/25  (56 s)
+  [R8-title-m] fold 13/25  (62 s)
+  [R8-title-m] fold 14/25  (69 s)
+  [R8-title-m] fold 15/25  (76 s)
+  [R8-title-m] fold 16/25  (83 s)
+  [R8-title-m] fold 17/25  (90 s)
+  [R8-title-m] fold 18/25  (97 s)
+  [R8-title-m] fold 19/25  (103 s)
+  [R8-title-m] fold 20/25  (110 s)
+  [R8-title-m] fold 21/25  (117 s)
+  [R8-title-m] fold 22/25  (124 s)
+  [R8-title-m] fold 23/25  (131 s)
+  [R8-title-m] fold 24/25  (138 s)
+  [R8-title-m] fold 25/25  (145 s)
+
+=== R8 song title on the genre-matched sample: 5x5 CV ===
+               config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+                audio    0.7222   0.0078        0.7190         0.7255    0.7961       25           NaN          NaN          NaN   NaN     NaN
+        audio + title    0.7697   0.0094        0.7659         0.7736    0.8475       25        0.0475        9.676 9.310730e-10  25.0     0.0
+audio + cleaned title    0.7546   0.0094        0.7507         0.7585    0.8304       25        0.0324        7.531 9.029287e-08  25.0     0.0
+                 main    0.7896   0.0088        0.7860         0.7933    0.8791       25           NaN          NaN          NaN   NaN     NaN
+         main + title    0.8181   0.0070        0.8153         0.8210    0.9047       25        0.0285        6.201 2.082742e-06  25.0     0.0
+ main + cleaned title    0.8085   0.0084        0.8051         0.8119    0.8946       25        0.0189        3.413 2.281903e-03  23.0     2.0
+-> <repo>\paper_results\r8_title_matched_cv_summary.csv
+-> <repo>\paper_results\r8_title_matched_cv_folds.csv

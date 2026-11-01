@@ -11,6 +11,7 @@
 \usepackage{multirow}
 \usepackage{xcolor}
 \usepackage{url}
+\usepackage{placeins}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 \usepackage[hidelinks]{hyperref}
@@ -29,18 +30,21 @@ Project in Artificial Intelligence}}
 \maketitle
 
 \begin{abstract}
-Can a computer tell, on the day a song is released, whether it will enter the Billboard Hot~100? Published
+Can a computer tell, on the day a song is released, whether it will enter the Billboard Hot~100, the weekly
+ranking of the 100 most popular songs in the United States? Published
 studies report 82--89\,\% accuracy from Spotify audio descriptors, but on different datasets, usually on a single
 train/test split, and without checking whether the datasets themselves give the answer away. We build a simple,
 fully described pipeline: 13 audio descriptors, the song's decade, and the artist's \emph{history} (how many Hot~100
-songs the artist placed in earlier decades), fed to a Random Forest, and we test every gain with repeated
-cross-validation, a corrected $t$-test and a Bonferroni correction. On the 40{,}560-song Spotify Hit Predictor
+songs the artist placed in earlier decades), fed to a Random Forest, and we test every gain with
+cross-validation (repeated wherever affordable), a corrected $t$-test and a Bonferroni correction (a few
+robustness checks use single splits and McNemar's test). On the 40{,}560-song Spotify Hit Predictor
 dataset, accuracy rises from 0.782 (audio only) to 0.832; the only earlier model on that dataset improves on 50 of 50
-random splits when the feature is added. Because that dataset never uses the artists of hits as negatives, we
+random splits when the feature is added. Because that dataset, by its construction rule, never uses the artists of
+a decade's hits as that decade's negatives, we
 validate on ISMIR~2019, where a year-matched test gives the transferable estimate: $+2.6$ points. An audit of every
 other input we built shows which gains are not real: song titles, spectral descriptors and release year score
-well only because of how the datasets were assembled. Lyrics are the one content input that survives every
-control ($+4.4$ points), and once a song is out, its first three weeks on the chart predict a top-10 peak with an
+well only because of how the datasets were assembled. Lyrics are the one content input whose gain survives
+year matching, an English-only test and unseen artists ($+4.4$ points), and once a song is out, its first three weeks on the chart predict a top-10 peak with an
 AUC of 0.89. All details are in the appendix; all code and data are public.
 \end{abstract}
 
@@ -90,10 +94,13 @@ its exact protocol, in which our feature improves its models on 50 out of 50 ran
 (Sec.~\ref{sec:tilburg}).
 \item An \emph{external validation} on the peer-reviewed ISMIR~2019 dataset, including a
 year-matched control that separates a genuine signal from a sampling artefact, and in which
-our feature exceeds the best published accuracy (Sec.~\ref{sec:external}).
+our feature exceeds the best published accuracy on the original protocol (protocol A, with a classifier
+instead of their regression and our own draw of negatives; Sec.~\ref{sec:external}).
 \item A \emph{robustness} analysis showing that the gain is not the model recognising artists it was
-trained on (artist-grouped cross-validation), together with a cold-start breakdown showing that, for
-artists with no earlier hit, artist history cannot help and only era does (Sec.~\ref{sec:robust}).
+trained on (artist-grouped cross-validation), together with a cold-start breakdown showing that, on the
+Hit Predictor, artist history does not help artists with no earlier hit and only era does (on ISMIR with
+year-matched negatives there is a hint that an empty history is informative, not significant after Bonferroni;
+Sec.~\ref{sec:robust}).
 \item An \emph{ablation} of the final model and a model trained on every input at once, showing where
 the accuracy comes from (Sec.~\ref{sec:ablation}).
 \item An \emph{audit} showing which apparent gains do not survive: title-based features that
@@ -101,8 +108,8 @@ encode dataset construction, and a rich audio representation whose single-split 
 disappears under repeated cross-validation (Sec.~\ref{sec:audit}), and a genre control
 showing that a significant spectral-feature gain on the whole benchmark is a genre
 shortcut (Sec.~\ref{sec:further}).
-\item \emph{Lyrics}: on ISMIR~2019, the bag of words of a song's lyrics adds $+4.4$ to $+5.1$ points
-and survives year matching, an English-only control and unseen artists, the only content input
+\item \emph{Lyrics}: on ISMIR~2019 with year-matched negatives, the bag of words of a song's lyrics adds $+4.4$ to
+$+5.1$ points ($+4.4$ in the strictest test; with random negatives $+2.7$ to $+4.7$, indicative only) and survives year matching, an English-only control and unseen artists, the only content input
 to do so (Sec.~\ref{sec:lyrics}).
 \item A \emph{time-series} analysis of the Hot~100: components and forecasting of chart
 dynamics, market-trend features before release, and early chart trajectories after release
@@ -121,14 +128,14 @@ closest earlier work. Accuracy unless stated; earlier numbers are as published.}
 \toprule
 Contribution & How we do it & Experiment & Before & Ours \\
 \midrule
-Artist history + era (Sec.~\ref{sec:main}) & count of the artist's Hot~100 songs in strictly earlier decades; decade one-hot & Hit Predictor, 40{,}560 songs, $5{\times}5$ CV, 5 classifiers & superstar indicator, no significance test~\cite{interiano2018musical}; 13 descriptors: 0.782 & 0.832 (+5.0, 25/25 folds, $p=7{\cdot}10^{-17}$); +4.6 to +5.7 for every classifier \\
+Artist history + era (Sec.~\ref{sec:main}) & count of the artist's Hot~100 songs in strictly earlier decades; decade one-hot & Hit Predictor, 40{,}560 songs, $5{\times}5$ CV (5-fold for the 5 classifiers) & superstar indicator, no significance test~\cite{interiano2018musical}; 13 descriptors: 0.782 & 0.832 (+5.0, 25/25 folds, $p=7{\cdot}10^{-17}$); +4.6 to +5.7 for every classifier \\
 Head-to-head (Sec.~\ref{sec:tilburg}) & re-implement Du's protocol, add our feature to his models & 2000s and 2010s, 50 random 70/30 splits & 0.84 (00s), 0.82 (10s)~\cite{du2022spotify} & 0.867 and 0.861; better on 50/50 splits \\
 External validation (Sec.~\ref{sec:external}) & same recipe on another dataset, with year-matched negatives & ISMIR~2019, 11{,}662 songs, $5{\times}2$ CV & 0.750, wide-and-deep, audio + year~\cite{zangerle2019hit} & 0.763; fair test (year-matched) +2.6, $p=3{\cdot}10^{-5}$ \\
-Unseen and new artists (Sec.~\ref{sec:robust}) & artist-grouped CV; split test songs by earlier hit or not & 3 datasets & not tested & gain kept for unseen artists (+5.0, +2.9); new artists: era only (+2.2) \\
+Unseen and new artists (Sec.~\ref{sec:robust}) & artist-grouped CV; split test songs by earlier hit or not & Hit Predictor; ISMIR A and B & not tested & gain kept for unseen artists (+5.0, +2.9); new artists: era only on the Hit Predictor (+2.2); ISMIR B artist history +1.4, indicative ($p=.002$) \\
 Ablation (Sec.~\ref{sec:ablation}) & remove one input at a time; shuffle one input; train on everything & Hit Predictor, $5{\times}5$ CV & not reported & artist $-3.0$, decade $-2.2$, instrumentalness $-1.6$; everything: +5.8, of which $-4.0$ is the title artefact \\
 Audit of shortcuts (Sec.~\ref{sec:audit}) & CV instead of one split; genre- and year-matched controls & titles, librosa, FFT, year & gains reported on one split & title +6.7 = artefact; librosa +3.8 $\to$ +0.9 n.s.; FFT +1.4 $\to$ +0.1 \\
-Lyrics (Sec.~\ref{sec:lyrics}) & musiXmatch bag of words + 8 lexical features, songs with lyrics only & ISMIR~2019, year-matched, English, unseen artists & lyrics in multimodal models on other data~\cite{zhao2023analysis,nofer2026deephits} & +4.4 ($p=3{\cdot}10^{-5}$) under all controls \\
-Early trajectories (Sec.~\ref{sec:timeseries}) & first $k$ weekly positions + climb, Random Forest & 31{,}925 Hot~100 songs, top-10 peak & early views predict later views of online content~\cite{szabo2010predicting} & AUC 0.892 with 3 weeks (0.593 without) \\
+Lyrics (Sec.~\ref{sec:lyrics}) & musiXmatch bag of words + 8 lexical features, songs with lyrics only & ISMIR~2019, year-matched, English, unseen artists & lyrics in multimodal models on other data~\cite{zhao2023analysis,nofer2026deephits} & +4.4 ($p=3{\cdot}10^{-5}$) with year-matched negatives, English only and unseen artists \\
+Early trajectories (Sec.~\ref{sec:timeseries}) & first $k$ weekly positions + climb, Random Forest & 31{,}925 Hot~100 songs, top-10 peak & early views predict later views of online content~\cite{szabo2010predicting} & AUC 0.892 with 3 weeks + context (0.593 with context only) \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -141,7 +148,8 @@ networks~\cite{yang2017revisiting} or multimodal models of audio, lyrics and met
 martingutierrez2020multimodal,nofer2026deephits}. Studies built on Spotify descriptors and Billboard labels report
 86--89\,\%~\cite{middlebrook2019song,dimolitsas2023spothitpy,zhao2023analysis}, each on its own dataset; the only
 academic study on the public Spotify Hit Predictor dataset~\cite{ansari2020dataset} is Du's thesis~\cite{du2022spotify}
-(84\,\% and 82\,\%), and the best result on the peer-reviewed ISMIR~2019 data is 75.04\,\%~\cite{zangerle2019hit}.
+(84\,\% and 82\,\%), and the best result on the peer-reviewed ISMIR~2019 data (released at the 2019 conference of the International
+Society for Music Information Retrieval) is 75.04\,\%~\cite{zangerle2019hit}.
 \textbf{Artist reputation.} Interiano et~al.~\cite{interiano2018musical} showed that a ``superstar'' indicator helps
 predict UK chart success, and Salganik et~al.~\cite{salganik2006experimental} that success feeds on itself.
 \textbf{Evaluation.} Single-split comparisons need McNemar's test~\cite{dietterich1998approximate}; repeated
@@ -166,7 +174,7 @@ Dataset & Songs & Hits & Label / negatives \\
 \midrule
 Spotify Hit Predictor~\cite{ansari2020dataset} & 40{,}560 & 49.4\,\% & Hot~100 in decade / rule-based \\
 \quad audio subset (Deezer clips) & 3{,}562 & 52.0\,\% & same \\
-ISMIR 2019~\cite{zangerle2019hit} (balanced) & 11{,}662 & 50.0\,\% & Hot~100 / random MSD \\
+ISMIR 2019~\cite{zangerle2019hit} (balanced) & 11{,}662 & 50.0\,\% & Hot~100 / random Million Song Dataset \\
 SpotGenTrack~\cite{martingutierrez2020multimodal} & 101{,}909 & 19.4\,\% & popularity $\geq 55$ \\
 \bottomrule
 \end{tabular}
@@ -175,13 +183,15 @@ SpotGenTrack~\cite{martingutierrez2020multimodal} & 101{,}909 & 19.4\,\% & popul
 
 \textbf{Spotify Hit Predictor} (main dataset). Six files, one per decade (1960s to 2010s), each listing songs
 with 13 Spotify audio descriptors, the artist, the title and the answer: hit (the song entered the weekly Hot~100
-in that decade) or non-hit. Each file is balanced (about half hits). The documentation states how the non-hits were
+in that decade) or non-hit (we also say \emph{flop}). Each file is balanced (about half hits). The documentation states how the non-hits were
 chosen: songs whose \emph{artist} had no hit in that decade, from ``non-mainstream'' genres. This rule makes the
 task easier than in reality, and we return to it throughout. \textbf{ISMIR~2019}: Hot~100 hits and non-hits drawn at
-random from the Million Song Dataset, with 592 Essentia audio descriptors; its negatives are not chosen by artist
-or genre, which makes it our honest check. \textbf{SpotGenTrack}: 101{,}909 tracks labelled by Spotify popularity
-(19\,\% hits). We also use the full weekly Hot~100 (1958--2026) to compute artist history, 30-second previews for
-two extra audio representations, and musiXmatch lyrics. Details are in Appendix~\ref{app:data}.
+random from the Million Song Dataset, with 592 audio descriptors computed by Essentia (an open-source audio
+analysis library); release year and artist come from the Million Song Dataset metadata; its negatives are not chosen by artist
+or genre, which makes it our honest check. \textbf{SpotGenTrack}: 101{,}909 tracks labelled by Spotify popularity, a 0--100 score (hit if
+$\geq55$; 19\,\% hits). We also use the full weekly Hot~100 (1958--2026) to compute artist history, 30-second audio previews downloaded from the music streaming service Deezer for
+two extra audio representations, and the lyrics that the lyrics provider musiXmatch released for the Million Song
+Dataset. Details are in Appendix~\ref{app:data}.
 
 % =====================================================================
 \section{Method}
@@ -207,18 +217,22 @@ the final answer.
 
 \subsection{Features}\label{sec:features}
 \textbf{Audio.} The 13 Spotify descriptors (Hit Predictor), the 592 Essentia descriptors
-(ISMIR) or the 13 Spotify descriptors (SpotGenTrack) form the baseline of each dataset.
+(ISMIR) or the same 13 Spotify descriptors (SpotGenTrack; App.~\ref{app:inputs}) form the baseline of each dataset.
 
 \textbf{Decade (era).} The Hit Predictor comes as six files, \texttt{dataset-of-60s.csv} to
-\texttt{dataset-of-10s.csv}; a song's decade is simply the file it comes from, i.e.\ the decade in which it was
-released. A decade is a category, not a quantity, so we turn it into six yes/no inputs (one-hot encoding:
+\texttt{dataset-of-10s.csv}; a song's decade is simply the file it comes from: for a hit, the decade in which it
+was on the Hot~100; for a non-hit, the decade the dataset's author assigned it to (the documentation does not
+say more; App.~\ref{app:data}). A decade is a category, not a quantity, so we turn it into six yes/no inputs (one-hot encoding:
 \texttt{is\_60s}, \dots, \texttt{is\_10s}), exactly one of which equals~1 (Fig.~\ref{fig:algorithm}, step~2b).
-Because every file is balanced, the decade alone says nothing about whether a song is a hit (0.503 accuracy,
-chance). It helps because \emph{what a hit sounds like changes with the era} (Fig.~\ref{fig:decade}): a 1990s hit is
-louder than a 1960s hit, and a typical 2000s non-hit is louder than any 1960s--80s hit; in the 1960s--90s hits are
+Because every file is balanced, the decade alone says nothing about whether a song is a hit (0.503 accuracy, at
+chance level: always answering ``non-hit'' gives 0.506). It helps because \emph{what a hit sounds like changes with the era} (Fig.~\ref{fig:decade}): a 1990s hit is
+louder than a 1960s hit, and the median 2000s non-hit is louder than the median hit of any decade from the 1960s
+to the 1980s; in the 1960s--90s hits are
 less acoustic than non-hits, in the 2000s slightly more; in the 1970s--90s hits are longer than non-hits, in the
-2000s--10s shorter. With the decade as input, the trees can learn a different rule for each era. On ISMIR and
-SpotGenTrack we use the release year as a number.
+2000s--10s shorter. With the decade as input, the trees can learn a different rule for each era. ISMIR and
+SpotGenTrack have no decade files; there the era is one number, the release year on ISMIR (e.g.\ 1987) and the
+release decade on SpotGenTrack (e.g.\ 1990, from the album release date). On ISMIR we also test the decade,
+the year rounded down to ten.
 
 \begin{figure*}[t]
 \centering
@@ -229,71 +243,175 @@ and sometimes reverses, from one era to the next.}
 \label{fig:decade}
 \end{figure*}
 
-\textbf{Artist history.} Let $a(s)$ be the normalised primary artist of song $s$ (accents,
-punctuation and ``feat./\&/with'' collaborators removed) and $t(s)$ its period (decade on
-the Hit Predictor, release year elsewhere). With $\mathcal{H}$ the set of reference hits,
+\textbf{Artist history.} Let $a(s)$ be the normalised primary artist of song $s$ (on the Hit Predictor and for
+the chart history: lower-cased, accents removed, cut at the first collaborator separator such as ``feat.'',
+``\&'', ``with'' or a comma, each written with a space on both sides (full list in App.~\ref{app:inputs}), then punctuation removed; on ISMIR and
+SpotGenTrack, whose artist fields are cleaner: only lower-cased and trimmed, on ISMIR the whole artist field, on
+SpotGenTrack the first artist of its artist list) and $t(s)$ its period (decade on
+the Hit Predictor, release year elsewhere). With $\mathcal{H}$ the set of reference hits, each element $s'$ being
+one (artist, title, period) entry, so that a title charting in two decades gives two entries,
 \begin{equation}
-h(s) = \log\bigl(1 + \bigl|\{\,s' \in \mathcal{H} : a(s') = a(s),\; t(s') < t(s)\,\}\bigr|\bigr).
+h(s) = \ln\bigl(1 + \bigl|\{\,s' \in \mathcal{H} : a(s') = a(s),\; t(s') < t(s)\,\}\bigr|\bigr).
 \end{equation}
 The strict inequality guarantees that no information from the song's own period or from
-the future is used. In words: for every song, we look up its artist in the full Hot~100
-history and count how many different songs that artist had placed on the chart \emph{before}
-the song's own decade; the logarithm compresses large counts (an artist with 40 earlier hits is
+the future is used. One subtlety remains: a hit whose chart run crosses a decade boundary, or that re-entered the
+chart, also appears among the artist's titles of the previous decade, and so counts itself. This concerns 219
+songs (211 hits, 0.5\,\%); excluding the song's own title from the count leaves the result essentially unchanged (0.831
+instead of 0.832; still $+5.0$\pp{} over audio alone, 25/25 folds, $p=4\times10^{-18}$; \texttt{r8\_future\_work.py selfcount}; this check
+was run on the Hit Predictor only), so we keep the simpler definition. In words: for every song, we look up its artist in the full Hot~100
+history and, for each decade before the song's own decade, count how many different songs that artist had on
+the chart in that decade, then add these counts (a song that charted in two decades counts once in each); the natural logarithm $\ln$ compresses large counts (an artist with 40 earlier hits is
 not twice as likely to chart again as one with 20). Fig.~\ref{fig:history} gives a worked
 example. The value is computed separately for every artist and every period, so the same
 artist gets a larger value in each later decade, and an artist with no earlier hit always gets
 $h(s)=0$.
 
 \input{fig_history} On the Hit Predictor, $\mathcal{H}$ is the full weekly Hot~100 history
-(distinct titles per artist and decade); on ISMIR and SpotGenTrack it is the set of positive
-songs of the dataset itself. On the Hit Predictor, 52.1\,\% of songs have an artist that
-can be matched to the chart history; this includes 99.99\,\% of the hits, and almost all
-unmatched songs are flops by artists who never charted (Sec.~\ref{sec:further}).
+(distinct titles per artist and decade, the decade being that of the chart week); on ISMIR and
+SpotGenTrack it is the set of positive songs of the dataset itself, counted by earlier release year. On the Hit
+Predictor, 52.1\,\% of songs have an artist that appears somewhere in the Hot~100 history: 99.99\,\% of the hits
+and 5.4\,\% of the flops. The unmatched songs are therefore flops by artists who never charted, not matching
+failures (Sec.~\ref{sec:further}).
 
 
 \subsection{Models}
 The main model is the Random Forest~\cite{breiman2001random} configuration of Middlebrook
-and Sheik~\cite{middlebrook2019song} (80 trees, 8 candidate features per split, Gini),
+and Sheik~\cite{middlebrook2019song} (80 trees, 8 candidate features per split, or all of them for a block with
+fewer than 8 inputs; splits chosen by Gini impurity, Fig.~\ref{fig:algorithm}),
 kept frozen throughout: we do not tune hyperparameters, so that gains come from the
 features and remain comparable with the published configuration. Robustness checks use XGBoost~\cite{chen2016xgboost}, logistic
-regression, $k$-NN and an RBF support vector machine. External datasets use a Random Forest
-with 200 trees and $\sqrt{d}$ candidate features, as in our original external scripts.
+regression, $k$-NN and an RBF support vector machine (each defined in App.~\ref{app:glossary}). External datasets use a Random Forest
+with 200 trees and $\sqrt{d}$ candidate features per split ($d$ = number of inputs), the usual default when $d$
+is large (592 descriptors on ISMIR). All models are the scikit-learn~1.8 and XGBoost~3.2 implementations
+(Python~3.14); audio features use librosa~0.11.
 
-\subsection{Evaluation protocol}
-We report two estimates for every comparison. The \emph{canonical} estimate reproduces the
-split of our earlier experiments (seed 42; 20{,}000 training and 2{,}000 test songs on the
-full benchmark, 75/25 elsewhere) and is compared with McNemar's
-test~\cite{dietterich1998approximate}. The \emph{cross-validated} estimate uses repeated
-stratified 5-fold cross-validation (5 repeats unless stated), reports the mean and a
-95\,\% confidence interval, and compares configurations fold by fold with the corrected
-resampled $t$-test of Nadeau and Bengio~\cite{nadeau2003inference}. All learned
-transformations are inside the cross-validation loop. Title features are produced
-out-of-fold: a TF-IDF + logistic-regression model is trained within the training part and
-its predicted probability is used as a single feature.
+\subsection{Evaluation protocol}\label{sec:protocol}
+Every model is always tested on songs it did not see during training (\emph{held-out} songs). The main
+comparisons on the Hit Predictor are reported with two estimates; most other experiments use cross-validation
+only, and a few robustness checks use single splits (stated where they appear).
+
+\emph{Cross-validation (the estimate our conclusions rest on).} The songs are shuffled and cut into five equal
+parts (\emph{folds}), each with the same share of hits (\emph{stratified}). The model is trained on four parts
+(32{,}448 songs on the Hit Predictor) and tested on the fifth (8{,}112 songs); this is repeated so that every part
+is the test part once, giving five accuracies. The whole procedure is then repeated five times with a
+different shuffle, giving $5\times5=25$ test accuracies (``$5{\times}5$ CV''; scikit-learn
+\texttt{RepeatedStratifiedKFold}, seed 42). Two configurations, e.g.\ with and without artist history, always use
+the \emph{same} 25 splits, so they can be compared fold by fold. Anything learned from data (standardisation, PCA,
+the text models) is fitted on the training part only. Two exceptions: the rejected market-trend features
+(App.~\ref{app:inputs}), and artist history on ISMIR and SpotGenTrack, which counts the dataset's own earlier hits,
+including songs that fall in the test folds; this uses only information from strictly earlier years, so it is
+legitimate in time. Where one run is expensive we use fewer repeats:
+$5{\times}2$ on ISMIR (592 descriptors per song) and $5{\times}1$ on SpotGenTrack (101{,}909 songs). Here
+``$5{\times}2$'' always means 5 folds repeated twice, not the 2-fold ``$5{\times}2$cv'' design of
+Dietterich~\cite{dietterich1998approximate}.
+
+\emph{Canonical split (a second, independent check).} One fixed split, seed 42: from the 40{,}560 songs, a
+sample of 24{,}000 is drawn and divided into 20{,}000 training, 2{,}000 validation (not used) and
+2{,}000 test songs by three successive scikit-learn \texttt{train\_test\_split} calls, each stratified by label with
+seed 42: 24{,}000 songs kept out of 40{,}560, then 20{,}000 of them for training, then the other 4{,}000 cut into
+2{,}000 validation and 2{,}000 test songs. This was the split of the first version of the study and we keep it unchanged so that its
+numbers can be compared over time; it uses fewer training songs, which is why its accuracies are about one point
+lower. On ISMIR and SpotGenTrack the canonical split is a stratified 75/25 split.
+
+\emph{Out-of-fold text features.} For the song title (and later the lyrics), a TF-IDF + logistic-regression model
+(App.~\ref{app:glossary}) is trained on the training part only, with an inner stratified, shuffled 5-fold split (seed 42) so that every training song
+gets a probability from a model that did not see it; the test songs get the probability of the model trained on the
+whole training part. That probability is then used as one input.
+
+\subsection{Metrics and statistics in plain words}\label{sec:stats}
+\textbf{Metrics.} \emph{Accuracy} is the share of test songs whose answer (hit or non-hit) is right. A gain in
+\emph{points} (pts) is a difference in accuracy times 100: going from 0.782 to 0.832 is $+5.0$\pp. On the hit
+class, \emph{precision} is the share of songs predicted ``hit'' that are hits, \emph{recall} the share of hits that
+are predicted ``hit'', and \emph{F1} their harmonic mean $2PR/(P+R)$. \emph{ROC-AUC} (area under the receiver operating characteristic curve) uses the predicted probability
+instead of the yes/no answer: it is the probability that a randomly chosen hit gets a higher score than a randomly
+chosen non-hit (0.5 = chance, 1 = perfect); it is useful when classes are imbalanced (SpotGenTrack), where always
+answering ``non-hit'' already gives high accuracy. \emph{Wins} (e.g.\ 25/25) is the number of the 25 folds in which
+the configuration with the new input is more accurate than without it (a tie does not count as a win).
+
+\textbf{What a $p$-value says.} Suppose the new input were in fact useless. Its measured gain would then be
+pure noise, sometimes positive, sometimes negative. The $p$-value is the probability of seeing a gain at least as
+large in absolute value as the one we measured if the input were useless. A small $p$ (e.g.\ $10^{-10}$) means
+that such a gain would almost never appear by chance; ``n.s.'' (not significant) means $p\geq0.05$.
+
+\textbf{The test we use (corrected resampled $t$-test~\cite{nadeau2003inference}).} For each of the $J$ folds we
+compute the paired difference $d_j$ = accuracy with the input $-$ accuracy without it (or the same difference of
+AUC or F1 when those are tested), then its mean $\bar d$ and
+its sample variance $s^2$ (here $s$ is a standard deviation, not a song). A naive paired $t$-test would use $t=\bar d/\sqrt{s^2/J}$. But the 25 folds are not
+independent: any two training sets share most of their songs, so the 25 differences vary less than truly
+independent estimates would, and the naive test finds ``significant'' gains far too easily. Nadeau and Bengio
+correct this by inflating the variance:
+\begin{equation}
+t=\frac{\bar d}{\sqrt{\left(\frac{1}{J}+\frac{n_{\text{test}}}{n_{\text{train}}}\right)s^2}},
+\end{equation}
+where $n_{\text{test}}/n_{\text{train}}$ is the ratio of test to training songs in one fold ($8{,}112/32{,}448 = 1/4$
+in 5-fold CV, $3/7$ for 70/30 splits). The $p$-value is two-sided, from a Student $t$ distribution with $J-1$
+degrees of freedom. \emph{Worked example} (Table~\ref{tab:main}, audio vs.\ audio + decade + artist): over the 25
+folds the gain has mean $\bar d=0.0504$ and standard deviation $s=0.0045$ (smallest 0.041, largest 0.058). The
+naive test would give $t=56$; the corrected one gives $t=0.0504/\sqrt{(1/25+1/4)\times0.0045^2}=20.8$, and with 24
+degrees of freedom $p=7\times10^{-17}$. The per-fold accuracies of every experiment are in the repository
+(\texttt{paper\_results/*\_folds.csv}), so every $p$-value can be recomputed.
+
+\textbf{Confidence intervals.} The 95\,\% interval printed next to an accuracy is the mean of the $J$ fold
+accuracies $\pm\,t_{0.975,J-1}\,s_{\text{acc}}/\sqrt{J}$, where $s_{\text{acc}}$ is the standard deviation of the $J$
+fold accuracies and $t_{0.975,J-1}$ the 97.5\,\% quantile of a Student $t$ distribution with $J-1$ degrees of
+freedom (2.06 for $J=25$). It is not corrected for the overlap of folds, so it
+describes how stable the 25 estimates are and is narrower than the true uncertainty; significance is always
+judged with the corrected test above, never from the intervals.
+
+\textbf{Single split: McNemar's test~\cite{dietterich1998approximate}.} On one test set, we count $b$, the songs only
+the old model gets right, and $c$, the songs only the new model gets right. If the two models were equally good, $b$
+and $c$ would be about equal; the test statistic is $(|b-c|-1)^2/(b+c)$, compared with a $\chi^2$ distribution
+with one degree of freedom (an exact binomial test when $b+c<25$).
+
+\textbf{Many tests at once (Bonferroni).} With many tests, some small $p$-values appear by chance alone: among 100
+useless inputs, about five would reach $p<0.05$. Bonferroni divides 0.05 by the number of tests. We do not rely on
+an exact count: every $p$-value printed in the paper that compares two configurations, counting a test again each time it is printed, plus the
+exploratory tests we ran but do not print (App.~\ref{app:stats}), stays well below 400, and we
+divide by 400, a deliberately generous family size. A result is therefore called significant after Bonferroni only if $p<0.05/400=1.25\times10^{-4}$;
+results with $1.25\times10^{-4}\leq p<0.05$ are called \emph{indicative}. Inputs are judged on the accuracy
+gain unless a row says otherwise (so the SpotGenTrack lyrics stay indicative on accuracy, $p=0.002$, although their
+AUC gain, $p=2\times10^{-5}$, would pass).
+
+\textbf{Rounding.} Gains $\Delta$ are computed from unrounded accuracies, so a gain can differ by 0.1\pp{} from the
+difference of the rounded values printed in a table (e.g.\ $0.8103-0.7817=0.0286$, printed $+2.9$, although $.810-.782=.028$).
 
 \textbf{Two kinds of ``new'' artist.} Two different situations are easy to confuse, and we keep
 them apart throughout. An \emph{unseen} artist is one whose songs are absent from the training
 folds; its chart history before the song is still known, so $h(s)$ can be positive. We test unseen
 artists with artist-grouped cross-validation (Sec.~\ref{sec:robust}), to check that the model does
 not simply recognise artists it was trained on. A \emph{new} (cold-start) artist is one with no
-earlier Hot~100 song, so $h(s)=0$ by definition, and artist history cannot help them. Our claims
-that the gain ``holds for unseen artists'' never mean that it helps new artists; for new artists
-only era and audio are informative (Table~\ref{tab:robust}).
+earlier hit in the reference set $\mathcal{H}$ (the full Hot~100 on the Hit Predictor; on ISMIR and SpotGenTrack only
+the dataset's own hits, so an ISMIR ``new'' artist may have Hot~100 songs that are not in the dataset), so $h(s)=0$
+by definition. Our claims that the gain ``holds for unseen artists'' never mean that it helps new artists. A value
+of 0 could still carry information, since the model learns from the known artists what an empty history means. On
+the Hit Predictor it does not ($+0.4$\pp, n.s.; only era helps new artists); on ISMIR with year-matched negatives
+there is a hint that it does ($+1.4$\pp, $p=0.002$, above the Bonferroni threshold, so indicative only;
+Table~\ref{tab:robust}).
 
 \subsection{How inputs were selected}\label{sec:selection}
 \input{fig_selection}
 We did not choose the inputs in advance. Every candidate we built---decade, artist history, song title,
-title length, \texttt{chorus\_hit}/\texttt{sections}, a 185-dimensional librosa representation, 31 FFT
-descriptors, Spotify artist genres, market-trend features and lyrics---went through the same four
+title length, \texttt{chorus\_hit}/\texttt{sections} (two analysis fields of the dataset; App.~\ref{app:inputs}), a
+185-dimensional representation computed with the audio library librosa, 31 ``FFT'' descriptors (spectral and
+rhythm statistics of the spectrogram of a 30-second preview), Spotify artist genres, market-trend features and lyrics---went through the same four
 questions (Fig.~\ref{fig:selection}). We first ask whether the input is known on release day. We then
-measure its gain under $5{\times}5$ cross-validation with the corrected $t$-test, not on one split. We
+measure its gain under cross-validation ($5{\times}5$; $5{\times}2$ on ISMIR; a single $5$-fold run on
+SpotGenTrack) with the corrected $t$-test, not on one split. We
 then re-test it under the controls that remove the known construction shortcuts of each dataset: negatives
 matched by year (ISMIR), negatives matched by genre (Hit Predictor), and no artist shared between training
-and test folds. Finally we require significance after a Bonferroni correction over all the tests in the
-paper. We call an input that passes all four questions a \emph{surviving} input, and we rank all tested gains
-by this criterion in Table~\ref{tab:survival} (the \emph{survival ranking}). Only two inputs survive on every
-dataset: decade (which matters only through its interactions with audio) and artist history. Lyrics survive on
-the one dataset where we could attach them to both hits and non-hits (Sec.~\ref{sec:lyrics}). We also trained
+and test folds. Each control is applied separately (the title also gets a combined genre + formatting control,
+Sec.~\ref{sec:auditmain}); an input \emph{fails} when, under at least one of the controls we ran on it, its gain is
+no longer significant after Bonferroni. A genre-matched \emph{and} artist-grouped run at once was not done. On ISMIR, protocol A
+(random negatives) contains the release-year shortcut, so ISMIR inputs are judged on the year-matched protocol B,
+with the other controls (English only, unseen artists) applied on top of it; protocol-A numbers are reported for
+comparison with prior work. Finally we require significance after a
+Bonferroni correction over all the tests in the paper. We call an input that passes all four questions a \emph{surviving} input, and we rank all tested gains
+by this criterion in Table~\ref{tab:survival} (the \emph{survival ranking}). Artist history survives on the Hit
+Predictor and on ISMIR; on SpotGenTrack its gain is only an upper bound, because popularity is measured today
+(Sec.~\ref{sec:discussion}). The decade survives on the Hit Predictor only (where it matters through its interactions with audio);
+on ISMIR, once years are matched, the era adds nothing (Sec.~\ref{sec:external}). Bag-of-words lyrics survive on the one
+dataset where we could attach them to both hits and non-hits, ISMIR (Sec.~\ref{sec:lyrics}); on SpotGenTrack only
+six lexical descriptors are available, and their gain is indicative. We also trained
 a model on everything at once, and we removed one input at a time from both that model and the final model
 (Sec.~\ref{sec:ablation}).
 
@@ -336,9 +454,8 @@ Decade + artist only & .668 & -- & .670 [.669,.672] & .685 & -- \\
 \end{figure}
 
 Table~\ref{tab:main} shows that each feature helps on its own and that their gains are
-nearly additive. The canonical numbers reproduce our earlier single-split experiments
-exactly; cross-validation places all accuracies about one point higher and gives very
-narrow intervals. The combined gain is $+5.04$\pp{} and is positive in all 25 folds.
+nearly additive. The canonical split trains on fewer songs (20{,}000 instead of 32{,}448), so its
+accuracies are about one point lower, but it ranks the configurations in the same order. The combined gain is $+5.04$\pp{} and is positive in all 25 folds.
 It is not bought by trading recall for precision: on the hit class, precision rises from
 0.758 to 0.828 and recall from 0.819 to 0.833, so F1 rises from 0.787 to 0.831 ($+4.3$\pp,
 25/25, $p=7\times10^{-15}$).
@@ -371,17 +488,18 @@ model with the full one fold by fold (Fig.~\ref{fig:ablation}a). Removing artist
 $p=5\times10^{-13}$), instrumentalness ($-1.6$\pp, $p=6\times10^{-9}$) and duration ($-1.1$\pp,
 $p=2\times10^{-7}$). These four survive the Bonferroni correction. Acousticness, speechiness, energy,
 danceability and valence each cost 0.3--0.6\pp{} ($0.004\leq p\leq0.04$), because the other descriptors
-largely carry the same information. Removing key, liveness, time signature, mode or tempo changes nothing
+largely carry the same information. Removing loudness ($-0.3$\pp), key, liveness, time signature, mode or tempo changes nothing
 ($p\geq0.30$). Keeping one block alone shows that the blocks are complementary rather than redundant: the
-13 descriptors alone reach 0.782, artist history alone 0.670, the decade alone 0.503 (chance, since every
-decade is balanced), and all three together 0.832. Removing all 13 descriptors at once costs $-16.2$\pp.
+13 descriptors alone reach 0.782, decade and artist history together without audio 0.670, the decade alone
+0.503 (chance, since every decade is balanced), and all three together 0.832. Removing all 13 descriptors at once costs $-16.2$\pp.
 So audio carries most of the accuracy, and artist history and era add to it.
 
 \textbf{Permutation importance.} Removing an input lets the model re-learn with the others, so
 correlated descriptors can stand in for one another. As a second view, we shuffle one input at a time in the
-held-out folds of the trained final model, which measures how much the model relies on it
+held-out folds of the trained final model (the 5 folds of the first repeat, 5 shuffles each), which measures how
+much the model relies on it
 (Fig.~\ref{fig:ablation}b). The ranking is the same at the top: artist history (8.9\pp{} lost when shuffled),
-then instrumentalness (6.3), acousticness (4.9), the decade block (4.3), duration (3.9) and danceability
+then instrumentalness (6.3), acousticness (4.9), the decade block (4.3; its six indicators are shuffled together), duration (3.9) and danceability
 (3.4), with key, liveness and time signature near zero. Duration is an instructive case. On its own it barely
 separates hits (AUC 0.51; Appendix~\ref{app:inputs}), but the model relies on it, presumably because song lengths
 changed across decades and its effect depends on the era. Its value comes from interactions, like that of the
@@ -399,8 +517,8 @@ folds of the trained model (5 folds $\times$ 5 shuffles, mean $\pm$ s.d.). Blue:
 
 \textbf{Training on everything at once.} A model with every input we built (8 blocks, including song
 titles, FFT, market trend) reaches 0.883 against 0.825 for the final model on the same songs, but removing the song
-title alone takes it back to 0.843, and the rest of the gain comes from inputs that fail the genre and era controls
-(Table~\ref{tab:all}, Appendix~\ref{app:ablation}). We therefore keep the 20 inputs of the final model.
+title alone takes it back to 0.843, and the rest of the gain comes from FFT, which fails the genre control, and from the market-trend
+features, which carry only the era (Table~\ref{tab:all}, Appendix~\ref{app:ablation}). We therefore keep the 20 inputs of the final model.
 
 
 
@@ -416,13 +534,14 @@ Dashed line: their published accuracy.}
 \label{fig:tilburg}
 \end{figure}
 
-Du~\cite{du2022spotify} trained one Random Forest (450 trees, $m_{\text{try}}=2$, at most
+Du~\cite{du2022spotify} trained one Random Forest (450 trees, $m_{\text{try}}=2$ candidate features per split, at most
 30 leaves) and one logistic regression per decade on the 2000s and 2010s, with a single
 70/30 split. Because the original R random seed cannot be replayed, we repeat the split
-with 50 seeds. Our re-implementation lands on or slightly above the published figures
+with 50 seeds (stratified 70/30 splits with seeds 0 to 49; each seed also seeds the models), on our de-duplicated
+decade files (5{,}855 songs in the 2000s, 6{,}280 in the 2010s). Our re-implementation lands on or slightly above the published figures
 (Table~\ref{tab:tilburg}, Fig.~\ref{fig:tilburg}), which validates the protocol. Adding artist history to
-\emph{their} models, with \emph{their} inputs, improves accuracy by $+2.1$ to $+3.2$\pp{}
-on every split, and the improved models exceed the published accuracy on 100\,\% of the
+\emph{their} models, with \emph{their} inputs, improves mean accuracy by $+2.1$ to $+3.2$\pp{}
+depending on the model and decade, the improvement is positive on every one of the 50 splits, and the improved models exceed the published accuracy on 100\,\% of the
 splits. The decade feature is constant within a per-decade model and is therefore not used
 here.
 
@@ -460,10 +579,11 @@ Year alone & .702 [.697,.707] & -- & .448 [.444,.451] & -- \\
 study), release year alone reaches 70.2\,\%---as much as 592 audio descriptors---because
 hits and non-hits come from different eras. Audio + year, which mirrors the inputs of the
 best model of Zangerle et~al., reaches 73.9\,\%; adding artist history raises it to
-76.3\,\% ($+2.4$\pp, 10/10 folds, $p=7\times10^{-8}$), above the published 75.04\,\%.
+76.3\,\% ($+2.4$\pp{} over audio + year, 10/10 folds, $p=7\times10^{-6}$), above the published 75.04\,\%.
 Protocol B removes the era shortcut by drawing, for every hit, a non-hit from the same
-release year. Year and decade then become useless ($p>0.5$, and year alone falls below
-chance), while artist history still adds $+2.6$\pp{} ($p=3\times10^{-5}$, 10/10 folds).
+release year (in every year we keep as many hits as non-hits, the smaller of the two counts; one draw,
+seed 42). The non-hit pool is large enough in every year, so all 5{,}831 hits are kept (11{,}662 songs). Year and decade then become useless (audio + year 0.681, $p=0.66$; audio + decade 0.681, $p=0.56$; in
+protocol A audio + decade reaches 0.738, $p=1.1\times10^{-4}$, a shortcut listed in Table~\ref{tab:survival}; year alone falls below chance, App.~\ref{app:faq}), while artist history still adds $+2.6$\pp{} ($p=3\times10^{-5}$, 10/10 folds).
 This is the cleanest estimate of the feature's value: the negatives are not selected by
 artist and cannot be separated by date.
 
@@ -478,15 +598,20 @@ artist history and decade raise the ROC-AUC from 0.690 to 0.777 and the share of
 test, so a model could recognise an artist from the audio. With folds grouped by artist, so that no test artist is
 ever seen in training, every gain remains: $+5.0$\pp{} on the Hit Predictor and $+2.9$\pp{} in the year-matched ISMIR
 test ($p=9\times10^{-7}$). \textbf{New artists.} For songs whose artist had no earlier hit, artist history is 0 and
-cannot help ($+0.4$\pp, $p=0.17$); the decade still helps them ($+2.2$\pp, $p=2\times10^{-9}$). On the Hit Predictor
+does not help on the Hit Predictor ($+0.4$\pp, $p=0.17$); the decade still helps them ($+2.2$\pp, $p=2\times10^{-9}$). On the Hit Predictor
 the whole gain of artist history comes from the 18\,\% of songs by established artists, 97\,\% of which are hits,
 which is the dataset effect mentioned above. Table and details: Appendix~\ref{app:robust}.
 
 
 \subsection{Audit: which gains are not real}\label{sec:auditmain}
 Several inputs gave large, significant gains that do not survive a closer look (Table~\ref{tab:survival}). The
-\emph{song title} adds $+6.7$\pp, more than any musical input, because the non-hits come from niche catalogue
-releases whose titles look different: it reveals how the data were collected. A 185-dimensional \emph{librosa}
+\emph{song title} adds $+6.7$\pp, more than any musical input, because the titles of the non-hits are written
+differently: on the genre-matched sample, 13.5\,\% of them carry a suffix such as ``- Remastered 2011'' or ``- Live'', against 0.1\,\% of the hits,
+and genre words (\emph{blues, metal, jazz}) and non-English words mark the niche catalogue. Two controls measure
+this. On the genre-matched sample (songs with both a preview and a Spotify genre, 20{,}610, from which as many hits
+as flops are drawn inside every genre family: 7{,}554 songs; App.~\ref{app:audit}) the title still adds $+2.9$\pp{} to the final model; once suffixes, brackets and
+``feat.'' are stripped, $+1.9$\pp{} ($p=0.002$, not significant after Bonferroni; App.~\ref{app:audit}). The title
+reveals how the data were collected, not what makes a hit. A 185-dimensional \emph{librosa}
 representation added $+3.8$\pp{} on one split ($p=0.002$) but $+0.9$\pp{} (n.s.) under cross-validation.
 \emph{FFT} descriptors of 30-second previews add $+1.4$\pp{} on the whole benchmark ($p=4\times10^{-9}$), but nothing
 ($+0.1$\pp) when hits and non-hits come from the same genres: they recognise the excluded genres. The artist's
@@ -498,13 +623,15 @@ and figure of the audit is in Appendix~\ref{app:audit}.
 
 \subsection{Lyrics on ISMIR 2019}\label{sec:lyrics}
 ISMIR songs have lyrics in the official musiXmatch release (word counts over 5{,}000 words). We add
-two inputs to the final ISMIR model: eight lexical features (length, richness, repetition, share of \emph{I},
-\emph{you}, \emph{love}, English words) and the probability given by a bag-of-words model trained inside each fold.
+two input blocks (9 numbers) to the final ISMIR model: eight lexical features (log number of words, log number of distinct words,
+richness, repetition, and the shares of \emph{I/me/my}, \emph{you/your}, \emph{love} and common English words) and the probability given by a bag-of-words model trained inside each fold.
 Two shortcuts are removed first: only songs \emph{with} lyrics are used on both sides (56\,\% of hits have lyrics,
-36\,\% of non-hits), and the test is repeated on English songs only (97.5\,\% of hits, 80.5\,\% of non-hits). Lyrics add
-$+4.7$\pp{} with random negatives and $+5.1$\pp{} with year-matched negatives, and still $+4.4$\pp{} with year-matched
-negatives, English songs only and no artist shared between training and test ($p=3\times10^{-5}$, 10/10 folds;
-Fig.~\ref{fig:lyrics}a). The words with the largest weights (Fig.~\ref{fig:lyrics}b) are \emph{love}, vocables
+36\,\% of non-hits), and the test is repeated on English songs only (97.5\,\% of hits, 80.5\,\% of non-hits). With
+year-matched negatives (protocol B, the one on which ISMIR inputs are judged, Sec.~\ref{sec:selection}) lyrics add
+$+5.1$\pp{} ($p=2\times10^{-5}$), and still $+4.4$\pp{} with English songs only and no artist shared between
+training and test ($p=3\times10^{-5}$, 10/10 folds; Fig.~\ref{fig:lyrics}a). With random negatives (protocol A) the
+gains are $+4.7$\pp{} ($p=3\times10^{-4}$) and $+2.7$ to $+3.0$\pp{} in the English and unseen-artist variants
+($p=6\times10^{-4}$): consistent, but only indicative under Bonferroni. The words with the largest weights (Fig.~\ref{fig:lyrics}b) are \emph{love}, vocables
 (\emph{la, oh, yeah}) and direct address on the hit side, and darker words (\emph{kill, hate, crime}) on the other:
 lyrics partly identify mainstream themes and genres. Details: Appendix~\ref{app:lyrics}.
 
@@ -515,7 +642,8 @@ lyrics partly identify mainstream themes and genres. Details: Appendix~\ref{app:
 \caption{Lyrics on ISMIR 2019. (a) Cross-validated accuracy of the final model without (gray) and with (blue)
 the lyrics inputs, from the plain protocol to the strictest control (year-matched, English only, no artist in
 both training and test folds). (b) Largest weights of the bag-of-words model fitted on the year-matched
-English sample (stemmed words used in at least 30 songs; ``caus'' = cause, ``futur'' = future).}
+English sample (for display only, stemmed words used in at least 30 songs; the model itself uses all 5{,}000;
+``caus'' = cause, ``futur'' = future).}
 \label{fig:lyrics}
 \end{figure*}
 
@@ -524,8 +652,10 @@ English sample (stemmed words used in at least 30 songs; ``caus'' = cause, ``fut
 
 Treating the chart as a time series answers two questions. \emph{Before release}, we built
 market-trend features (how close a song's audio is to the previous decade's hits and to the direction in which
-hits are moving): they add nothing to the final model ($+0.07$\pp, $p=0.66$) because they only encode the era.
-The chart itself (weekly debuts, seasonal songs) is mostly trend; its decomposition, periodogram and ARIMA forecasts
+hits are moving): they add nothing significant to the final model ($+0.07$\pp, $p=0.66$; the 13 per-descriptor deviations
+$+0.46$\pp, $p=0.006$, indicative) because they mostly encode the era.
+The chart itself is a time series too: the number of weekly debuts is mostly trend, the number of holiday songs
+almost purely seasonal; their decomposition, periodogram and ARIMA forecasts
 are in Appendix~\ref{app:tsdetails}. \emph{After release}, the question changes.
 
 
@@ -540,11 +670,11 @@ and 12 (so for $k=3$ the input is $(39, 28, 12)$) and later peaked at number~1. 
 positions we also compute the best rank so far, the average climb per week (slope), the change
 of the weekly move (acceleration) and the number of weeks on the chart, and we add as context the
 year, month, and the artist's earlier songs and earlier top-10 hits reached before the debut
-(Random Forest, 200 trees, $5{\times}3$ CV). Table~\ref{tab:traj} shows that the trajectory dominates: three weeks give
-an AUC of 0.892 against 0.593 for the context alone, and context adds $+0.03$ to $+0.05$ on
+(Random Forest, 200 trees, $5{\times}3$ CV). Table~\ref{tab:traj} shows that the trajectory dominates: three weeks plus
+context give an AUC of 0.892 (the three weeks alone 0.845) against 0.593 for the context alone, and context adds $+0.03$ to $+0.05$ on
 top (15/15 folds, $p<10^{-6}$ for every $k$). The prediction is not limited to songs already
 at the top: among the songs not yet in the top~10 after three weeks, the AUC is 0.870, and a
-model trained on songs before 2000 reaches 0.852 on songs from 2000 onwards. As for online
+model trained on songs that debuted before 2000 reaches 0.852 on songs from 2000 onwards ($k=3$, with context, the same 200-tree forest fitted once). As for online
 content~\cite{szabo2010predicting}, early popularity predicts later popularity. This task
 differs from that of Sec.~\ref{sec:main}: every song has already charted, so it separates
 big hits from small ones and cannot be used before release. A second target, at least
@@ -587,18 +717,22 @@ $h(s)$. It reaches 0.832 accuracy and 0.918 ROC-AUC on the Hit Predictor
 (Table~\ref{tab:main}). On the external datasets the same recipe is used with each dataset's
 own audio descriptors, the release year or decade and artist history, with a 200-tree Random
 Forest (0.763 on ISMIR protocol~A, 0.708 on protocol~B, ROC-AUC 0.777 on SpotGenTrack).
-XGBoost is 1.3 points more accurate under cross-validation but ties with the Random Forest on
+XGBoost is 1.3 points more accurate under cross-validation (0.845 vs 0.832, untested) but ties with the Random Forest on
 the canonical split ($p=0.87$), so we keep the configuration that matches prior work. Every
 other candidate is left out for a stated reason (Table~\ref{tab:final}). A separate model
 answers a different question, for songs already on the chart: the same kind of Random Forest
 on the first weeks of the chart trajectory (Sec.~\ref{sec:timeseries}). Where lyrics are available
-(ISMIR, songs with musiXmatch lyrics), adding them gives the best model we found on that dataset (0.775 in
-protocol~A, 0.727 in protocol~B; Table~\ref{tab:lyrics}).
+(ISMIR, songs with musiXmatch lyrics), adding them gives the best model we found on those songs (0.775 in
+protocol~A, 0.727 in protocol~B, against 0.728 and 0.676 for the final model on the same songs;
+Table~\ref{tab:lyrics}).
 
 \begin{table}[t]
 \centering
-\caption{Inputs of the final model. Gains in accuracy points over the 13 Spotify
-descriptors on the Hit Predictor ($5{\times}5$ CV) unless stated.}
+\caption{Inputs of the final model, and the candidates left out. Gains in accuracy points ($5{\times}5$ CV on the
+Hit Predictor; rows marked ISMIR: $5{\times}2$ CV on ISMIR). Baselines: kept inputs, over the 13 descriptors (40{,}560 songs); title, title length and
+\texttt{chorus\_hit}, over the 13 descriptors (the title's ``after controls'' value: over the final model on the
+genre-matched sample, titles cleaned); rich librosa, over the 13 descriptors on the 3{,}562-song audio
+subset; FFT, genre and market trend, over the final model (on the songs with a preview, resp.\ a genre).}
 \label{tab:final}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -608,9 +742,9 @@ Input & Evidence & Decision \\
 \midrule
 13 Spotify descriptors & 0.782 & kept (baseline) \\
 Decade (6 indicators) & $+2.0$ & kept; helps new artists \\
-Artist history $h(s)$ & $+2.9$; ISMIR~B $+2.6$ & kept; survives every control \\
+Artist history $h(s)$ & $+2.9$; ISMIR~B $+2.6$ & kept; survives every control run on it (each separately) \\
 \midrule
-Song title (TF-IDF) & $+6.7$ & out: construction artefact \\
+Song title (TF-IDF) & $+6.7$; $+1.9$ after controls ($p=0.002$, not Bonferroni-significant) & out: construction artefact \\
 Title length & $+0.2$, n.s. & out: no signal \\
 chorus\_hit, sections & $0.0$, n.s. & out: no signal \\
 Rich librosa (PCA 40) & $+0.9$, n.s. & out: single-split luck \\
@@ -632,104 +766,127 @@ protocol, whose negatives are chosen neither by artist nor by date, gives a more
 conservative $+2.6$\pp; this is the number we consider transferable.
 
 \textbf{Era as a shortcut.} On ISMIR, release year looks like a strong predictor (70.2\,\%
-alone, and $+12$--$13$\,\% in the original study) because hits are older than the
+alone, and $+12$ to $+13$ points in the original study) because hits are older than the
 non-hit pool. Once years are matched, it carries no information. On the Hit Predictor, the
 decade is uninformative alone and helps only through interactions, which is consistent
-with era-specific tastes but may also reflect decade-dependent genre rules of the negative
-class. Reported gains from date features should be accompanied by a year-matched control.
+with era-specific tastes. It could also reflect decade-dependent genre rules of the negative class, but on the
+genre-matched sample the decade still adds $+2.5$\pp{} to the 13 descriptors (25/25, $p=8\times10^{-7}$;
+Table~\ref{tab:genre}), so genre is not the whole story. Reported gains from date features should be accompanied by a year-matched control.
 
-\textbf{Genre as a shortcut.} On the Hit Predictor, the artist's genre alone takes the
+\textbf{Genre as a shortcut.} On the Hit Predictor, adding the artist's genre takes the
 main model to $0.928$, and the apparent FFT gain disappears once genre is controlled
 (Sec.~\ref{sec:further}). Any audio representation evaluated on this benchmark can score
 by recognising the excluded genres rather than by modelling what makes a song a hit, so
 audio gains on it should be reported together with a genre-matched control. Artist history
-passes that control; FFT does not. Within the audio content itself, therefore, no
+passes that control: on the genre-matched sample, decade and artist history still add $+6.7$\pp{} to the 13
+descriptors (25/25, $p=9\times10^{-13}$; Table~\ref{tab:genre}). FFT does not. Within the audio content itself, therefore, no
 representation we tested adds to artist history and era once the construction shortcuts
 are controlled. The one content input that does is the lyrics (Sec.~\ref{sec:lyrics}), whose
 gain survives year matching, an English-only control and unseen artists; their strongest words,
-however, suggest that they too partly identify mainstream genres and themes. On these data, what
-predicts a hit is mostly who sings it, when, and what the song is about---not how it sounds.
+however, suggest that they too partly identify mainstream genres and themes, and a genre-matched control
+for lyrics remains to be done. On these data, the 13 audio descriptors carry most of the accuracy, but what
+adds to them and survives the controls is who sings the song, when, and what it is about---not a richer
+description of how it sounds.
 
 \textbf{Single splits and multiple comparisons.} Several of our own earlier single-split conclusions
-did not survive cross-validation, and with about 60 tests a few small $p$-values are expected by chance; this is why
+did not survive cross-validation, and with a few hundred $p$-values some small ones are expected by chance; this is why
 the survival ranking requires the Bonferroni threshold. Details: Appendix~\ref{app:stats}.
 
 
 
 \begin{table*}[t]
 \centering
-\caption{Survival ranking: every tested gain, ranked by how far it survives. A gain \emph{survives} if it is
-significant under cross-validation, remains significant after the Bonferroni correction over the $\approx$\,60
-tests of the paper ($p<8\times10^{-4}$), and passes the control that removes the known shortcut of its dataset.
-$\Delta$: accuracy points unless stated; $p$: corrected $t$-test (McNemar for single splits).}
+\caption{Survival ranking: every tested gain, ranked by how far it survives. \emph{Bonf.}: significant after
+the Bonferroni correction over at most 400 tests ($p<0.05/400=1.25\times10^{-4}$, Sec.~\ref{sec:stats}).
+\emph{Control}: \checkmark{} passed the control that removes the known shortcut of its dataset (year-matched or
+genre-matched negatives, unseen artists); $\times$ failed it, or the input is not known on release day; -- no such
+control applies or none was run (the early-trajectory row answers a separate, after-release question and is
+exempt from the release-day rule). $\Delta$: accuracy points unless stated; $p$: corrected $t$-test (McNemar for single
+splits). Not ranked: the future-decades check of artist history (single split per decade, McNemar, $+1.9$ to
+$+3.4$\pp, $p\leq10^{-7}$), a robustness check of the first row.}
 \label{tab:survival}
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{5.1cm}rrcc>{\raggedright\arraybackslash}p{4.3cm}@{}}
+\fontsize{6.6}{7.6}\selectfont
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{0.95}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{5.6cm}rrcc>{\raggedright\arraybackslash}p{6.2cm}@{}}
 \toprule
 & Gain tested & $\Delta$ & $p$ & Bonf. & Control & Verdict \\
 \midrule
-\multirow{12}{*}{\rotatebox{90}{\textbf{survived (low $p$)}}}
-& Decade + artist history, Hit Predictor & +5.0 & $7{\cdot}10^{-17}$ & \checkmark & \checkmark & real; benchmark-inflated (unseen artists: +5.0, $10^{-13}$) \\
-& Every classifier, decade + artist (5 models) & +4.6 to +5.7 & $\leq 4{\cdot}10^{-5}$ & \checkmark & \checkmark & gain comes from the inputs, not the model \\
-& Head-to-head, Du's models + artist (6 settings) & +2.1 to +3.2 & $\leq 6{\cdot}10^{-6}$ & \checkmark & \checkmark & better on 50/50 splits \\
-& Future decades, artist history (3 decades) & +1.9 to +3.4 & $\leq 10^{-7}$ & \checkmark & \checkmark & survives a temporal shift \\
-& Decade, Hit Predictor & +2.0 & $10^{-10}$ & \checkmark & \checkmark & helps new artists (+2.2, $2{\cdot}10^{-9}$) \\
-& Artist history, ISMIR A (vs audio) & +2.5 & $2{\cdot}10^{-5}$ & \checkmark & \checkmark & real \\
+\multirow{9}{*}{\rotatebox{90}{\textbf{survived}}}
+& Decade + artist history, Hit Predictor & +5.0 & $7{\cdot}10^{-17}$ & \checkmark & \checkmark & real; benchmark-inflated, since these controls leave the artist rule of the negatives in place (ISMIR B is the control for it); unseen artists +5.0 ($10^{-13}$), genre-matched +6.7 ($9{\cdot}10^{-13}$) \\
+& Every classifier, decade + artist (5 models) & +4.6 to +5.7 & $\leq 4{\cdot}10^{-5}$ & \checkmark & -- & gain comes from the inputs, not the model \\
+& Head-to-head, Du's protocol + artist (his RF and LR, our frozen RF; 2 decades) & +2.1 to +3.2 & $\leq 6{\cdot}10^{-6}$ & \checkmark & -- & better on 50/50 splits; benchmark-specific \\
+& Decade, Hit Predictor & +2.0 & $10^{-10}$ & \checkmark & \checkmark & genre-matched +2.5 ($8{\cdot}10^{-7}$); unseen artists +2.0 ($10^{-8}$); helps new artists (+2.2) \\
+& Artist history, Hit Predictor & +2.9 & $10^{-11}$ & \checkmark & \checkmark & unseen artists +3.0 ($2{\cdot}10^{-9}$); genre-matched +4.2 ($2{\cdot}10^{-8}$) \\
+& Artist history, ISMIR A (vs audio) & +2.5 & $2{\cdot}10^{-5}$ & \checkmark & \checkmark & real (year-matched: next row) \\
 & Artist history, ISMIR B year-matched & +2.6 & $3{\cdot}10^{-5}$ & \checkmark & \checkmark & \textbf{transferable estimate}; unseen artists +2.9 ($9{\cdot}10^{-7}$) \\
-& Decade + artist, SpotGenTrack (AUC .690$\to$.777) & +1.3 & $3{\cdot}10^{-4}$ & \checkmark & \checkmark & F1 .147$\to$.358 ($7{\cdot}10^{-7}$) \\
 & Lyrics, ISMIR B, English, unseen artists & +4.4 & $3{\cdot}10^{-5}$ & \checkmark & \checkmark & only content input that survives \\
-& Lyrics, ISMIR A, English, unseen artists & +3.0 & $6{\cdot}10^{-4}$ & \checkmark & \checkmark & same, weaker \\
-& Early trajectory, 3 weeks + context vs weeks (AUC) & +.047 & $<10^{-6}$ & \checkmark & \checkmark & after release only; AUC 0.892 \\
-& Genre-control results (FFT given genre) & $-1.1$ & $5{\cdot}10^{-7}$ & \checkmark & -- & shows that FFT encodes genre \\
+& Early trajectory, 3 weeks + context vs weeks (AUC) & +.047 & $<10^{-6}$ & \checkmark & -- & after release only; AUC 0.892 \\
 \midrule
 \multirow{4}{*}{\rotatebox{90}{\textbf{shortcut}}}
-& Song title (TF-IDF), Hit Predictor & +6.7 & $4{\cdot}10^{-20}$ & \checkmark & $\times$ & artefact of how non-hits were collected \\
+& Song title (TF-IDF), Hit Predictor & +6.7 & $4{\cdot}10^{-20}$ & \checkmark & $\times$ & formatting + genre words; genre-matched and cleaned: +1.9 ($p=.002$) \\
 & Spotify artist genre, Hit Predictor & +10.1 & $8{\cdot}10^{-23}$ & \checkmark & $\times$ & not known on release day; control only \\
-& FFT, whole Hit Predictor & +1.4 & $4{\cdot}10^{-9}$ & \checkmark & $\times$ & genre-matched: +0.1 ($p=0.84$) \\
-& Release year, ISMIR A & +3.1 & $2{\cdot}10^{-4}$ & \checkmark & $\times$ & year-matched: $-0.1$ ($p=0.66$) \\
+& FFT, whole Hit Predictor & +1.4 & $4{\cdot}10^{-9}$ & \checkmark & $\times$ & genre-matched +0.1 ($p=0.84$); given genre $-1.1$ ($5{\cdot}10^{-7}$) \\
+& Decade, ISMIR A & +2.9 & $1.1{\cdot}10^{-4}$ & \checkmark & $\times$ & year-matched: $-0.2$ ($p=0.56$) \\
 \midrule
-\multirow{11}{*}{\rotatebox{90}{\textbf{did not survive (high $p$)}}}
+\multirow{14}{*}{\rotatebox{90}{\textbf{did not survive}}}
+& Release year, ISMIR A & +3.1 & $2{\cdot}10^{-4}$ & $\times$ & $\times$ & also a shortcut: year-matched $-0.1$ ($p=0.66$) \\
+& Decade + artist, SpotGenTrack (AUC .690$\to$.777) & +1.3 & $3{\cdot}10^{-4}$ & $\times$ & $\times$ & also a leak: popularity measured today; upper bound \\
+& Lyrics, ISMIR A, English, unseen artists & +3.0 & $6{\cdot}10^{-4}$ & $\times$ & -- & indicative; the year-matched test (B) is stronger \\
 & Lyrics lexical, SpotGenTrack ($5{\times}1$) & +0.6 & .002 & $\times$ & -- & indicative; confirmed on ISMIR \\
 & Market trend, 13 per-feature deviations & +0.46 & .006 & $\times$ & -- & indicative only \\
-& ARIMA vs seasonal naive (11 origins) & MASE $-0.5$ & .006 & $\times$ & -- & indicative only \\
-& FFT on top of artist, audio subset & +2.0 & .008 & $\times$ & $\times$ & genre shortcut (see above) \\
+& ARIMA vs seasonal naive (11 origins; MASE = mean absolute error divided by that of the seasonal naive forecast on the training months,
+App.~\ref{app:ts}) & MASE $-0.5$ & .006 & $\times$ & -- & indicative only \\
+& FFT on top of artist, audio subset & +2.0 & .008 & $\times$ & -- & genre shortcut (FFT row above) \\
 & Decade, audio subset & +1.0 & .03 & $\times$ & -- & small sample \\
 & Audio + artist + FFT vs final, whole benchmark & +0.4 & .04 & $\times$ & $\times$ & no \\
 & Rich librosa (PCA 40), audio subset & +0.9 & .15 & $\times$ & -- & single split said +3.8 ($p=.002$) \\
-& Artist history for new artists, Hit Predictor & +0.4 & .17 & $\times$ & -- & cannot help: $h(s)=0$ \\
+& Artist history for new artists, Hit Predictor & +0.4 & .17 & $\times$ & -- & does not help: $h(s)=0$ for all of them \\
 & Title length & +0.2 & .28 & $\times$ & -- & no signal \\
 & Market trend, distance + direction & +0.07 & .66 & $\times$ & -- & carries only the era \\
 & \texttt{chorus\_hit} + \texttt{sections} & 0.0 & .82 & $\times$ & -- & no signal \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \end{table*}
 
 \textbf{Survival ranking.} Table~\ref{tab:survival} lists every gain we tested, split into three groups.
-\emph{Survived}: low $p$ after Bonferroni and passing the control of its dataset. \emph{Shortcut}: low $p$
-but failing the control, so the gain is real on that dataset but would not transfer. \emph{Did not survive}:
-high $p$ (above the Bonferroni threshold). Only artist history, era, the lyrics and, after release, the early
-trajectory are in the first group.
+The groups are assigned in this order. \emph{Did not survive}: $p$ above the Bonferroni threshold, whatever the
+control (a failed control is then noted in the verdict). \emph{Shortcut} (leaks included): significant after Bonferroni, but
+failing a control (under at least one control its gain is no longer Bonferroni-significant) or not known on
+release day, so the gain is real on that dataset but would not transfer. \emph{Survived}: significant after
+Bonferroni and failing none of the controls run on it (a \checkmark{} where a control was run). Only artist history, era, the lyrics and, after release, the early
+trajectory are in the survived group. The table groups by outcome; Fig.~\ref{fig:selection} instead lists each
+rejected input at the first question it fails, so an input that fails both a control and Bonferroni (release year
+on ISMIR, the SpotGenTrack leak) appears in the figure under ``shortcut'' or ``leak'' and in the table under ``did
+not survive'' with the failed control noted.
 
 
 \textbf{Limitations.} Artist history is matched by normalised name, not by a canonical
-identifier, so homonymous artists can be merged. Artist history does not help new artists on
-the Hit Predictor and helps them only modestly on ISMIR ($+1.4$\pp), and it partly measures
+identifier, so homonymous artists can be merged. On SpotGenTrack the ``hits'' are songs with Spotify popularity
+$\geq55$, a score measured when the dataset was collected, not at release; artist history there counts
+the artist's earlier songs that are popular \emph{today}, so it is not strictly known on release day, and the
+SpotGenTrack gain should be read as an upper bound. The Hit Predictor and ISMIR results do not have this problem. Artist history does not help new artists on
+the Hit Predictor and at most modestly on ISMIR ($+1.4$\pp, indicative), and it partly measures
 cumulative advantage~\cite{salganik2006experimental} rather than the intrinsic appeal
 of a song. We use classical classifiers on fixed descriptors rather than deep networks on
 raw audio~\cite{yang2017revisiting,nofer2026deephits}: our question is which inputs carry
 signal under a controlled protocol, and the comparison with prior work is made at equal
 model; a learned representation could still capture what the descriptors miss. The
-comparison with Zangerle et~al.\ uses a classifier rather than their regression on chart
-position and a different random draw of negatives; the comparison with Du uses re-drawn
-splits. Our audio previews are 30-second clips from a different service than the one that
+comparison with Zangerle et~al.\ uses a classifier, whereas they trained a regression on peak chart position
+(non-hits set to 150) and report as accuracy the share of songs placed on the right side of position 100; we
+also use a different random draw of negatives; the comparison with Du uses re-drawn
+splits. On ISMIR the period of a song is its release year in the Million Song Dataset, which for a reissue or a
+compilation can be later than its chart run, so ``earlier'' hits there are only as reliable as that year. Our audio
+previews are 30-second clips from a different service than the one that
 computed the Spotify descriptors.
 
 % =====================================================================
 \section{Future Work}
 
 Sec.~\ref{sec:further} already runs the cheap versions of several follow-ups: artist
-matching (no gain available), a genre control for audio features, rolling-origin decay and
+matching (no gain available), a genre control for audio features, model ageing across decades and
 lexical lyrics descriptors. What remains needs new data.
 (i) \emph{Cold start}: artist history barely helps first-time artists on the benchmark, and
 the FFT gain for them was a genre shortcut; features such as label, collaborators, prior
@@ -748,15 +905,17 @@ daily streams and radio plays would allow the same prediction days after release
 A song's artist history is a simple, leakage-free signal that improves hit prediction
 across classifiers, beats the only prior model on the Spotify Hit Predictor benchmark in a
 head-to-head comparison, and transfers to an independent peer-reviewed dataset where it
-exceeds the best published accuracy and survives a year-matched control. These gains hold
+exceeds the best published accuracy on the original protocol and survives a year-matched control. These gains hold
 for artists the model never saw in training, which rules out artist recognition; but artist
-history cannot help an artist with no earlier hit, and for those newcomers only era context helps; spectral descriptors of a 30-second
+history does not help an artist with no earlier hit on the benchmark, where for those newcomers only era context
+helps (on ISMIR there is an indicative hint, $p=0.002$, that an empty history is informative); spectral descriptors of a 30-second
 preview appear to help them too, but that gain disappears under a genre control. The same audit
 shows that larger gains---song titles, release dates, genre-driven audio features, rich
 audio on a single split---can
 come from how the data were built or from chance. Chart time series add nothing before
 release, but after release a song's first weeks are the strongest predictor we found. The lyrics are
-the only content input whose gain survives every control. Knowing which gains are real matters more
+the only content input whose gain survives every control we could run on them (year matching, English only,
+unseen artists). Knowing which gains are real matters more
 than the headline number.
 
 \section*{Code and data availability}
@@ -768,15 +927,20 @@ stated). \texttt{docs/DATA.md} explains where each dataset goes.
 \textbf{Data.} All datasets are public:
 Spotify Hit Predictor~\cite{ansari2020dataset}, \url{https://github.com/fortyTwo102/The-Spotify-Hit-Predictor-Dataset}
 (also Kaggle: \url{https://www.kaggle.com/datasets/theoverman/the-spotify-hit-predictor-dataset});
-Billboard Hot~100 weekly charts, \url{https://github.com/utdata/rwd-billboard-data};
+Billboard Hot~100 weekly charts, \url{https://github.com/utdata/rwd-billboard-data} (file \texttt{hot-100-current.csv},
+downloaded in July 2026; charts of 4 August 1958 to 11 July 2026);
 ISMIR~2019 hit-song data~\cite{zangerle2019hit}, \url{https://zenodo.org/records/3258042};
 SpotGenTrack~\cite{martingutierrez2020multimodal}, \url{https://data.mendeley.com/datasets/4m2x4zngny};
 musiXmatch lyrics for the Million Song Dataset, \url{http://millionsongdataset.com/musixmatch/}.
-Audio previews were retrieved from the public Deezer API (\url{https://developers.deezer.com/api}).
+Audio previews were retrieved from the public Deezer API (\url{https://developers.deezer.com/api}). The
+previews and the features extracted from them are not in the repository (the audio is copyrighted);
+\texttt{repro/fetch\_audio\_full.py} downloads and processes them again, but Deezer's search results can change
+over time, so a re-run may find a slightly different set of songs.
 
+\FloatBarrier
 \input{appendix}
 
-
+\FloatBarrier
 \bibliographystyle{IEEEtran}
 \bibliography{refs}
 

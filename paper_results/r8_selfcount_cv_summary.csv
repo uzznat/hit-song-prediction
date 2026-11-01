@@ -1,0 +1,4 @@
+config,acc_mean,acc_std,acc_ci95_low,acc_ci95_high,auc_mean,n_folds,delta_vs_ref,corrected_t,corrected_p,wins,losses
+audio,0.7817,0.005,0.7796,0.7838,0.8592,25,,,,,
+main,0.8321,0.0043,0.8303,0.8339,0.9177,25,0.0504,20.805,7.29876714755627e-17,25.0,0.0
+"main, own title excluded",0.8314,0.0049,0.8294,0.8334,0.9171,25,0.0497,23.521,4.385160442141152e-18,25.0,0.0

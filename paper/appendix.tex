@@ -1,12 +1,14 @@
 % =====================================================================
 \appendices
 
+\FloatBarrier
 \section{Inputs in detail}\label{app:inputs}
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \caption{The 13 Spotify audio descriptors (Spotify Web API definitions) and how well each one alone
-separates hits on the Hit Predictor (ROC-AUC; Sec.~\ref{sec:ablation}).}
+separates hits on the Hit Predictor (ROC-AUC of the raw value, reported as $\max(\mathrm{AUC},1-\mathrm{AUC})$ so that a
+descriptor lower in hits also scores above 0.5; Sec.~\ref{sec:ablation}).}
 \label{tab:descriptors}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -22,53 +24,109 @@ acousticness & confidence that the track is acoustic (0--1); lower in hits & .60
 energy & perceived intensity and activity (0--1) & .59 \\
 speechiness & presence of spoken words (0--1) & .58 \\
 mode & major (1) or minor (0) & .54 \\
-time signature & estimated beats per bar & .53 \\
-liveness & probability that the track was recorded live & .53 \\
-tempo & estimated beats per minute & .52 \\
+time signature & estimated beats per bar (integer, 0--5 in these data) & .53 \\
+liveness & probability that the track was recorded live (0--1) & .53 \\
+tempo & estimated beats per minute (about 0--240) & .52 \\
 duration & length in milliseconds & .51 \\
 key & pitch class of the track (0 = C, \dots, 11 = B) & .51 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Decade.} Six indicators (1960s \dots\ 2010s), exactly one equal to 1. On ISMIR and SpotGenTrack,
-the release year (or decade) as a number.
+\textbf{Decade.} Six indicators (1960s \dots\ 2010s), exactly one equal to 1. On ISMIR, the release year as
+a number; on SpotGenTrack, the release decade as a number (1990 for 1990--1999).
 
-\textbf{Artist history.} Defined in Sec.~\ref{sec:features} and Fig.~\ref{fig:history}. Artist names are
-lower-cased, accents and punctuation are removed, and only the first credited artist is kept
-(the name is cut at ``featuring'', ``feat.'', ``ft.'', ``with'', ``\&'', ``x'', ``+'', ``/'', ``vs.'',
-``and'' or a comma), so that ``Madonna feat.\ Justin Timberlake'' counts for Madonna.
-On the Hit Predictor the reference set is the weekly Hot~100 since August 1958, counted in distinct
-titles per artist and decade; on ISMIR and SpotGenTrack it is the set of positive songs of the dataset,
-counted by release year.
+\textbf{Artist history.} Defined in Sec.~\ref{sec:features} and Fig.~\ref{fig:history}. On the Hit Predictor
+and the chart, artist names are processed in this order: accents removed (Unicode NFKD decomposition, then
+non-ASCII characters dropped) and lower-cased; cut at the first
+separator, which must be written with a space on each side, i.e.\ a whole word (so even the comma counts only
+as `` , ''; ``Earth, Wind \& Fire'' is cut at `` \& '' into ``earth wind''), among (``featuring'', ``feat.'', ``ft.'', ``with'', ``\&'',
+``x'', ``+'', ``/'', ``vs.'', ``and'' or a comma; so ``Brandy'' is not cut); every character other than a--z, 0--9
+and space removed, and spaces collapsed. So ``Madonna feat.\ Justin Timberlake'' counts for Madonna.
+On the Hit Predictor the reference set is the weekly Hot~100 since August 1958 (so the 1958--59 charts form a
+``1950s'' decade that counts as earlier for 1960s songs): for every artist and every
+decade (the decade of the chart week), we collect the set of distinct lower-cased titles, and $h(s)$ sums the
+sizes of these sets over the decades strictly before the song's decade. On ISMIR and SpotGenTrack it is the set
+of positive songs of the dataset, counted over strictly earlier release years. $\ln$ is the natural logarithm.
 
 \textbf{Rejected candidates.} \emph{Song title}: TF-IDF of word uni- and bigrams, logistic regression,
 out-of-fold probability as one feature. \emph{Title length}: number of words. \emph{chorus\_hit,
-sections}: the two Echo Nest analysis fields of the Hit Predictor. \emph{Rich librosa} (185): 20 MFCCs
-with first and second derivatives, chroma, tonnetz, spectral contrast, centroid, bandwidth, roll-off,
-flatness, zero-crossing rate, RMS and onset/tempogram statistics, each by mean and standard deviation,
-reduced to 40 principal components inside each fold. \emph{FFT} (31): from the short-time Fourier transform of the 30-second clip, the mean and standard
-deviation of the spectral centroid, bandwidth, roll-off, flatness and contrast, 13 mean MFCCs, the chroma mean
-and standard deviation, and six rhythm descriptors (estimated tempo, onset-envelope mean and standard
-deviation, pulse clarity, mean and variation of inter-onset intervals).
-\emph{Genre} (16 families, control only): Spotify artist tags mapped by keyword to hip-hop, R\&B/soul,
-country, rock, metal, electronic, pop, jazz, classical, folk, blues, Latin, reggae, gospel, world, other.
-\emph{Market trend}: distance of the standardised descriptors to the previous decade's hit centroid,
-projection on the direction in which that centroid moved, and the 13 per-descriptor deviations.
+sections}: two fields of the Hit Predictor computed from Spotify's audio-analysis endpoint (inherited from the
+Echo Nest, the music-analysis company Spotify bought), the estimated
+start time of the chorus (the author's estimate: the start of the third section) and the number of sections (verse, chorus, \dots) of the track.
 
-\textbf{Lyrics} (ISMIR). From musiXmatch word counts: log number of words, log number of distinct words,
+\emph{Audio from the 30-second previews.} Every preview is decoded to mono at 22{,}050\,Hz (first 30\,s). All
+frame-based descriptors are computed with librosa~0.11~\cite{mcfee2015librosa}, an open-source Python library for
+audio analysis, with its defaults: a short-time Fourier transform with a 2{,}048-sample window
+(93\,ms) and a hop of 512 samples (23\,ms). \emph{FFT} (31; the name only says that every descriptor is derived from
+the fast Fourier transform of the clip, i.e.\ its spectrogram): mean and standard deviation over frames of the
+spectral centroid, bandwidth, roll-off (85\,\%), flatness and contrast (contrast averaged over its 7 frequency
+bands, so one value per frame); the mean of each of 13 MFCCs; the mean and standard deviation of the 12-bin
+STFT chroma, taken over all bins and frames together (two numbers); and six rhythm descriptors: tempo estimated from the onset envelope, mean and
+standard deviation of the onset envelope, \emph{pulse clarity} (the maximum divided by the mean of the
+time-averaged tempogram, i.e.\ how strongly one periodicity dominates), and the mean and coefficient of variation
+(s.d./mean) of inter-onset intervals. \emph{Rich librosa} (185): the mean and standard deviation over frames
+of each row of 20 MFCCs and of their first and second derivatives (120), 12 constant-Q chroma bins (24), 6 tonnetz
+dimensions of the harmonic part (12), 7 spectral-contrast bands (14), spectral centroid, bandwidth and roll-off
+(6), flatness (2), zero-crossing rate (2) and RMS energy (2), plus the onset-envelope mean and standard deviation
+and the pulse clarity (3); reduced to 40 principal components inside each training fold.
+
+\emph{Genre} (16 families, control only). Spotify artist tags (from the SpotGenTrack artist file, matched by
+normalised artist name; when a name occurs twice, the artist with more followers is kept) are mapped by
+substring to families: hip-hop (hip hop, rap, trap, drill, grime, crunk, bounce), R\&B/soul (r\&b, soul, funk,
+motown, disco, new jack, quiet storm, doo-wop), country (country, bluegrass, americana, honky, western swing), rock
+(rock, punk, grunge, emo, britpop, new wave, shoegaze, post-), metal (metal, hardcore, deathcore, grindcore, thrash,
+doom), electronic (edm, house, techno, trance, electro, dubstep, drum and bass, dance, idm, ambient, downtempo,
+breakbeat, glitch, synth), pop (pop, boy band, girl group, teen, adult standards, easy listening), jazz (jazz,
+bebop, swing, big band, bop, exotica, lounge), classical (classical, orchestra, baroque, opera, romantic era, early
+music, choral, compositional, minimalism, soundtrack, score), folk (folk, singer-songwriter, acoustic, cantautor),
+blues, Latin (latin, reggaeton, salsa, bachata, cumbia, mexican, tango, bossa, samba, mpb, sertanejo, flamenco,
+ranchera, banda, tropical), reggae (reggae, dancehall, ska, dub, rocksteady), gospel (gospel, christian, worship,
+ccm, spiritual), world (afro, k-pop, j-pop, indian, bollywood, arab, turkish, greek, celtic, world, chanson,
+schlager, french, german, italian, brazil, polka, nordic, russian, african, hawaiian), and other (no match). A tag is assigned to every family one of whose keywords it contains (so ``rocksteady'' counts for rock and
+reggae, ``k-pop'' for pop and world). An artist gets one yes/no input per family; the \emph{dominant} family is the
+one matched by the most tags (ties go to the family listed first above), and it is used for the
+genre-matched sample, in which, for every dominant family (``other'' included), we draw at random (seed 42) as
+many hits as flops (the smaller of the two counts).
+
+\emph{Market trend.} Descriptors are standardised over the whole dataset. For each decade we compute the
+centroid (mean vector) of its hits. A song's \emph{distance} is the Euclidean distance between its descriptors and
+the centroid of the previous decade's hits; its \emph{direction} is the projection of that difference on the
+unit vector pointing from the centroid two decades back to the one of the previous decade (dot product divided by
+the vector's length); the 13 \emph{deviations} are the
+coordinates of the difference. The 1960s have no previous decade (distance and deviations set to the median and
+to 0), and the direction exists from the 1980s on (median before). These features are computed once on the whole
+dataset, from earlier decades' hits only, not inside the folds; since they add nothing, this does not affect any
+conclusion.
+
+\textbf{Lyrics} (ISMIR). From musiXmatch word counts, which cover only the 5{,}000 most frequent stemmed words
+(so all counts below are over that vocabulary, not the full text): $\ln(1+{}$number of words$)$, $\ln(1+{}$number of
+distinct words$)$,
 richness (distinct/total), repetition (count of the most frequent word/total), shares of \emph{I, me,
-my}, of \emph{you, your}, of \emph{love}, and of the 29 most common English words; plus the out-of-fold
-TF-IDF logistic-regression probability.
+my}, of \emph{you, your}, of \emph{love}, and of 29 common English words, matched as written against the stemmed vocabulary (28 of them occur in it;
+\emph{don't} does not and is ignored) (\emph{the, i, you, and, to, a, me,
+my, it, in, of, is, that, your, on, be, we, all, love, do, so, no, for, what, with, can, this, but, don't}); plus
+the out-of-fold TF-IDF logistic-regression probability. A song counts as English if at least 25\,\% of its words
+are in that list.
 
-\textbf{Early trajectory.} For $k$ weeks: the $k$ positions (101 = off the chart), the best position, the
-number of weeks on the chart, the slope $(p_k-p_1)/(k-1)$ (negative = climbing), the acceleration
-$(p_k-p_{k-1})-(p_{k-1}-p_{k-2})$; context: debut year and month, $\log(1+{}$earlier songs of the
-artist$)$ and $\log(1+{}$earlier top-10 hits that had already reached the top~10 before the debut$)$.
+\textbf{Early trajectory.} A ``song'' is one title--performer pair of the weekly chart file. Week $w$ is the
+chart published $w-1$ weeks after the debut chart; $p_w$ is the song's position in it (101 = not on the chart).
+For $k$ weeks: the $k$ positions, the best of these $k$ positions, the number of these $k$ weeks in which the
+song is on the chart (nothing after week $k$ is used), the slope
+$(p_k-p_1)/(k-1)$ (negative = climbing; only for $k\geq2$) and the acceleration $(p_k-p_{k-1})-(p_{k-1}-p_{k-2})$
+(only for $k\geq3$); context: debut year and month, $\ln(1+{}$earlier songs of the artist, i.e.\ songs that debuted before this one$)$ and
+$\ln(1+{}$earlier songs of the artist that had already reached the top~10 before the debut$)$, the artist being
+the performer field normalised as on the Hit Predictor. The ``not yet top~10'' column of Table~\ref{tab:traj} comes
+from a model retrained, with the same settings, on those songs only. Permutation importance
+(Fig.~\ref{fig:traj}c) uses one stratified 75/25 split (seed 42). The target is
+whether the song's peak over its whole chart run is in the top~10; songs are kept only if they debuted after the
+first chart (August 1958) and at least 52 weeks before the last one, so that their run is almost always complete
+(a song that peaks for the first time more than a year after its debut is rare).
 
+\FloatBarrier
 \section{Models and settings}\label{app:models}
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \caption{Every model used, with all non-default settings. None was tuned on the test data.}
 \label{tab:settings}
@@ -78,27 +136,33 @@ artist$)$ and $\log(1+{}$earlier top-10 hits that had already reached the top~10
 \toprule
 Model & Settings \\
 \midrule
-Random Forest (main) & 80 trees, 8 candidate features per split, Gini, fully grown trees, seed 42 (configuration of~\cite{middlebrook2019song}) \\
+Random Forest (main) & 80 trees, $\min(8,d)$ candidate features per split for a model with $d$ inputs (8 for the final model; all of them when a block has fewer than 8), Gini, fully grown trees, seed 42 (configuration of~\cite{middlebrook2019song}) \\
 Random Forest (external, trajectories) & 200 trees, $\sqrt{d}$ candidate features per split \\
 XGBoost & 400 trees, depth 6, learning rate 0.05, subsample 0.8, column sample 0.8 \\
 Logistic regression & standardised inputs, L2, $C=1$ \\
-$k$-NN & standardised inputs, $k=25$ \\
-SVM & standardised inputs, RBF kernel, $C=1$, $\gamma$ = scale \\
-Du's models~\cite{du2022spotify} & RF 450 trees, $m_{\text{try}}=2$, at most 30 leaves; logistic regression; one model per decade \\
-Title / lyrics text model & TF-IDF + logistic regression ($C=4$ titles, $C=1$ lyrics), inner 5-fold out-of-fold \\
+$k$-NN & standardised inputs, $k=25$, Euclidean distance, equal votes \\
+SVM & standardised inputs, RBF kernel $e^{-\gamma\|x-x'\|^2}$, $C=1$, $\gamma=1/(d\cdot\mathrm{Var}(X))$ (scikit-learn ``scale'') \\
+Du's models~\cite{du2022spotify} & RF 450 trees, $m_{\text{try}}=2$, at most 30 leaves; logistic regression on standardised inputs (L2, $C=1$); one model per decade \\
+Title text model & TF-IDF of word uni- and bigrams (words in at least 2 titles, sublinear term frequency $1+\ln\mathrm{tf}$) + logistic regression $C=4$; inner 5-fold out-of-fold \\
+Lyrics text model & TF-IDF (sublinear, no minimum document frequency) on the musiXmatch counts of all 5{,}000 stemmed words + logistic regression $C=1$; inner 5-fold out-of-fold \\
 Rich audio & standardisation + PCA (40) fitted inside each training fold \\
 \midrule
 Cross-validation & repeated stratified $k$-fold: $5{\times}5$ (Hit Predictor), $5{\times}2$ (ISMIR), $5{\times}1$ (SpotGenTrack), $5{\times}3$ (trajectories); stratified group $k$-fold by artist for the unseen-artist tests \\
-Tests & corrected resampled $t$-test~\cite{nadeau2003inference} for CV; McNemar~\cite{dietterich1998approximate} for single splits; Bonferroni over $\approx$\,60 tests \\
+Tests & corrected resampled $t$-test~\cite{nadeau2003inference} for CV, two-sided (formula in Sec.~\ref{sec:stats}); McNemar~\cite{dietterich1998approximate} for single splits; Bonferroni over at most 400 tests ($p<1.25\times10^{-4}$) \\
+Artist-grouped CV & scikit-learn \texttt{StratifiedGroupKFold} (5 folds, shuffled), run once per repeat with seed $42+r$ for repeat $r=0,1,\dots$, so 25 grouped folds on the Hit Predictor and 10 on ISMIR; folds then differ slightly in size, and the corrected $t$-test uses the mean $n_{\text{test}}/n_{\text{train}}$ over folds \\
+Audio-subset single split & stratified 75/25 (2{,}671 training, 891 test songs), seed 42 \\
+Seeds & 42 for every split, sample and model; in repeated CV, one seed (42) generates the different shuffles of all the repeats \\
+Software & Python 3.14, scikit-learn 1.8, XGBoost 3.2, librosa 0.11, pandas 3.0, NumPy 2.4, SciPy 1.17, statsmodels 0.15 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \input{appendix_details}
 
+\FloatBarrier
 \section{Which script produces what}\label{app:scripts}
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \caption{Scripts in \texttt{repro/} and the results they produce (\texttt{paper\_results/r*\_*.csv}).}
 \label{tab:scripts}
@@ -115,7 +179,7 @@ Script & Results \\
 \texttt{r5\_tilburg.py} & head-to-head with Du (Table~\ref{tab:tilburg}) \\
 \texttt{r6\_robustness.py} & unseen artists, cold start (Table~\ref{tab:robust}) \\
 \texttt{r7\_fft\_full.py} & FFT on the whole benchmark \\
-\texttt{r8\_future\_work.py} & artist matching, genre control, decay, SpotGenTrack lyrics (Tables~\ref{tab:genre}, \ref{tab:decay}) \\
+\texttt{r8\_future\_work.py} & artist matching, genre control, title control, own-title check, decay, SpotGenTrack lyrics (Tables~\ref{tab:genre}, \ref{tab:decay}) \\
 \texttt{r9\_metrics.py} & precision, recall, F1 \\
 \texttt{r10\_timeseries.py} & market trend, early trajectories (Table~\ref{tab:traj}) \\
 \texttt{r11\_lyrics\_ismir.py} & lyrics on ISMIR (Table~\ref{tab:lyrics}, Fig.~\ref{fig:lyrics}) \\
@@ -127,15 +191,22 @@ Script & Results \\
 \end{tabular}
 \end{table}
 
+\FloatBarrier
 \section{Time-series details}\label{app:ts}
 
 The chart analysis of Sec.~\ref{sec:timeseries} is in a notebook (\texttt{timeseries/time\_series\_hot100.ipynb})
 that follows the standard sequence of a time-series study~\cite{hyndman2021forecasting}: plot the series,
 decompose it into trend, seasonality and residual, look for cycles with the periodogram, model the cycles
 with Fourier terms, test stationarity (ADF, KPSS) and autocorrelation (ACF, PACF, Ljung--Box), and compare
-forecasting methods by rolling origin.
+forecasting methods by rolling origin. Test settings (statsmodels defaults otherwise; computed on the whole
+1959--2025 series): ADF with the lag order chosen
+by AIC; KPSS around a constant with automatic lag; Ljung--Box at lags 12 and 24. On the monthly debut series, ADF
+does not reject a unit root ($p=0.51$) and KPSS rejects stationarity ($p=0.01$); after one difference ADF rejects
+($p<0.001$) and KPSS does not ($p\geq0.10$), hence $d=1$ (fixed from the whole series, forecast windows
+included; the orders $p,q$ are chosen on pre-origin data only). The STL residual is close to white noise (Ljung--Box does
+not reject at lags 12 and 24).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{ts_decomposition.png}
 \caption{STL decomposition of the monthly mean number of debuts per chart week (1959--2025). The trend
@@ -144,22 +215,24 @@ admitted songs not released as singles.}
 \label{fig:stl}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{ts_periodogram.png}
-\caption{Periodogram (FFT) of the weekly number of holiday songs on the chart: peaks at one year and its
+\caption{Periodogram (FFT) of the weekly number of holiday songs on the chart (``series B'' in the plot; computed on
+$\ln(1+\text{count})$ after removing the trend; titles containing Christmas, Santa,
+Jingle, Sleigh, Rudolph, Mistletoe, Navidad, Winter Wonderland, Holly Jolly, Silent Night or Snowman): peaks at one year and its
 harmonics (26.1, 17.4, 13.0 weeks), which a Fourier regression turns into the seasonal pattern.}
 \label{fig:periodogram}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{ts_forecasts.png}
 \caption{Twelve-month forecasts of monthly debuts from the last origin (January 2025).}
 \label{fig:forecasts}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \caption{Forecasting monthly debuts 12 months ahead, rolling origin (11 origins, 2015--2025). MASE: mean
 absolute error divided by that of the in-sample seasonal naive forecast (lower is better).}
@@ -183,8 +256,87 @@ Seasonal naive & 2.32 \\
 \textbf{ARIMA in one paragraph.} ARIMA$(p,d,q)$ models a series by differencing it $d$ times until it has
 no trend, then explaining each value from its own $p$ previous values (autoregression) and from the $q$
 previous forecast errors (moving average). We chose $d=1$ from the stationarity tests and $(p,q)$ by AIC
-over $p,q\leq2$. Adding Fourier terms as regressors captures yearly seasonality with few parameters.
+over $p,q\leq2$, on the data before the first origin only. Adding Fourier terms as regressors captures yearly
+seasonality with few parameters.
 
+\textbf{Forecasting settings.} Series: monthly mean number of debuts per chart week. Rolling origin: 11 origins,
+every January from 2015 to 2025; at each origin the models are fitted on all earlier months and forecast the next
+12. STL: period 12, robust fitting. ARIMA$(1,1,2)$; ARIMA + Fourier: the same with $K=2$ yearly harmonics as
+regressors; seasonal ARIMA: $(1,1,2)(P,0,Q)_{12}$ with $P,Q\leq1$ chosen by AIC; ETS: additive damped trend and
+additive seasonality of period 12. Gradient boosting (300 trees, depth 3, learning rate 0.03, subsample 0.8) and
+random forest (300 trees, at least 5 samples per leaf) predict the monthly change $y_t-y_{t-1}$ from its 12 lags,
+the last level, the 12-month rolling mean and $K=2$ Fourier terms of the month, and forecast 12 months recursively
+(each prediction is fed back as a lag); seed 42. MASE scales the mean absolute error by that of the seasonal naive
+forecast on the training months.
+
+\FloatBarrier
+\section{Glossary}\label{app:glossary}
+{\footnotesize\setlength{\parskip}{2pt}
+\noindent\textbf{Bag of words / TF-IDF.} A text is represented by how often each word occurs, ignoring order. TF-IDF weights a
+word by its (sublinear) frequency in the text, $1+\ln\mathrm{tf}$, times $\ln\frac{1+N}{1+\mathrm{df}}+1$, where $N$ is
+the number of texts and df the number containing the word (the scikit-learn default), so that words found
+everywhere count little; each text vector is then scaled to length 1. A logistic regression on these weights gives a hit probability.\par
+\noindent\textbf{Bootstrap sample.} A sample of $n$ songs drawn \emph{with replacement} from $n$ songs; about 63\,\% of them
+appear at least once. Each tree of a Random Forest is grown on its own bootstrap sample.\par
+\noindent\textbf{ACF, PACF.} Autocorrelation function: correlation of a series with itself $\ell$ steps earlier, for each lag
+$\ell$; the partial version removes the effect of the shorter lags.\par
+\noindent\textbf{ADF, KPSS.} Two stationarity tests (a series is \emph{stationary} if its mean and variance do not drift). ADF
+assumes a unit root (the series behaves like a random walk, each value being the previous one plus a shock, so it
+is non-stationary) and tries to reject it; KPSS assumes stationarity and tries to reject it.\par
+\noindent\textbf{AIC.} Akaike information criterion: goodness of fit penalised by the number of parameters; lower is better.\par
+\noindent\textbf{Anti-conservative.} A test is anti-conservative when it gives $p$-values that are too small, i.e.\ it declares
+``significant'' more often than it should.\par
+\noindent\textbf{Chroma, tonnetz.} Energy of each of the 12 pitch classes (C, C\#, \dots, B) in a frame, computed from a
+short-time Fourier transform (STFT chroma) or from a constant-Q transform, whose frequency bins are spaced like
+musical notes (CQT chroma); tonnetz projects chroma on harmonic relations (fifths, thirds) and is computed on the
+\emph{harmonic part} of the signal, obtained by separating sustained (harmonic) from percussive sounds.\par
+\noindent\textbf{ISMIR.} International Society for Music Information Retrieval; ``ISMIR~2019'' is the dataset released with
+Zangerle et~al.'s paper at its 2019 conference.\par
+\noindent\textbf{Essentia.} An open-source library for audio analysis; the ISMIR release provides its low-level (spectral,
+rhythmic, tonal) and high-level (mood, genre classifier outputs) descriptors.\par
+\noindent\textbf{ETS / damped Holt--Winters.} Exponential smoothing: the forecast is a weighted average of past values with
+weights that decrease geometrically, with a level, a trend that flattens out (damped) and a seasonal part.\par
+\noindent\textbf{Cross-validation, fold, stratified.} See Sec.~\ref{sec:protocol}.\par
+\noindent\textbf{Fourier terms.} $\sin(2\pi jt/m)$ and $\cos(2\pi jt/m)$ for $j=1,\dots,K$, where $m$ is the season length (12
+months, or 52.18 weeks) and $K$ the number of harmonics; a regression on them draws any smooth yearly pattern.\par
+\noindent\textbf{Gini impurity.} $1-p^2-(1-p)^2$ for a group with hit share $p$; a split is chosen to lower it the most.\par
+\noindent\textbf{Ljung--Box test.} Tests whether the first $L$ autocorrelations of a series are all zero (white noise).\par
+\noindent\textbf{Logistic regression.} A linear model whose weighted sum of the inputs is turned into a probability by
+$1/(1+e^{-z})$; $C$ is the inverse strength of the L2 penalty on the weights.\par
+\noindent\textbf{$k$-NN.} Predicts the majority answer of the $k$ most similar training songs.\par
+\noindent\textbf{MFCC.} Mel-frequency cepstral coefficients: a compact description (13 or 20 numbers per frame) of the shape of
+the sound spectrum on a perceptual frequency scale; standard for timbre.\par
+\noindent\textbf{Million Song Dataset (MSD).} A public collection of metadata and audio features for one million songs.\par
+\noindent\textbf{Onset envelope, tempogram.} The onset envelope measures, frame by frame, how much the spectrum suddenly
+increases (note attacks); the tempogram is its local autocorrelation, showing which beat periods are present.\par
+\noindent\textbf{One-hot encoding.} A category with $m$ values becomes $m$ yes/no inputs, exactly one of which is 1.\par
+\noindent\textbf{Out-of-fold.} A value for a training song produced by a model that did not see that song (inner split).\par
+\noindent\textbf{PCA.} Principal component analysis: new axes, combinations of the inputs, ordered by how much of the variance
+they explain.\par
+\noindent\textbf{Periodogram.} The squared magnitude of the Fourier transform of a series: how much variance each period
+(cycle length) explains.\par
+\noindent\textbf{Permutation importance.} Accuracy (or AUC) lost when one input is shuffled across the test songs.\par
+\noindent\textbf{RBF SVM.} A support vector machine with a radial (Gaussian) kernel.\par
+\noindent\textbf{Seasonal naive.} Forecast equal to the value observed one season (12 months) earlier.\par
+\noindent\textbf{Standardisation.} Replacing each input by (value $-$ mean) / standard deviation, the mean and standard
+deviation being computed on the training part.\par
+\noindent\textbf{Stemming.} Reducing a word to its stem with fixed suffix rules (Porter stemmer: ``causes'' $\to$ ``caus'',
+``future'' $\to$ ``futur'', while ``love'' stays ``love''); the musiXmatch release is stemmed this way.\par
+\noindent\textbf{STL; trend and seasonal strength.} Seasonal--trend decomposition by local regression (Loess): series = trend
++ seasonal + residual. Trend strength is $\max(0,1-\mathrm{Var}(R)/\mathrm{Var}(T+R))$ and seasonal strength the same
+with $S$ in place of $T$ (0 = none, 1 = everything).\par
+\noindent\textbf{Spectral centroid, bandwidth, roll-off, flatness, contrast.} Centre of mass of the spectrum; its spread; the
+frequency below which 85\,\% of the energy lies; how noise-like it is; the difference between peaks and valleys
+in each frequency band.\par
+\noindent\textbf{Track URI.} Spotify's unique identifier of a track (\texttt{spotify:track:\dots}).\par
+\noindent\textbf{TreeSHAP, $|\phi|$.} For a tree model, $\phi$ is how much an input moves one prediction away from the average
+prediction (SHAP value); the mean of $|\phi|$ over songs ranks the inputs.\par
+\noindent\textbf{Wide-and-deep.} A neural network that combines a linear part on the raw inputs with a deep part (used by
+Zangerle et~al.).\par
+\noindent\textbf{XGBoost.} Gradient-boosted trees: trees are added one by one, each correcting the errors of the previous ones.\par
+}
+
+\FloatBarrier
 \section{Questions a reader may ask}\label{app:faq}
 
 \textbf{Is artist history not cheating?} No information from the song's own period or later is used
@@ -193,7 +345,7 @@ is the construction of the negatives (artists of hits are excluded), which is wh
 year-matched ISMIR gain ($+2.6$\pp) as the transferable number.
 
 \textbf{Why does the paper say the gain holds for unseen artists but not for new artists?} The two words
-mean different things (Sec.~\ref{sec:features}): an unseen artist is absent from the training folds but may
+mean different things (end of Sec.~\ref{sec:stats}): an unseen artist is absent from the training folds but may
 have earlier hits; a new artist has none, so $h(s)=0$.
 
 \textbf{Why Random Forest and not XGBoost?} XGBoost is 1.3 points better under cross-validation but ties
@@ -204,8 +356,9 @@ configuration, and the gain of our features is the same for all five classifiers
 representation could capture what the descriptors miss, and is future work.
 
 \textbf{Why reject the song title when it is the strongest feature?} A title does not make a song a hit.
-It reveals how the non-hits were collected (niche-genre catalogue tracks), so its gain would not transfer
-to any other dataset.
+Its gain comes from formatting (``- Remastered'', ``feat.'') that only non-hit titles carry, and from genre and
+language words; once both are controlled, what remains ($+1.9$\pp, $p=0.002$) is only indicative, below the Bonferroni threshold,
+and is itself mostly genre and language vocabulary (App.~\ref{app:audit}).
 
 \textbf{Why does release year alone score below chance (0.448) in ISMIR protocol~B?} Every hit has a
 non-hit from the same year, so the year carries no information, and a Random Forest on a single input with

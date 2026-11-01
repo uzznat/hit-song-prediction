@@ -9,20 +9,21 @@
 }
 % Madonna's Hot 100 songs, one tick per song
 \foreach \k in {0,...,18} \fill[blue!60!black] (0.05+\k*0.044,0.42) rectangle ++(0.026,0.22);
-\foreach \k in {0,...,23} \fill[blue!60!black] (1.04+\k*0.035,0.42) rectangle ++(0.022,0.22);
-\foreach \k in {0,...,9} \fill[blue!60!black] (2.05+\k*0.08,0.42) rectangle ++(0.04,0.22);
+\foreach \k in {0,...,24} \fill[blue!60!black] (1.04+\k*0.034,0.42) rectangle ++(0.021,0.22);
+\foreach \k in {0,...,10} \fill[blue!60!black] (2.05+\k*0.075,0.42) rectangle ++(0.04,0.22);
 \node at (0.47,0.2) {19 songs};
-\node at (1.47,0.2) {24 songs};
-\node at (2.47,0.2) {10 songs};
+\node at (1.47,0.2) {25 songs};
+\node at (2.47,0.2) {11 songs};
 % the three example songs
-\node[ex, anchor=north] (s1) at (0.47,-0.35) {\textit{Holiday} (1983)\\earlier: 0 songs\\\mbox{$h=\log 1=0$}};
-\node[ex, anchor=north] (s2) at (1.47,-0.35) {\textit{Vogue} (1990)\\earlier: 19 songs\\\mbox{$h=\log 20=3.0$}};
-\node[ex, anchor=north] (s3) at (2.47,-0.35) {\textit{Hung Up} (2005)\\earlier: 44 songs\\\mbox{$h=\log 45=3.8$}};
+\node[ex, anchor=north] (s1) at (0.47,-0.35) {\textit{Holiday} (1983)\\earlier: 0 songs\\\mbox{$h=\ln 1=0$}};
+\node[ex, anchor=north] (s2) at (1.47,-0.35) {\textit{Vogue} (1990)\\earlier: 19 songs\\\mbox{$h=\ln 20=3.0$}};
+\node[ex, anchor=north] (s3) at (2.47,-0.35) {\textit{Hung Up} (2005)\\earlier: $19+25=44$\\\mbox{$h=\ln 45=3.8$}};
 \draw[->, blue!60!black, thick] (0.47,0.0) to[out=-60, in=150] (s2.north west);
 \end{tikzpicture}
-\caption{Artist history, worked example for Madonna. Each tick is one of her Hot~100 songs. For a song from the
-1990s (\textit{Vogue}), only her songs from \emph{earlier} decades are counted (the 19 of the 1980s, arrow), never
-those of the 1990s themselves, so the value is known on release day. A song from her first hit decade gets 0
-(\textit{Holiday}), and a 2000s song counts the 1980s and 1990s (44 distinct titles under her normalised name).}
+\caption{Artist history, worked example for Madonna. Each tick is one distinct title she had on the Hot~100 in
+that decade (decade of the chart week). For a song from the 1990s (\textit{Vogue}), only her songs from
+\emph{earlier} decades are counted (the 19 of the 1980s, arrow), never those of the 1990s themselves, so the value
+is known on release day. A song from her first hit decade gets 0 (\textit{Holiday}), and a 2000s song counts the
+1980s and 1990s ($19+25=44$). $\ln$ is the natural logarithm.}
 \label{fig:history}
 \end{figure}

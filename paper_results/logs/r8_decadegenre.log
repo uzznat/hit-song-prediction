@@ -1,0 +1,32 @@
+  [R8-decade-genre] fold 1/25  (6 s)
+  [R8-decade-genre] fold 2/25  (12 s)
+  [R8-decade-genre] fold 3/25  (18 s)
+  [R8-decade-genre] fold 4/25  (24 s)
+  [R8-decade-genre] fold 5/25  (29 s)
+  [R8-decade-genre] fold 6/25  (35 s)
+  [R8-decade-genre] fold 7/25  (41 s)
+  [R8-decade-genre] fold 8/25  (46 s)
+  [R8-decade-genre] fold 9/25  (52 s)
+  [R8-decade-genre] fold 10/25  (57 s)
+  [R8-decade-genre] fold 11/25  (65 s)
+  [R8-decade-genre] fold 12/25  (71 s)
+  [R8-decade-genre] fold 13/25  (76 s)
+  [R8-decade-genre] fold 14/25  (82 s)
+  [R8-decade-genre] fold 15/25  (87 s)
+  [R8-decade-genre] fold 16/25  (93 s)
+  [R8-decade-genre] fold 17/25  (99 s)
+  [R8-decade-genre] fold 18/25  (105 s)
+  [R8-decade-genre] fold 19/25  (110 s)
+  [R8-decade-genre] fold 20/25  (116 s)
+  [R8-decade-genre] fold 21/25  (122 s)
+  [R8-decade-genre] fold 22/25  (128 s)
+  [R8-decade-genre] fold 23/25  (133 s)
+  [R8-decade-genre] fold 24/25  (139 s)
+  [R8-decade-genre] fold 25/25  (144 s)
+        config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+         audio    0.7222   0.0078        0.7190         0.7255    0.7961       25           NaN          NaN          NaN   NaN     NaN
+audio + decade    0.7473   0.0095        0.7433         0.7512    0.8237       25        0.0250        6.601 7.922849e-07  25.0     0.0
+audio + artist    0.7638   0.0079        0.7605         0.7671    0.8546       25        0.0416        8.301 1.631026e-08  25.0     0.0
+          main    0.7896   0.0088        0.7860         0.7933    0.8791       25        0.0674       13.583 9.232991e-13  25.0     0.0
+-> <repo>\paper_results\r8_decade_genre_matched_cv_summary.csv
+-> <repo>\paper_results\r8_decade_genre_matched_cv_folds.csv

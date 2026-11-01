@@ -347,7 +347,100 @@ def run_lyrics():
     save(folds, "r8_lyrics_cv_folds.csv")
 
 
+def run_title():
+    """Genre control for the song title: same genre-matched sample as run_genre (same seed, same order)."""
+    from common import TitleOOF
+    df = load_kaggle()
+    data, _ = load_fft(df)
+    data = attach_genres(data).reset_index(drop=True)
+    rng = np.random.RandomState(SEED)
+    keep = []
+    for g, sub in data.groupby("genre_dom"):
+        h, f = sub.index[sub.target == 1], sub.index[sub.target == 0]
+        k = min(len(h), len(f))
+        keep += list(rng.choice(h, k, replace=False)) + list(rng.choice(f, k, replace=False))
+    m = data.loc[sorted(keep)].reset_index(drop=True)
+    ym = m["target"].values
+    print(f"genre-matched sample: {len(m)} songs")
+    # formatting control: strip what Spotify appends to catalogue titles (" - Remastered 2011", "(Live)", "feat. X")
+    clean = (m["track"].astype(str)
+             .str.replace(r"\s+-\s+.*$", "", regex=True)
+             .str.replace(r"\(.*?\)|\[.*?\]", "", regex=True)
+             .str.replace(r"\b(feat\.?|ft\.?|featuring)\b.*$", "", regex=True, flags=re.I)
+             .str.strip())
+    m["track_clean"] = clean
+    print(f"titles changed by cleaning: hits {(clean != m.track)[ym == 1].mean():.3f}, "
+          f"flops {(clean != m.track)[ym == 0].mean():.3f}")
+    title = [("title", TitleOOF(), ["track"])]
+    title_c = [("title", TitleOOF(), ["track_clean"])]
+    cfg = {"audio": make_pipeline(AUDIO),
+           "audio + title": make_pipeline(AUDIO, extra=title),
+           "audio + cleaned title": make_pipeline(AUDIO, extra=title_c),
+           "main": make_pipeline(MAIN),
+           "main + title": make_pipeline(MAIN, extra=title),
+           "main + cleaned title": make_pipeline(MAIN, extra=title_c)}
+    s1, f1 = cv_eval({k: cfg[k] for k in ["audio", "audio + title", "audio + cleaned title"]}, m, ym, ref="audio",
+                     label="R8-title-a")
+    s2, f2 = cv_eval({k: cfg[k] for k in ["main", "main + title", "main + cleaned title"]}, m, ym, ref="main",
+                     label="R8-title-m")
+    summ = pd.concat([s1, s2], ignore_index=True)
+    print("\n=== R8 song title on the genre-matched sample: 5x5 CV ===")
+    show(summ)
+    save(summ, "r8_title_matched_cv_summary.csv")
+    save(pd.concat([f1, f2], ignore_index=True), "r8_title_matched_cv_folds.csv")
+
+
+def run_decadegenre():
+    """Genre control for the decade alone: audio vs audio + decade on the genre-matched sample."""
+    df = load_kaggle()
+    data, _ = load_fft(df)
+    data = attach_genres(data).reset_index(drop=True)
+    rng = np.random.RandomState(SEED)
+    keep = []
+    for g, sub in data.groupby("genre_dom"):
+        h, f = sub.index[sub.target == 1], sub.index[sub.target == 0]
+        k = min(len(h), len(f))
+        keep += list(rng.choice(h, k, replace=False)) + list(rng.choice(f, k, replace=False))
+    m = data.loc[sorted(keep)].reset_index(drop=True)
+    ym = m["target"].values
+    cfg = {"audio": make_pipeline(AUDIO), "audio + decade": make_pipeline(AUDIO + DEC_COLS),
+           "audio + artist": make_pipeline(AUDIO + [ART]), "main": make_pipeline(MAIN)}
+    summ, folds = cv_eval(cfg, m, ym, ref="audio", label="R8-decade-genre")
+    show(summ)
+    save(summ, "r8_decade_genre_matched_cv_summary.csv")
+    save(folds, "r8_decade_genre_matched_cv_folds.csv")
+
+
+def run_selfcount():
+    """Artist history WITHOUT the song's own title: a hit that already charted in an earlier decade
+    (a run across a decade boundary, a re-entry) would otherwise count itself."""
+    from feature_experiments import build_artist_history
+    df = load_kaggle()
+    hist = build_artist_history()
+
+    def excl(na, ds, title):
+        if na not in hist:
+            return 0
+        t = str(title).lower().strip()
+        return sum(len(v - {t}) for d, v in hist[na].items() if d < ds)
+
+    df["art_noself"] = np.log1p([excl(na, ds, t) for na, ds, t in zip(df.na, df.dstart, df.track)])
+    own = df["art_noself"] != df[ART]
+    facts = {"songs_affected": int(own.sum()), "hits_affected": int((own & (df.target == 1)).sum())}
+    print(facts)
+    y = df["target"].values
+    cfg = {"audio": make_pipeline(AUDIO), "main": make_pipeline(MAIN),
+           "main, own title excluded": make_pipeline(AUDIO + DEC_COLS + ["art_noself"])}
+    summ, folds = cv_eval(cfg, df, y, ref="audio", label="R8-selfcount")
+    show(summ)
+    save(summ, "r8_selfcount_cv_summary.csv")
+    save(folds, "r8_selfcount_cv_folds.csv")
+    save(pd.DataFrame([facts]).T.reset_index().rename(columns={"index": "fact", 0: "value"}),
+         "r8_selfcount_facts.csv")
+
+
 if __name__ == "__main__":
-    parts = sys.argv[1:] or ["decay", "artist", "genre", "lyrics"]
+    parts = sys.argv[1:] or ["decay", "artist", "genre", "lyrics", "title", "selfcount"]
     for p in parts:
-        {"artist": run_artist, "genre": run_genre, "decay": run_decay, "lyrics": run_lyrics}[p]()
+        {"artist": run_artist, "genre": run_genre, "decay": run_decay, "lyrics": run_lyrics,
+         "title": run_title, "selfcount": run_selfcount, "decadegenre": run_decadegenre}[p]()

@@ -167,7 +167,7 @@ def fig_traj():
     ax.set_ylabel("Chart position (median, IQR)")
     ax.text(7.9, 22, "reaches the\ntop 10", ha="right", va="top", fontsize=6.5, color=BLUE)
     ax.text(5, 66, "does not", ha="center", va="bottom", fontsize=6.5, color=INK2)
-    ax.set_title("(a) Two typical trajectories", color=INK)
+    ax.set_title("(a) Median trajectory of each group", color=INK)
 
     ax = axes[1]
     rows = ["1-40", "41-60", "61-80", "81-90", "91-100"]
@@ -319,7 +319,7 @@ def fig_ablation():
     fig, axes = plt.subplots(1, 2, figsize=(TEXT_W, 2.45))
     ax = axes[0]
     y = np.arange(len(drops))
-    cols = [BLUE if p < 8e-4 else ("#8fb5e8" if p < 0.05 else GRAY) for _, _, p in drops]
+    cols = [BLUE if p < 0.05 / 400 else ("#8fb5e8" if p < 0.05 else GRAY) for _, _, p in drops]
     ax.barh(y, [d for _, d, _ in drops], color=cols, height=0.68)
     for yi, (_, d, p) in zip(y, drops):
         ax.text(max(d, 0) + 0.06, yi, f"{-d:+.1f}".replace("-", "−") if abs(d) >= 0.05 else "0.0",

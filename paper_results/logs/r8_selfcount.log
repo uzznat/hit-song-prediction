@@ -1,0 +1,33 @@
+{'songs_affected': 219, 'hits_affected': 211}
+  [R8-selfcount] fold 1/25  (22 s)
+  [R8-selfcount] fold 2/25  (48 s)
+  [R8-selfcount] fold 3/25  (70 s)
+  [R8-selfcount] fold 4/25  (93 s)
+  [R8-selfcount] fold 5/25  (114 s)
+  [R8-selfcount] fold 6/25  (136 s)
+  [R8-selfcount] fold 7/25  (158 s)
+  [R8-selfcount] fold 8/25  (180 s)
+  [R8-selfcount] fold 9/25  (203 s)
+  [R8-selfcount] fold 10/25  (226 s)
+  [R8-selfcount] fold 11/25  (248 s)
+  [R8-selfcount] fold 12/25  (267 s)
+  [R8-selfcount] fold 13/25  (281 s)
+  [R8-selfcount] fold 14/25  (286 s)
+  [R8-selfcount] fold 15/25  (290 s)
+  [R8-selfcount] fold 16/25  (295 s)
+  [R8-selfcount] fold 17/25  (299 s)
+  [R8-selfcount] fold 18/25  (303 s)
+  [R8-selfcount] fold 19/25  (308 s)
+  [R8-selfcount] fold 20/25  (323 s)
+  [R8-selfcount] fold 21/25  (340 s)
+  [R8-selfcount] fold 22/25  (360 s)
+  [R8-selfcount] fold 23/25  (379 s)
+  [R8-selfcount] fold 24/25  (398 s)
+  [R8-selfcount] fold 25/25  (417 s)
+                  config  acc_mean  acc_std  acc_ci95_low  acc_ci95_high  auc_mean  n_folds  delta_vs_ref  corrected_t  corrected_p  wins  losses
+                   audio    0.7817   0.0050        0.7796         0.7838    0.8592       25           NaN          NaN          NaN   NaN     NaN
+                    main    0.8321   0.0043        0.8303         0.8339    0.9177       25        0.0504       20.805 7.298767e-17  25.0     0.0
+main, own title excluded    0.8314   0.0049        0.8294         0.8334    0.9171       25        0.0497       23.521 4.385160e-18  25.0     0.0
+-> <repo>\paper_results\r8_selfcount_cv_summary.csv
+-> <repo>\paper_results\r8_selfcount_cv_folds.csv
+-> <repo>\paper_results\r8_selfcount_facts.csv
