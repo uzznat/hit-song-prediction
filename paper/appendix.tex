@@ -186,7 +186,7 @@ Script & Results \\
 \texttt{r12\_report.py} & PCA, ablation, everything together, trajectory figure (Sec.~\ref{sec:ablation}, Fig.~\ref{fig:traj}) \\
 \texttt{r13\_explain.py} & worked example and decade medians (Figs.~\ref{fig:algorithm}, \ref{fig:decade}) \\
 \texttt{make\_figures.py} & all data figures \\
-\texttt{timeseries/} \texttt{build\_notebook.py} & STL, periodogram, Fourier, ARIMA forecasting (App.~\ref{app:ts}) \\
+\texttt{timeseries/} \texttt{build\_notebook.py} & STL, periodogram, Fourier, ARIMA forecasting (Appendix~\ref{app:ts}) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -358,7 +358,7 @@ representation could capture what the descriptors miss, and is future work.
 \textbf{Why reject the song title when it is the strongest feature?} A title does not make a song a hit.
 Its gain comes from formatting (``- Remastered'', ``feat.'') that only non-hit titles carry, and from genre and
 language words; once both are controlled, what remains ($+1.9$\pp, $p=0.002$) is only indicative, below the Bonferroni threshold,
-and is itself mostly genre and language vocabulary (App.~\ref{app:audit}).
+and is itself mostly genre and language vocabulary (Appendix~\ref{app:audit}).
 
 \textbf{Why does release year alone score below chance (0.448) in ISMIR protocol~B?} Every hit has a
 non-hit from the same year, so the year carries no information, and a Random Forest on a single input with
