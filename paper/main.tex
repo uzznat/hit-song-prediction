@@ -953,10 +953,30 @@ previews and the features extracted from them are not in the repository (the aud
 over time, so a re-run may find a slightly different set of songs.
 
 \FloatBarrier
-\input{appendix}
-
-\FloatBarrier
 \bibliographystyle{IEEEtran}
 \bibliography{refs}
+
+% ---------------------------------------------------------------------
+% Clear start of the appendix: new page, full-width banner, contents.
+\twocolumn[{%
+\centering
+\rule{\textwidth}{0.8pt}\\[6pt]
+{\LARGE\bfseries Appendix: technical details}\\[6pt]
+\begin{minipage}{0.94\textwidth}\small
+The paper ends with the references above. The appendices below are not needed to follow it: they give every
+detail needed to rebuild each result (inputs, settings, extra tables, controls, statistics, code) and a glossary.\\[4pt]
+\begin{tabular}{@{}l@{\ }l@{\hspace{1.2em}}l@{\ }l@{\hspace{1.2em}}l@{\ }l@{}}
+\ref{app:inputs} & Inputs in detail & \ref{app:external} & External validation & \ref{app:stats} & Single splits, multiple comparisons \\
+\ref{app:models} & Models and settings & \ref{app:robust} & Unseen artists, cold start & \ref{app:scripts} & Which script produces what \\
+\ref{app:related} & Extended related work & \ref{app:audit} & Audit and further experiments & \ref{app:ts} & Time-series details \\
+\ref{app:data} & Datasets in detail & \ref{app:lyrics} & Lyrics on ISMIR & \ref{app:glossary} & Glossary \\
+\ref{app:main} & Main result: more detail & \ref{app:tsdetails} & Chart components, trajectories & \ref{app:faq} & Questions a reader may ask \\
+\ref{app:ablation} & PCA, everything together & & & & \\
+\ref{app:tilburg} & Head-to-head with Du & & & & \\
+\end{tabular}
+\end{minipage}\\[6pt]
+\rule{\textwidth}{0.8pt}\vspace{10pt}}]
+
+\input{appendix}
 
 \end{document}
